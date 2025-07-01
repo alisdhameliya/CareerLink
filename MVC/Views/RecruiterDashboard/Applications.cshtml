@@ -1,0 +1,500 @@
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "_RecruiterLayout";
+}
+
+<style>
+    .dashboard-container {
+        max-width: 1200px;
+        margin:  auto;
+        padding: 0 1rem;
+        animation: fadeIn 0.5s ease-out forwards;
+        margin-top: -12rem;
+    }
+
+    .swal2-confirm {
+        background-color: #4361ee;
+    }
+
+    /* Header */
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        opacity: 0;
+        animation: fadeInUp 0.5s ease-out 0.2s forwards;
+    }
+
+    .dashboard-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #1e3a8a;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+    .dashboard-title:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, #2563eb, #3b82f6);
+        border-radius: 2px;
+    }
+
+    .btn-close{
+        background-color: #4c4c4c05;
+        border-radius: 5px;
+        border: 1px solid gray;
+        color: #4d4d4d;
+    }
+    .btn-close:hover{
+        background-color: #ff00000f;
+        border-radius: 5px;
+        border: 1px solid red;
+        color: red;
+    }
+
+    .resume-style {
+        line-height: 1.1;
+    }
+
+    .resume-header {
+        margin-bottom: 1.5rem;
+        display:flex;
+        align-items: center;
+        padding: 15px;
+        background: linear-gradient(135deg, #4361ee 0%, #3f37c9 100%);
+        color:white;
+        gap:2rem;
+        border-radius:12px;
+    }
+
+    .resume-header h2 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+
+    .resume-header p {
+        font-size: 1rem;
+        color: #efefef;
+    }
+
+    .resume-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .resume-section h4 {
+        font-size: 22px;
+        font-weight: bold;
+        color: #2563eb !important;
+        margin-bottom: 0.75rem;
+        border-left: 5px solid #2563eb;
+        border-radius: 5px;
+        padding-bottom: 0.25rem;
+        padding-left: 1rem;
+    }
+
+    .resume-section p {
+        margin: 0.25rem 0;
+        padding-left: 1.3rem;
+        color: #484848;
+    }
+
+    .resume-section strong {
+        color: #000e35;
+    }
+
+    .modal-body {
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+
+    .resume-header img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: 1rem;
+        border: 2px solid #2563eb;
+    }
+
+    .profile-column {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.4rem;
+        border-radius: 30px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f900;
+    }
+
+    .profile-column img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #2563eb;
+    }
+
+    .profile-column .profile-details {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .profile-column .profile-details .name {
+        font-weight: bold;
+        color: #434750;
+    }
+
+    .profile-column .profile-details .email {
+        font-size: 0.875rem;
+        color: #555;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        text-align: center;
+    }
+
+    .status-badge.shortlisted {
+        background-color: #38ff821a;
+        color: #095a0f;
+        font-weight: 500;
+        border: 1px solid green;
+        border-radius: 5px;
+    }
+
+    .status-badge.rejected {
+        background-color: #ff00000f;
+        color: #650000;
+        font-weight: normal;
+        border: 1px solid #5c0000;
+        border-radius: 5px;
+        box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .status-badge.pending {
+       background-color: #bcff001c;
+        color: #654700;
+        font-weight: normal;
+        border: 1px solid #654700;
+        border-radius: 5px;
+        box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+
+    .table {
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #ddd;
+    }
+
+    .table th, .table td {
+        vertical-align: middle !important;
+        @* text-align: center; *@
+    }
+
+    .table thead th {
+        @* background-color: #4361ee !important; /* Custom color for table header */ *@
+        color: white; /* Text color for table header */
+        font-weight: normal !important;
+        text-align: center;
+        color: #E8EDF3 !important; 
+    }
+
+    #rejectButton{
+        background-color: #ff00000f;
+        color: #650000;
+        font-weight: normal;
+        border: 1px solid #5c0000;
+        border-radius: 7px;
+        box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 5px 17px;
+    }
+
+    #selectButton{
+        background-color: #38ff821a;
+        color: #095a0f;
+        font-weight: 500;
+        border: 1px solid green;
+        border-radius: 7px;
+        padding: 5px 17px;
+    }
+
+    #rejectButton:hover{
+        background-color: #ff000033;
+        padding: 6px 18px;
+    }
+    
+    #selectButton:hover{
+        background-color: #38ff813f;
+        padding: 6px 18px;
+    }
+
+    #applicationDetailsModalLabel{
+        color: #1e3a8a;
+    }
+
+    .form-select{
+        border: 1px solid #010101;
+        padding: 5px 5px;
+        border-radius: 4px;
+        background: #00000000;
+        color: #000e35;
+        outline: none;
+    }
+   
+</style>
+
+
+<main class="animate-fade-in">
+    <div class="dashboard-header"></div>
+    <h1 class="dashboard-title">Manage Applications</h1>
+    
+    <!-- Filters -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <label for="jobTitleFilter" class="form-label">Filter by Job Title</label>
+            <select id="jobTitleFilter" class="form-select">
+                <option value="">All Job Titles</option>
+                <!-- Dynamic job titles will be populated here -->
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="statusFilter" class="form-label">Filter by Status</label>
+            <select id="statusFilter" class="form-select">
+                <option value="">All Statuses</option>
+                <option value="shortlisted">Shortlisted</option>
+                <option value="rejected">Rejected</option>
+                <option value="pending">Pending</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="table-responsive mt-4">
+        <table id="applicationsTable" class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr class="bg-body-tertiary">
+                    <th>Job Title</th>
+                    <th>Profile</th>
+                    <th>Email</th>
+                    <th>Mobile Number</th>
+                    <th>ATS Score</th>
+                    <th>Applied Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="applicationsTableBody">
+                <!-- Dynamic rows will be populated here -->
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<!-- Modal for Viewing Details -->
+
+<div class="modal fade" id="applicationDetailsModal" tabindex="-1" aria-labelledby="applicationDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header ">
+                <h5 class="modal-title" id="applicationDetailsModalLabel">Application Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body resume-style">
+                <div id="applicationDetailsContent">
+                    <!-- Dynamic content will be populated here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="rejectButton">Reject</button>
+                <button type="button" class="btn btn-success" id="selectButton">Shortlist</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Scheduling Interview -->
+<div class="modal fade" id="scheduleInterviewModal" tabindex="-1" aria-labelledby="scheduleInterviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="scheduleInterviewModalLabel">Schedule Interview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="scheduleInterviewForm">
+                    <input type="hidden" id="userId" name="userId">
+                    <input type="hidden" id="companyId" name="companyId">
+                    <div class="mb-3">
+                        <label for="interviewDate" class="form-label">Interview Date</label>
+                        <input type="date" class="form-control" id="interviewDate" name="interviewDate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="interviewTime" class="form-label">Interview Time</label>
+                        <input type="time" class="form-control" id="interviewTime" name="interviewTime" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveScheduleButton">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+
+    <script>
+        $(document).ready(function () {
+            function getUserIdFromToken() {
+                let token = localStorage.getItem("token");
+                if (!token) return null; // No token found
+
+                let payload = JSON.parse(atob(token.split('.')[1])); // Decode JWT payload
+                return payload.uid; // Extract User ID
+            }
+
+            // Get User ID dynamically
+            var userId = getUserIdFromToken();
+            console.log(userId); // Log the User ID for debugging
+
+            // Fetch applications from the API
+            $.ajax({
+                url: `http://localhost:5086/api/ApplyJob/GetApplyJobApplication/${userId}`,
+                type: 'GET',
+                success: function (response) {
+                    console.log(response); // Log the response data for debugging
+
+                    // Map API response to the expected format
+                    const applications = response.map(app => ({
+                        profileImage: app.user.c_profileImage || "default-profile-image.jpg",
+                        fullName: app.user.c_fullName,
+                        email: app.user.Email,
+                        mobile: app.user.c_phoneNumber,
+                        status: app.c_status,
+                        atsScore: 85, // Placeholder, replace with actual ATS score if available
+                        appliedDate: app.c_apply_date,
+                        details: {
+                            education: app.education_Details.c_HighestQualification,
+                            degree: app.education_Details.c_Degree,
+                            specialization: app.education_Details.c_Specialization,
+                            university: app.education_Details.c_UniversityName,
+                            yearOfPassing: app.education_Details.c_YearOfPassing,
+                            companyName: app.work_Experience.c_CompanyName,
+                            jobTitle: app.work_Experience.c_JobTitle,
+                            yearsOfWork: app.work_Experience.c_years_work,
+                            currentlyWorking: app.work_Experience.c_CurrentlyWorking,
+                            resumePath: app.userResume.c_ResumeFilePath
+                        }
+                    }));
+
+                    // Populate job title filter dropdown
+                    const jobTitles = [...new Set(applications.map(app => app.details.jobTitle))];
+                    jobTitles.forEach(title => {
+                        $("#jobTitleFilter").append(`<option value="${title}">${title}</option>`);
+                    });
+
+                    // Function to filter and render table
+                    function renderTable() {
+                        const selectedJobTitle = $("#jobTitleFilter").val();
+                        const selectedStatus = $("#statusFilter").val();
+
+                        const filteredApplications = applications.filter(app => {
+                            const matchesJobTitle = selectedJobTitle ? app.details.jobTitle === selectedJobTitle : true;
+                            const matchesStatus = selectedStatus ? app.status.toLowerCase() === selectedStatus : true;
+                            return matchesJobTitle && matchesStatus;
+                        });
+
+                        const tableBody = $("#applicationsTableBody");
+                        tableBody.empty();
+
+                        filteredApplications.forEach((app, index) => {
+                            const scheduleButton = app.status.toLowerCase() === "shortlisted"
+                                ? `<button class="btn btn-success btn-sm schedule-btn" data-userid="${index}" data-companyid="${index}" data-bs-toggle="modal">Schedule</button>`
+                                : "";
+
+                            const row = `
+                                <tr>
+                                    <td>${app.details.jobTitle}</td>
+                                    <td>
+                                        <div class="profile-column">
+                                            <img src="${app.profileImage}" alt="Profile Image">
+                                            <div class="profile-details">
+                                                <span class="name">${app.fullName}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>${app.email}</td>
+                                    <td>${app.mobile}</td>
+                                    <td>${app.atsScore}%</td>
+                                    <td>${app.appliedDate}</td>
+                                    <td>
+                                        <span class="status-badge ${app.status.toLowerCase()}">${app.status}</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm view-details-btn" data-index="${index}" data-bs-toggle="modal" data-bs-target="#applicationDetailsModal">View</button>
+                                        ${scheduleButton}
+                                    </td>
+                                </tr>
+                            `;
+                            tableBody.append(row);
+                        });
+                    }
+
+                    // Initial render
+                    renderTable();
+
+                    // Event listeners for filters
+                    $("#jobTitleFilter").change(renderTable);
+                    $("#statusFilter").change(renderTable);
+
+                    // Handle View button click
+                    $(document).on("click", ".view-details-btn", function () {
+                        const index = $(this).data("index");
+                        const app = applications[index];
+                        const detailsHtml = `
+                            <div class="resume-header">
+                                <img src="${app.profileImage}" alt="Profile Image">
+                                <div class="resume-header-right">
+                                    <h2>${app.fullName}</h2>
+                                    <p>${app.email}</p>
+                                </div>
+                            </div>
+                            <div class="resume-section">
+                                <h4>Education</h4>
+                                <p><strong>Highest Qualification:</strong> ${app.details.education}</p>
+                                <p><strong>Degree:</strong> ${app.details.degree || "N/A"}</p>
+                                <p><strong>Specialization:</strong> ${app.details.specialization || "N/A"}</p>
+                                <p><strong>University:</strong> ${app.details.university || "N/A"}</p>
+                                <p><strong>Year of Passing:</strong> ${app.details.yearOfPassing || "N/A"}</p>
+                            </div>
+                            <div class="resume-section">
+                                <h4>Work Experience</h4>
+                                <p><strong>Company Name:</strong> ${app.details.companyName || "N/A"}</p>
+                                <p><strong>Job Title:</strong> ${app.details.jobTitle || "N/A"}</p>
+                                <p><strong>Years of Work:</strong> ${app.details.yearsOfWork}</p>
+                                <p><strong>Currently Working:</strong> ${app.details.currentlyWorking ? "Yes" : "No"}</p>
+                            </div>
+                            <div class="resume-section">
+                                <h4>Resume</h4>
+                                <p><strong>Resume Path:</strong> <a href="${app.details.resumePath}" target="_blank">${app.details.resumePath}</a></p>
+                            </div>
+                        `;
+                        $("#applicationDetailsContent").html(detailsHtml);
+                    });
+                },
+                error: function () {
+                    console.error('Failed to fetch profile data.');
+                }
+            });
+        });
+    </script>
+}

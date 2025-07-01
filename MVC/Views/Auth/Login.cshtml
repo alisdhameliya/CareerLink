@@ -1,0 +1,340 @@
+@{
+    Layout = "_AuthLayout";
+}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<style>
+    .role-btn {
+        transition: background-color 0.3s, color 0.3s;
+    }
+    /* Default State */
+    .role-btn.btn-outline-primary {
+        background-color: white;
+        color: #4361ee;
+        border: 2px solid #4361ee;
+    }
+
+    /* Active (Selected) State */
+    .role-btn.active {
+        background-color: #4361ee !important;
+        color: white !important;
+        border: 2px solid #4361ee;
+    }
+
+    /* Hover Effect */
+    .role-btn:hover {
+        background-color: #364fc7 !important;
+        color: white !important;
+        border: 2px solid #364fc7;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+
+    .input-group {
+        position: relative;
+        margin-bottom: 0.25rem;
+    }
+
+    .input-group-text {
+        background-color: transparent;
+        border-right: none;
+    }
+
+    .form-control {
+        border-left: none;
+        padding-left: 0;
+    }
+
+    .form-control:focus {
+        border-color: #ced4da;
+        box-shadow: none;
+    }
+
+    .input-group:focus-within {
+        box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.25);
+        border-radius: 0.25rem;
+    }
+
+    /* Error message styling */
+    .error {
+        color: #dc3545 !important;
+        font-size: 12px;
+        margin-top: 0.25rem;
+        display: block;
+        position: absolute;
+        left: 0;
+    }
+
+    /* Add margin to form groups with errors */
+    .form-group.has-error {
+        margin-bottom: 2rem;
+    }
+
+    /* Fade-in animation */
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .login-right-wrapper {
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    .btn-primary {
+        background-color: #4361ee !important;
+        border-color: #4361ee !important;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus,
+    .btn-primary:active {
+        background-color: #364fc7 !important;
+        border-color: #364fc7 !important;
+    }
+
+    .text-primary {
+        color: #4361ee !important;
+    }
+
+    .text-primary:hover {
+        color: #364fc7 !important;
+    }
+
+    /* Password toggle styling */
+    .password-toggle {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #6c757d;
+        cursor: pointer;
+        z-index: 5;
+    }
+    .swal2-confirm{
+        background-color: #4361ee;
+    }
+    .password-toggle:hover {
+        color: #4361ee;
+    }
+
+    .password-input-group {
+        position: relative;
+    }
+
+    .error {
+        color: #dc3545 !important;
+        font-size: 12px;
+        margin-top: 0.25rem;
+        display: block;
+        position: absolute;
+        left: 0;
+    }
+</style>
+
+<div class="login-right-wrapper border p-4 shadow-lg rounded">
+    <div class="loginpage-box-wrapper">
+        <h2 class="login-title text-dark font-bold text-center mb-4">Login</h2>
+        <form id="loginForm">
+            <div class="loginpage-box-content">
+                <!-- Role Selection Buttons -->
+                <div class="form-group text-center">
+                    <button type="button" class="role-btn btn btn-outline-primary active me-2 mb-2"
+                        data-role="Candidate">
+                        <i class="fas fa-user"></i> Candidate
+                    </button>
+                    <button type="button" class="role-btn btn btn-outline-primary me-2 mb-2" data-role="Recruiter">
+                        <i class="fas fa-user-tie"></i> Recruiter
+                    </button>
+                    <button type="button" class="role-btn btn btn-outline-primary mb-2" data-role="Admin">
+                        <i class="fas fa-user-shield"></i> Admin
+                    </button>
+                    <input type="hidden" id="role" name="role" value="Candidate">
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        <input type="email" class="form-control" placeholder="Email" id="loginEmail" name="loginEmail">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group password-input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" class="form-control" placeholder="Password" id="loginPwd"
+                            name="loginPwd">
+                        <button type="button" class="password-toggle" id="togglePassword">
+                            <i class="fas fa-eye-slash"></i> <!-- Changed from fa-eye to fa-eye-slash -->
+                        </button>
+                    </div>
+                    <label id="loginPwd-error" class="error" for="loginPwd"></label>
+                </div>
+
+                <div class="form-group pb-10">
+                    <button type="submit" id="login" class="btn btn-primary w-100">
+                        Login
+                    </button>
+                </div>
+
+                <div class="text-center">
+                    <a asp-action="ForgotPassword" class="text-primary">
+                        Forgot Password?
+                    </a>
+                </div>
+
+                <div class="text-center mt-3">
+                    <span class="text-dark">Don't have an account?</span>
+                    <a asp-action="Register" class="text-primary ms-1">Sign up here</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Load Necessary Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Add custom password validation method
+        $.validator.addMethod("strongPassword", function (value, element) {
+            // At least 6 characters
+            if (value.length < 6) return false;
+
+            // At least one uppercase letter
+            if (!/[A-Z]/.test(value)) return false;
+
+            // At least one lowercase letter
+            if (!/[a-z]/.test(value)) return false;
+
+            // At least one special character
+            if (!/[!@@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value)) return false;
+
+            return true;
+        }, "");
+
+        // Role selection
+        $(".role-btn").click(function () {
+            $(".role-btn").removeClass("active");
+            $(this).addClass("active");
+
+            let selectedRole = $(this).data("role");
+            $("#role").val(selectedRole);
+        });
+
+        // Password visibility toggle
+        $("#togglePassword").click(function () {
+            const passwordInput = $("#loginPwd");
+            const icon = $(this).find("i");
+
+            if (passwordInput.attr("type") === "text") {
+                passwordInput.attr("type", "password");
+                icon.removeClass("fa-eye").addClass("fa-eye-slash");
+            } else {
+                passwordInput.attr("type", "text");
+                icon.removeClass("fa-eye-slash").addClass("fa-eye");
+            }
+        });
+
+        // Login form validation
+        $("#loginForm").validate({
+            rules: {
+                loginEmail: {
+                    required: true,
+                    email: true
+                },
+                loginPwd: {
+                    required: true,
+                    strongPassword: true
+                }
+            },
+            messages: {
+                loginEmail: {
+                    required: "Email is required",
+                    email: "Please enter a valid email address"
+                },
+                loginPwd: {
+                    required: "Password is required"
+                }
+            },
+            highlight: function (element) {
+                $(element).closest('.form-group').addClass('has-error');
+            },
+            unhighlight: function (element) {
+                $(element).closest('.form-group').removeClass('has-error');
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.closest('.form-group'));
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault();
+                console.log("Login form validation passed");
+
+                let formData = new FormData();
+                formData.append("c_email", $("#loginEmail").val());
+                formData.append("c_password", $("#loginPwd").val());
+                formData.append("c_userRole", $("#role").val());
+                console.log([...formData]);
+                $.ajax({
+                    url: "http://localhost:5086/api/AuthApi/Login",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        console.log(response);
+                        localStorage.setItem("token", response.token);
+                        if (response.success) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Login Successful",
+                                text: "Redirecting...",
+                                timer: 1000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                // Check user role and redirect
+                                if (response.userrole === "Candidate") {
+                                    window.location.href = "/UserDashboard/Index";
+                                } else if (response.userrole === "Admin") {
+                                    window.location.href = "/Admin/Index";
+                                } else if (response.userrole === "Recruiter") {
+                                    window.location.href = "/RecruiterDashboard/Index";
+                                } else {
+                                    window.location.href = "/Home/Index"; // Default fallback
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error",
+                                text: response.message
+                            });
+                        }
+                    },
+                    error: function (xhr) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            text: xhr.responseText
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>

@@ -1,0 +1,903 @@
+@{
+    Layout = "~/Views/Shared/_RecruiterLayout.cshtml";
+}
+
+<style>
+    /* Main Container */
+    .form-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        background: white;
+        padding: 2.5rem;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+    }
+
+    /* Form Title */
+    .form-title {
+        text-align: center;
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: #2563eb;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+    .swal2-confirm {
+        background-color: #4361ee;
+    }
+
+    .form-title:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(90deg, #2563eb, #3b82f6);
+        border-radius: 2px;
+    }
+
+    /* Wizard Styling */
+    .k-wizard {
+        border: none;
+        box-shadow: none;
+    }
+
+    /* Step Indicators */
+    .k-wizard .k-step-indicator {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+        border-width: 2px;
+    }
+
+    .k-wizard .k-step-current .k-step-indicator {
+        background-color: #2563eb;
+        border-color: #2563eb;
+        color: white;
+    }
+
+    .k-wizard .k-step:not(.k-step-current) .k-step-indicator {
+        background-color: #f1f5f9;
+        border-color: #e2e8f0;
+        color: #64748b;
+    }
+
+    .k-wizard .k-step-done .k-step-indicator {
+        background-color: #10b981;
+        border-color: #10b981;
+        color: white;
+    }
+
+    /* Progress Bar */
+    .k-wizard .k-progressbar {
+        height: 4px;
+        background-color: #e2e8f0;
+    }
+
+    .k-wizard .k-progressbar .k-state-selected {
+        background-color: #2563eb;
+    }
+
+    /* Step Content */
+    .k-wizard .k-step-content {
+        padding: 1.5rem 0;
+    }
+
+    /* Form Fields */
+    .k-form-field {
+        margin-bottom: 1.25rem;
+    }
+
+    .k-form-label {
+        font-weight: 500;
+        color: #334155;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Input Styling */
+    .k-textbox,
+    .k-dropdown,
+    .k-multiselect,
+    .k-numerictextbox,
+    .k-combobox {
+        width: 100%;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+        padding: 0.5rem 0.75rem;
+        transition: all 0.2s ease;
+    }
+
+    .k-textbox:focus,
+    .k-dropdown:focus,
+    .k-multiselect:focus,
+    .k-numerictextbox:focus,
+    .k-combobox:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        outline: none;
+    }
+
+    /* Textarea */
+    textarea.k-input-inner {
+        min-height: 120px;
+        resize: vertical;
+        padding: 0.75rem;
+        line-height: 1.5;
+    }
+
+    /* Buttons */
+    .k-button-solid-primary {
+        background-color: #2563eb !important;
+        color: white !important;
+        border-radius: 6px;
+        padding: 0.5rem 1.25rem;
+        font-weight: 500;
+        border: none;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+    }
+
+    .k-button-solid-primary:hover {
+        background-color: #1d4ed8 !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(37, 99, 235, 0.15);
+    }
+
+    .k-button-solid-primary:active {
+        transform: translateY(0);
+    }
+
+    /* Error Styling */
+    .k-invalid {
+        border-color: #ef4444 !important;
+    }
+
+    .error-message {
+        color: #ef4444;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+        display: block;
+    }
+
+    /* Success Message */
+    .alert-success {
+        background-color: #ecfdf5;
+        color: #059669;
+        border: 1px solid #a7f3d0;
+        border-radius: 6px;
+        padding: 0.75rem 1rem;
+        margin: 1rem 0;
+    }
+
+    /* Error Message */
+    .alert-danger {
+        background-color: #fef2f2;
+        color: #dc2626;
+        border: 1px solid #fecaca;
+        border-radius: 6px;
+        padding: 0.75rem 1rem;
+        margin: 1rem 0;
+    }
+
+    /* MultiSelect Styling */
+    .k-multiselect-wrap {
+        min-height: 38px;
+        padding: 0.25rem 0.5rem;
+    }
+
+    .k-multiselect-wrap .k-button {
+        background-color: #2563eb;
+        color: white;
+        border-radius: 4px;
+        padding: 0.25rem 0.5rem;
+        margin: 0.125rem;
+        font-size: 0.75rem;
+    }
+
+    /* Dropdown Items */
+    .k-list-item.k-selected,
+    .k-selected.k-list-optionlabel {
+        background-color: #2563eb !important;
+        color: white !important;
+    }
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Form Container Animation */
+    .form-container {
+        animation: fadeInUp 0.6s ease-out forwards;
+        opacity: 0;
+        /* Start invisible for animation */
+    }
+
+    /* Wizard Step Animation */
+    .k-wizard .k-step-content {
+        animation: fadeIn 0.4s ease-out 0.3s forwards;
+        opacity: 0;
+        /* Start invisible for animation */
+    }
+
+    /* Title Animation */
+    .form-title {
+        animation: fadeInUp 0.5s ease-out 0.2s forwards;
+        opacity: 0;
+        /* Start invisible for animation */
+    }
+
+    /* Button Animation */
+    .k-button-solid-primary {
+        animation: fadeInUp 0.5s ease-out 0.4s forwards;
+        opacity: 0;
+        /* Start invisible for animation */
+    }
+
+    /* Loading Overlay Animation */
+    .loading-overlay {
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    /* Spinner Animation */
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .spinner {
+        animation: spin 1s linear infinite, fadeIn 0.5s ease-out;
+    }
+
+    /* Success Message Animation */
+    .alert-success {
+        animation: fadeInUp 0.4s ease-out;
+    }
+
+    /* Error Message Animation */
+    .alert-danger {
+        animation: fadeInUp 0.4s ease-out;
+    }
+
+    /* Responsive Adjustments */
+    @@media (max-width: 768px) {
+        .form-container {
+            padding: 1.5rem;
+            margin: 1rem;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+        }
+
+        .k-wizard .k-step-indicator {
+            width: 28px;
+            height: 28px;
+            font-size: 12px;
+        }
+    }
+
+    /* Animation */
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .k-wizard .k-step-content {
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    /* Loading State */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid #e2e8f0;
+        border-top: 4px solid #2563eb;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
+<!-- Form Container -->
+<div class="form-container">
+    <div class="form-title">Post a New Job Opportunity</div>
+
+    <!-- Success/Error Messages -->
+    <div id="messageBox" class="alert" style="display:none;"></div>
+
+    <!-- Kendo UI Wizard -->
+    <form id="jobForm" enctype="multipart/form-data">
+        <input type="text" name="companyName" id="companyName" hidden>
+        <div id="wizard"></div>
+    </form>
+</div>
+
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="loading-overlay" style="display:none;">
+    <div class="spinner"></div>
+</div>
+
+<script>
+    var selectedSkills = [];
+    $(document).ready(function () {
+        // Show loading overlay while initializing
+        $("#loadingOverlay").show();
+
+        // Initialize wizard
+        var wizard = $("#wizard").kendoWizard({
+            stepper: {
+                indicator: true,
+                label: true,
+                linear: false
+            },
+            select: function (e) {
+                if (e.step.options.title === "Additional Info" && !validateStep1()) {
+                    e.preventDefault();
+                    showMessage("Please complete all required fields in Job Details before proceeding.", "error");
+                }
+            },
+            steps: [
+                {
+                    title: "Job Details",
+                    content: "<div id='step1'></div>",
+                    buttons: [
+                        {
+                            name: "next",
+                            text: "Continue",
+                            attributes: { class: "k-button-solid-primary" },
+                            click: function (e) {
+                                if (!validateStep1()) {
+                                    e.preventDefault();
+                                    showMessage("Please complete all required fields before proceeding.", "error");
+                                    return false;
+                                }
+                                // Animate step transition
+                                $(".k-step-content").css("opacity", 0);
+                                setTimeout(() => {
+                                    $(".k-step-content").css("opacity", 1);
+                                }, 300);
+                            },
+                        },
+                    ],
+                },
+                {
+                    title: "Additional Info",
+                    content: "<div id='step2'></div>",
+                    buttons: [
+                        {
+                            name: "previous",
+                            text: "Back",
+                            attributes: { class: "k-button-solid-primary" },
+                            click: function () {
+                                wizard.select(0);
+                                // Animate step transition
+                                $(".k-step-content").css("opacity", 0);
+                                setTimeout(() => {
+                                    $(".k-step-content").css("opacity", 1);
+                                }, 300);
+                            }
+                        },
+                        {
+                            name: "custom",
+                            text: "Post Job Now",
+                            primary: true,
+                            attributes: { class: "k-button-solid-primary" },
+                            click: function () {
+                                if (!validateStep2()) {
+                                    showMessage("Please complete all required fields before submitting.", "error");
+                                    return false;
+                                }
+                                submitForm();
+                            }
+                        }
+                    ]
+                }
+            ],
+            done: function () {
+                // Hide loading overlay when wizard is ready
+                $("#loadingOverlay").hide();
+            }
+        }).data("kendoWizard");
+
+        // Initialize Step 1 - Job Details
+        $("#step1").kendoForm({
+            formData: {
+                c_job_title: "",
+                c_job_desc: "",
+                c_job_location: "",
+                c_job_type: "Full-Time"
+            },
+            items: [
+                {
+                    field: "c_job_title",
+                    label: "Job Title",
+                    hint: "E.g. 'Senior Frontend Developer' or 'Marketing Manager'",
+                    editor: function (container) {
+                        $("<input id='c_job_title' name='c_job_title' placeholder='Enter job title'>")
+                            .appendTo(container)
+                            .kendoTextBox();
+                    }
+                },
+                {
+                    field: "c_job_desc",
+                    label: "Job Description",
+                    editor: function (container) {
+                        $("<textarea id='c_job_desc' name='c_job_desc'></textarea>").appendTo(container).kendoTextBox();
+                    }
+                },
+                {
+                    field: "c_job_location",
+                    label: "Job Location",
+                    hint: "Start typing to search for cities",
+                    editor: function (container) {
+                        $("<input id='c_job_location' name='c_job_location' placeholder='Search for a city'>")
+                            .appendTo(container)
+                            .kendoComboBox({
+                                dataTextField: "name",
+                                dataValueField: "name",
+                                placeholder: "Search for a city...",
+                                filter: "startswith",
+                                minLength: 2,
+                                suggest: true,
+                                noDataTemplate: "<div class='k-no-data'>No cities found</div>",
+                                dataSource: {
+                                    transport: {
+                                        read: {
+                                            url: "https://raw.githubusercontent.com/nshntarora/Indian-Cities-JSON/master/cities.json",
+                                            dataType: "json",
+                                            cache: true
+                                        }
+                                    },
+                                    schema: {
+                                        data: function (response) {
+                                            if (!response || !Array.isArray(response)) {
+                                                console.error("Invalid API response:", response);
+                                                return [];
+                                            }
+                                            return response;
+                                        }
+                                    }
+                                }
+                            });
+                    }
+                },
+                {
+                    field: "c_job_type",
+                    label: "Employment Type",
+                    editor: function (container) {
+                        $("<input id='c_job_type' name='c_job_type'>")
+                            .appendTo(container)
+                            .kendoDropDownList({
+                                dataSource: ["Full-Time", "Part-Time", "Internship"],
+                                optionLabel: "Select employment type..."
+                            });
+                    }
+                }
+            ],
+            buttonsTemplate: ""
+        });
+
+        // Initialize Step 2 - Additional Info
+        $("#step2").kendoForm({
+            formData: {
+                c_job_experience: 0,
+                c_salary_range: "",
+                c_vacancy: 1,
+                c_dept_id: 1,
+                c_qualification_title: "",
+                c_skills: []
+            },
+            items: [
+                {
+                    field: "c_job_experience",
+                    label: "Required Experience",
+                    hint: "Minimum years of experience required",
+                    editor: function (container) {
+                        $("<input id='c_job_experience' name='c_job_experience' type='number' min='0'>")
+                            .appendTo(container)
+                            .kendoNumericTextBox({
+                                min: 0,
+                                format: "{0} yrs",
+                                placeholder: "Enter years of experience"
+                            });
+                    }
+                },
+                {
+                    field: "c_salary_range",
+                    label: "Salary Range",
+                    hint: "E.g. '$50,000 - $70,000' or 'Competitive'",
+                    editor: function (container) {
+                        $("<input id='c_salary_range' name='c_salary_range' placeholder='Enter salary range'>")
+                            .appendTo(container)
+                            .kendoTextBox();
+                    }
+                },
+                {
+                    field: "c_vacancy",
+                    label: "Number of Openings",
+                    hint: "How many positions are available?",
+                    editor: function (container) {
+                        $("<input id='c_vacancy' name='c_vacancy' type='number' min='1'>")
+                            .appendTo(container)
+                            .kendoNumericTextBox({
+                                min: 1,
+                                format: "{0}",
+                                placeholder: "Enter number of vacancies"
+                            });
+                    }
+                },
+                {
+                    field: "c_dept_id",
+                    label: "Department",
+                    editor: function (container) {
+                        $("<input id='c_dept_id' name='c_dept_id'>")
+                            .appendTo(container)
+                            .kendoDropDownList({
+                                dataTextField: "c_deptname",
+                                dataValueField: "c_dept_id",
+                                optionLabel: "Select department...",
+                                dataSource: {
+                                    transport: {
+                                        read: {
+                                            url: "http://localhost:5086/api/jobposts/getAllDepartments",
+                                            dataType: "json"
+                                        }
+                                    }
+                                }
+                            });
+                    }
+                },
+                {
+                    field: "c_qualification_title",
+                    label: "Required Qualifications",
+                    hint: "E.g. 'Bachelor's Degree in Computer Science'",
+                    editor: function (container) {
+                        $("<input id='c_qualification_title' name='c_qualification_title' placeholder='Enter required qualifications'>")
+                            .appendTo(container)
+                            .kendoTextBox();
+                    }
+                },
+                {
+                    field: "c_skills",
+                    label: "Required Skills",
+                    hint: "Select all relevant skills for this position",
+                    editor: function (container) {
+                        $("<input id='c_skills' name='c_skills'>")
+                            .appendTo(container)
+                            .kendoMultiSelect({
+                                dataTextField: "c_skill_title",
+                                dataValueField: "c_skill_title",
+                                placeholder: "Select skills...",
+                                autoClose: false,
+                                dataSource: {
+                                    transport: {
+                                        read: {
+                                            url: "http://localhost:5086/api/jobposts/getAllSkills",
+                                            dataType: "json"
+                                        }
+                                    }
+                                },
+                                select: function (e) {
+                                    var selectedItem = e.dataItem.c_skill_title;
+                                    if (selectedSkills.indexOf(selectedItem)) {
+                                        selectedSkills.push(selectedItem);
+                                    }
+                                    var multiSelect = $("#c_skills").data("kendoMultiSelect");
+                                    multiSelect.element.val(selectedSkills.join(","));
+                                },
+                                deselect: function (e) {
+                                    var deselectedItem = e.dataItem.c_skill_title;
+                                    var index = selectedSkills.indexOf(deselectedItem);
+                                    if (index !== -1) {
+                                        selectedSkills.splice(index, 1);
+                                    }
+                                    var multiSelect = $("#c_skills").data("kendoMultiSelect");
+                                    multiSelect.element.val(selectedSkills.join(","));
+                                }
+                            });
+                    }
+                }
+            ],
+            buttonsTemplate: ""
+        });
+
+        // Hide loading overlay when forms are initialized
+        $("#loadingOverlay").hide();
+
+        // Validation functions
+        function validateStep(formId) {
+            let isValid = true;
+            const requiredFields = {
+                "step1": {
+                    "c_job_title": "Job Title is required",
+                    "c_job_desc": "Job Description is required",
+                    "c_job_location": "Job Location is required",
+                    "c_job_type": "Employment Type is required"
+                },
+                "step2": {
+                    "c_job_experience": "Experience is required",
+                    "c_salary_range": "Salary Range is required",
+                    "c_vacancy": "Number of openings is required",
+                    "c_dept_id": "Department is required",
+                    "c_qualification_title": "Qualifications are required",
+                    "c_skills": "At least one skill is required"
+                }
+            };
+
+            $("#" + formId).find("input, textarea, select").each(function () {
+                let inputElement = $(this);
+                let fieldName = inputElement.attr("id");
+                let parentContainer = inputElement.closest(".k-form-field");
+
+                parentContainer.find(".error-message").remove();
+                inputElement.removeClass("k-invalid");
+
+                if (requiredFields[formId][fieldName]) {
+                    if (fieldName === "c_skills" && selectedSkills.length === 0) {
+                        isValid = false;
+                        parentContainer.append(`<span class='error-message'>${requiredFields[formId][fieldName]}</span>`);
+                    } else if (!inputElement.val() || inputElement.val().trim() === "") {
+                        isValid = false;
+                        inputElement.addClass("k-invalid");
+                        parentContainer.append(`<span class='error-message'>${requiredFields[formId][fieldName]}</span>`);
+                    }
+                }
+            });
+
+            return isValid;
+        }
+
+        function validateStep1() {
+            return validateStep("step1");
+        }
+
+        function validateStep2() {
+            return validateStep("step2");
+        }
+
+        // Clear error messages on input
+        $("#step1, #step2").on("input change", "input, textarea, select", function () {
+            let inputElement = $(this);
+            let parentContainer = inputElement.closest(".k-form-field");
+            inputElement.removeClass("k-invalid");
+            parentContainer.find(".error-message").remove();
+        });
+
+        // Message display function
+        function showMessage(message, type) {
+            var messageBox = $("#messageBox");
+            messageBox.removeClass("alert-success alert-danger").hide();
+
+            if (type === "success") {
+                messageBox.addClass("alert-success").text(message).fadeIn();
+            } else {
+                messageBox.addClass("alert-danger").text(message).fadeIn();
+            }
+
+            setTimeout(() => {
+                messageBox.fadeOut();
+            }, 5000);
+        }
+
+        // Get user ID from token
+        function getUserIdFromToken() {
+            let token = localStorage.getItem("token");
+            if (!token) return null;
+
+            try {
+                let payload = JSON.parse(atob(token.split('.')[1]));
+                return payload.uid;
+            } catch (e) {
+                console.error("Error decoding token:", e);
+                return null;
+            }
+        }
+
+        // Initialize user and company data
+        var userId = getUserIdFromToken();
+        if (!userId) {
+            console.error("User ID not found in token.");
+            showMessage("Authentication error. Please log in again.", "error");
+            return;
+        }
+
+        $.ajax({
+            url: `http://localhost:5086/api/CompanyApi/getCompanyId/${userId}`,
+            type: "GET",
+            @* beforeSend: function () {
+                $("#loadingOverlay").show();
+            }, *@
+            success: function (response) {
+                const companyId = response;
+    @* console.log(response); *@
+                if (companyId == 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Company Not Registered',
+                        text: 'You have not registered your company . Please complete the registration process.',
+                        confirmButtonColor: '#2563eb'
+                    }).then(() => {
+                        window.location = '../RecruiterDashboard/CompanyRegistration';
+                    });
+                    return;
+                }
+                loadCompanyName(companyId);
+
+
+                // ✅ Call second AJAX inside the success callback of the first one
+                $.ajax({
+                    url: 'http://localhost:5086/api/CompanyApi/getCompanyStatus/' + companyId,
+                    type: 'GET',
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        console.log("Company status is: " + response);
+                        setTimeout(() => {
+                            if (response == 0) {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Company Not Approved',
+                                    text: 'Your approval is pending. Please Wait for approval process.',
+                                    confirmButtonColor: '#2563eb'
+                                }).then(() => {
+                                    window.location = '../RecruiterDashboard/Index';
+                                });
+                            }
+                        }, 300);
+                    },
+                    error: function (xhr) {
+                        console.error("Failed to fetch company status:", xhr);
+                    }
+                });
+            },
+            error: function (xhr) {
+                console.error("Failed to fetch company ID:", xhr);
+                showMessage("Failed to fetch company information. Please try again later.", "error");
+            },
+            complete: function () {
+                $("#loadingOverlay").hide();
+            }
+        });
+
+
+        function loadCompanyName(companyId) {
+            $.ajax({
+                url: `http://localhost:5086/api/CompanyApi/getCompanyName/${companyId}`,
+                type: "GET",
+                success: function (response) {
+                    if (response && response.company) {
+                        $("#companyName").val(response.company.c_company_name);
+                    } else {
+                        console.error("Invalid company data received:", response);
+                    }
+                },
+                error: function (xhr) {
+                    console.error("Failed to fetch company name:", xhr);
+                }
+            });
+        }
+
+        // Form submission
+        function submitForm() {
+            if (!companyId) {
+                showMessage("Company information is missing. Cannot post job.", "error");
+                return;
+            }
+
+            $("#loadingOverlay").show();
+
+            var formData = {
+                c_job_title: $("#c_job_title").val(),
+                c_job_desc: $("#c_job_desc").val(),
+                c_job_location: $("#c_job_location").val(),
+                c_job_type: $("#c_job_type").val(),
+                c_job_experience: parseInt($("#c_job_experience").val()),
+                c_salary_range: $("#c_salary_range").val(),
+                c_vacancy: parseInt($("#c_vacancy").val()),
+                c_dept_id: parseInt($("#c_dept_id").val()),
+                c_qualification_title: $("#c_qualification_title").val(),
+                c_skills: selectedSkills.join(","),
+                c_company_id: parseInt(companyId),
+                c_company_name: $("#companyName").val()
+            };
+
+            $.ajax({
+                url: "http://localhost:5086/api/jobposts/create",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    $("#loadingOverlay").hide();
+
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: response.message,
+                            confirmButtonColor: '#2563eb',
+                            timer: 1500,
+                            timerProgressBar: true,
+                            willClose: () => {
+                                window.location.href = '../RecruiterDashboard/ManageJobs';
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: response.message,
+                            confirmButtonColor: '#2563eb'
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    $("#loadingOverlay").hide();
+
+                    try {
+                        var errorResponse = JSON.parse(xhr.responseText);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: errorResponse.message || "Job posting failed. Please try again.",
+                            confirmButtonColor: '#2563eb'
+                        });
+                    } catch (e) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: "An unexpected error occurred. Please try again later.",
+                            confirmButtonColor: '#2563eb'
+                        });
+                    }
+                }
+            });
+        }
+    });
+</script>

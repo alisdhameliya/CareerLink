@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .logo {
+            max-width: 150px;
+            margin-bottom: 15px;
+        }
+        .content {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 20px;
+            color: white;
+            background-color: #0b5ed7;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .footer {
+            font-size: 14px;
+            color: #777;
+            margin-top: 20px;
+        }
+        .logo {
+    width: 600px; /* Adjust width as needed */
+    height: 50px; /* Maintain aspect ratio */
+    margin-bottom: 15px;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+     <img src="https://res.cloudinary.com/dhruvil20/image/upload/v1743946773/2removebg-preview_x58xrm.png" alt="Company Logo" class="logo">
+        <div class="content">
+            <h2>Application Rejected</h2>
+            <p>We regret to inform you that your application for <strong>{{CompanyName}}</strong> has been <b>rejected</b>.</p>
+            <p><strong>Reason:</strong> {{Reason}}</p>
+            <p>If you believe this was a mistake or have any concerns, please reach out to our support team.</p>
+            <a href="mailto:careerlink2025@gmail.com" class="button" style="color: white;">Contact Support</a>
+        </div>
+        <div class="footer">©CareerLink. All Rights Reserved.</div>
+    </div>
+</body>
+</html>

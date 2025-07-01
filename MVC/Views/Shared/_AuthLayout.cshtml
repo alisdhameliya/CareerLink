@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--meta tags-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <title>Career Link</title>
+    <!-- favicon -->
+    <link rel="shortcut icon" href="~/favicon.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/css/Default/css/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/css/Default/css/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/css/Default/css/fonts.css" rel="stylesheet" />
+    <link href="~/css/Default/css/Css icon/all.min.css" rel="stylesheet" />
+    <link href="~/css/Default/css/styleguide.css" rel="stylesheet" />
+    <link href="~/css/Default/css/responsive.css" rel="stylesheet" />
+    <link href="~/css/Default/css/casepoint.comfortable.css" rel="stylesheet" />
+    <link href="~/css/Default/css/kendo.Indigo.css" rel="stylesheet" />
+    <link href="~/css/auth.css" rel="stylesheet" />
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/Kendo/jquery.min.js"></script>
+    <script src="~/js/Kendo/kendo.all.min.js"></script>
+    <script src="~/js/CLARENT/Other/Custom/clarant-custom.js"></script>
+    <script src="~/js/CLARENT/Other/Custom/Custom.js"></script>
+</head>
+
+<body>
+
+    <div class="auth-container">
+        <!-- Animated shapes -->
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+
+        <div class="auth-card">
+            <div class="auth-left">
+                @{
+                    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+                    var action = ViewContext.RouteData.Values["action"]?.ToString();
+                    var welcomeTitle = "Welcome to Career Link";
+                    var welcomeText = "Your gateway to endless career opportunities. Connect with top employers and find your dream job today.";
+                    var imagePath = "/img/auth-illustration.svg";
+
+                    if (controller == "Auth")
+                    {
+                        switch (action)
+                        {
+                            case "Login":
+                                welcomeTitle = "Welcome Back!";
+                                welcomeText = "Sign in to continue your journey with Career Link. Access your profile, applications, and job matches.";
+                                imagePath = "/img/Login.png";
+                                break;
+                            case "Register":
+                                welcomeTitle = "Join Career Link";
+                                welcomeText = "Create your account and unlock a world of opportunities. Start your career journey today.";
+                                imagePath = "/img/Register.gif";
+                                break;
+                            case "ForgotPassword":
+                                welcomeTitle = "Password Recovery";
+                                welcomeText = "Don't worry! It happens. Please enter your email address to recover your password.";
+                                imagePath = "/img/ForgotPass.png";
+                                break;
+                        }
+                    }
+                }
+                <div class="welcome-text">
+                    <h1>@welcomeTitle</h1>
+                    <p>@welcomeText</p>
+                </div>
+                <img src="@Url.Content(imagePath)" alt="Career Illustration" class="auth-illustration" 
+                     onerror="console.error('Failed to load image:', this.src); this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiB2aWV3Qm94PSIwIDAgNDAwIDMwMCI+CiAgPHN0eWxlPgogICAgLmJnIHsgZmlsbDogI2U2ZjBmZjsgfQogICAgLnByaW1hcnkgeyBmaWxsOiAjMDA2NmZmOyB9CiAgICAuc2Vjb25kYXJ5IHsgZmlsbDogIzAwNTJjYzsgfQogIDwvc3R5bGU+CiAgPHJlY3QgY2xhc3M9ImJnIiB4PSIwIiB5PSIwIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgcng9IjIwIiAvPgogIDxjaXJjbGUgY2xhc3M9InByaW1hcnkiIGN4PSIyMDAiIGN5PSIxNTAiIHI9IjgwIiBvcGFjaXR5PSIwLjIiIC8+CiAgPGNpcmNsZSBjbGFzcz0ic2Vjb25kYXJ5IiBjeD0iMjIwIiBjeT0iMTcwIiByPSI2MCIgb3BhY2l0eT0iMC4yIiAvPgogIDxjaXJjbGUgY2xhc3M9InByaW1hcnkiIGN4PSIxODAiIGN5PSIxMzAiIHI9IjQwIiBvcGFjaXR5PSIwLjIiIC8+Cjwvc3ZnPg=='" />
+            </div>
+            <div class="auth-right">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

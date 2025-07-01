@@ -1,0 +1,670 @@
+@{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewData["Title"] = "Personal Info";
+}
+
+<!-- Include necessary libraries -->
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --primary: #4361ee;
+        --primary-dark: #3a56d4;
+        --secondary: #3f37c9;
+        --accent: #4895ef;
+        --danger: #f72585;
+        --success: #4cc9f0;
+        --light: #f8f9fa;
+        --dark: #212529;
+        --gray: #6c757d;
+        --light-gray: #e9ecef;
+        --border-radius: 12px;
+        --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        --transition: all 0.3s ease;
+    }
+
+    .swal2-confirm {
+        background-color: #4361ee;
+    }
+
+    .personal-info-container {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 0 1.5rem;
+    }
+
+    .personal-info-card {
+        background: #fff;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        overflow: hidden;
+        transition: var(--transition);
+        position: relative;
+    }
+
+    .personal-info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        padding: 1.75rem 2rem;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+        transform: rotate(30deg);
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .title-section {
+        flex: 1;
+    }
+
+    .header-icon {
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .personal-info-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin: 0;
+        color: white;
+    }
+
+    .personal-info-subtitle {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        margin-top: 0.25rem;
+        font-weight: 300;
+    }
+
+    /* Profile Image Styling */
+    .profile-image-container {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        flex-shrink: 0;
+    }
+
+    .profile-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid white;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: var(--transition);
+    }
+
+    .profile-image-upload-btn {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background: var(--accent);
+        color: white;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: var(--transition);
+        border: 2px solid white;
+    }
+
+    .profile-image-upload-btn:hover {
+        transform: scale(1.1);
+        background: var(--primary);
+    }
+
+    .profile-image-upload-btn i {
+        font-size: 1rem;
+    }
+
+    /* Form Styling */
+    .card-body {
+        padding: 2rem;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+        position: relative;
+    }
+
+    .floating-label-group {
+        position: relative;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 1rem 1rem 1rem 3rem;
+        border: 2px solid var(--light-gray);
+        border-radius: var(--border-radius);
+        font-size: 0.95rem;
+        transition: var(--transition);
+        height: 56px;
+        background-color: #fff;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .form-input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        outline: none;
+    }
+
+    .floating-label {
+        position: absolute;
+        top: 1rem;
+        left: 3rem;
+        color: var(--gray);
+        transition: var(--transition);
+        pointer-events: none;
+        background: #fff;
+        padding: 0 0.25rem;
+        font-size: 0.95rem;
+    }
+
+    .form-input:focus~.floating-label,
+    .form-input:not(:placeholder-shown)~.floating-label {
+        top: -0.6rem;
+        left: 2.5rem;
+        font-size: 0.75rem;
+        color: var(--primary);
+        background: #fff;
+        font-weight: 500;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--primary);
+        font-size: 1.1rem;
+    }
+
+    /* Form Actions */
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--light-gray);
+    }
+
+    .save-btn {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.75rem;
+        border-radius: var(--border-radius);
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        transition: var(--transition);
+        cursor: pointer;
+        font-size: 0.95rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .save-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    }
+
+    .save-btn:after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -60%;
+        width: 200%;
+        height: 200%;
+        background: rgba(255, 255, 255, 0.2);
+        transform: rotate(30deg);
+        transition: var(--transition);
+    }
+
+    .save-btn:hover:after {
+        left: 100%;
+    }
+
+    .discard-btn {
+        background: #fff;
+        color: var(--gray);
+        border: 1px solid var(--light-gray);
+        padding: 0.75rem 1.75rem;
+        border-radius: var(--border-radius);
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        transition: var(--transition);
+        cursor: pointer;
+        font-size: 0.95rem;
+    }
+
+    .discard-btn:hover {
+        background: var(--light-gray);
+        transform: translateY(-2px);
+        color: var(--dark);
+    }
+
+    /* Animations */
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .form-group {
+        animation: fadeIn 0.5s ease forwards;
+    }
+
+    .form-group:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .form-group:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .form-group:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+
+    .form-group:nth-child(4) {
+        animation-delay: 0.4s;
+    }
+
+    /* Responsive Adjustments */
+    @@media (max-width: 992px) {
+        .personal-info-container {
+            padding: 0 1rem;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .card-header {
+            padding: 1.5rem;
+        }
+
+        .header-content {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .profile-image-container {
+            margin-top: 1rem;
+            width: 80px;
+            height: 80px;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .save-btn,
+        .discard-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .personal-info-title {
+            font-size: 1.5rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+    }
+</style>
+
+<div class="personal-info-container">
+    <div class="personal-info-card">
+        <!-- Card Header -->
+        <div class="card-header">
+            <div class="header-content">
+                <div class="title-section" style="display: flex; align-items: center; gap: 1rem;">
+                    <i class="fas fa-user-circle header-icon"></i>
+                    <div>
+                        <h2 class="personal-info-title">Personal Information</h2>
+                        <p class="personal-info-subtitle">Manage your personal details and profile</p>
+                    </div>
+                </div>
+                <div class="profile-image-container">
+                    <img id="profileImagePreview" src="/images/default-profile.png" class="profile-image" alt="Profile">
+                    <label for="profileImageUpload" class="profile-image-upload-btn">
+                        <i class="fas fa-camera"></i>
+                    </label>
+                    <input type="file" id="profileImageUpload" accept="image/*" class="d-none">
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Body -->
+        <div class="card-body">
+            <form id="personalInfoForm" enctype="multipart/form-data">
+                <div class="form-grid">
+                    <!-- Full Name -->
+                    <div class="form-group">
+                        <div class="floating-label-group">
+                            <input type="text" id="fullName" class="form-input" placeholder=" ">
+                            <label class="floating-label">Full Name*</label>
+                            <i class="input-icon fas fa-user"></i>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <div class="floating-label-group">
+                            <input type="email" id="email" class="form-input" placeholder=" ">
+                            <label class="floating-label">Email*</label>
+                            <i class="input-icon fas fa-envelope"></i>
+                        </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="form-group">
+                        <div class="floating-label-group">
+                            <input type="tel" id="phoneNumber" class="form-input" placeholder=" ">
+                            <label class="floating-label">Phone Number</label>
+                            <i class="input-icon fas fa-phone"></i>
+                        </div>
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="form-group">
+                        <div class="floating-label-group">
+                            <select id="gender" class="form-input">
+                                <option value=""></option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                                <option value="Prefer not to say">Prefer not to say</option>
+                            </select>
+                            <label class="floating-label">Gender</label>
+                            <i class="input-icon fas fa-venus-mars"></i>
+                        </div>
+                    </div>
+
+                    <!-- Username (Hidden by default) -->
+                    <div class="form-group" id="usernameField" style="display: none;">
+                        <div class="floating-label-group">
+                            <input type="text" id="username" class="form-input" placeholder=" ">
+                            <label class="floating-label">Username</label>
+                            <i class="input-icon fas fa-at"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="submit" class="save-btn" id="saveChanges">
+                        <i class="fas fa-save me-2"></i>Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            // Function to extract user ID from JWT token
+            function getUserIdFromToken() {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Authentication Error',
+                        text: 'No authentication token found',
+                        confirmButtonColor: '#4361ee'
+                    });
+                    return null;
+                }
+
+                try {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    return payload.uid || payload.userId || null;
+                } catch (e) {
+                    console.error("Error decoding token:", e);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Authentication Error',
+                        text: 'Invalid token format',
+                        confirmButtonColor: '#4361ee'
+                    });
+                    return null;
+                }
+            }
+
+            // Get user ID
+            const userId = getUserIdFromToken();
+            if (!userId) {
+                window.location.href = "/login";
+                return;
+            }
+
+            // Preview profile image before upload
+            $("#profileImageUpload").change(function () {
+                const file = this.files[0];
+                if (file) {
+                    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'File Too Large',
+                            text: 'Image size should be less than 5MB',
+                            confirmButtonColor: '#4361ee'
+                        });
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        $("#profileImagePreview").attr("src", e.target.result);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Fetch user profile data
+            function fetchUserProfile() {
+                Swal.fire({
+                    title: 'Loading Profile',
+                    html: 'Please wait while we load your profile information...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajax({
+                    url: `http://localhost:5086/api/UserDetails/GetUserProfile/${userId}`,
+                    type: "GET",
+                    success: function (response) {
+                        Swal.close();
+                        if (response.success && response.data) {
+                            const data = response.data;
+
+                            // Populate form fields
+                            $("#fullName").val(data.c_fullName || "");
+                            $("#email").val(data.Email || "");
+                            $("#phoneNumber").val(data.c_phoneNumber || "");
+                            $("#gender").val(data.c_gender || "");
+
+                            // Set profile image if available
+                            if (data.c_profileImageUrl) {
+                                $("#profileImagePreview").attr("src", data.c_profileImageUrl);
+                            }
+
+                            // Show username field if needed
+                            if (data.c_username) {
+                                $("#username").val(data.c_username);
+                                $("#usernameField").show();
+                            }
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message || "Failed to load profile data",
+                                confirmButtonColor: '#4361ee'
+                            });
+                        }
+                    },
+                    error: function (xhr) {
+                        Swal.close();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON?.message || "Network error",
+                            confirmButtonColor: '#4361ee'
+                        });
+                    }
+                });
+            }
+
+            // Initialize form
+            fetchUserProfile();
+
+            // Form submission handler
+            $("#personalInfoForm").on("submit", function (e) {
+                e.preventDefault();
+
+                const formData = new FormData();
+                const profileImage = $("#profileImageUpload")[0].files[0];
+
+                // Add form data
+                formData.append("c_userId", userId);
+                formData.append("c_fullName", $("#fullName").val().trim());
+                formData.append("c_email", $("#email").val().trim());
+                formData.append("c_phoneNumber", $("#phoneNumber").val().trim());
+                formData.append("c_gender", $("#gender").val());
+
+                // Add username if field is visible
+                if ($("#usernameField").is(":visible")) {
+                    formData.append("c_username", $("#username").val().trim());
+                }
+
+                // Add profile image if selected
+                if (profileImage) {
+                    formData.append("c_image", profileImage);
+                }
+
+                // Validate required fields
+                if (!$("#fullName").val().trim()) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Validation Error',
+                        text: 'Full name is required',
+                        confirmButtonColor: '#4361ee'
+                    });
+                    return;
+                }
+
+                if (!$("#email").val().trim()) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Validation Error',
+                        text: 'Email is required',
+                        confirmButtonColor: '#4361ee'
+                    });
+                    return;
+                }
+
+                // Show loading state
+                $("#saveChanges").html('<i class="fas fa-spinner fa-spin me-2"></i>Saving...').prop("disabled", true);
+
+                // Submit data
+                $.ajax({
+                    url: "http://localhost:5086/api/UserDetails/UpdatePersonalDetail",
+                    type: "PUT",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        $("#saveChanges").html('<i class="fas fa-save me-2"></i>Save Changes').prop("disabled", false);
+
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Profile updated successfully!',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+
+                            // Update profile image if changed
+                            if (response.data?.c_profileImageUrl) {
+                                $("#profileImagePreview").attr("src", response.data.c_profileImageUrl);
+                            }
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message || "Failed to update profile",
+                                confirmButtonColor: '#4361ee'
+                            });
+                        }
+                    },
+                    error: function (xhr) {
+                        $("#saveChanges").html('<i class="fas fa-save me-2"></i>Save Changes').prop("disabled", false);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON?.message || "An error occurred",
+                            confirmButtonColor: '#4361ee'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

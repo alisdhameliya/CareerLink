@@ -1,0 +1,158 @@
+@{
+    Layout = "../Shared/_HomeLayout.cshtml";
+}
+
+<style>
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        animation: fadeInUp 0.5s ease-out 0.2s forwards;
+    }
+
+    .dashboard-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #1e3a8a;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+    .dashboard-title:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, #2563eb, #3b82f6);
+        border-radius: 2px;
+    }
+
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+
+    .application-card {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        max-width: 400px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background-color: #fff;
+        padding: 0px 20px;
+    }
+
+    .application-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .application-card img {
+        width: 65px;
+        height: 65px;
+        object-fit: cover;
+    }
+
+    .application-card-body {
+        padding: 1rem;
+    }
+
+    .application-card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #1e3a8a;
+        margin-bottom: 0.5rem;
+    }
+
+    .application-card-text {
+        font-size: 0.875rem;
+        color: #555;
+        margin-bottom: 0.5rem;
+    }
+
+    .application-card-location {
+        font-size: 0.875rem;
+        color: #2563eb;
+        font-weight: bold;
+    }
+
+    .back-button {
+        background-color: #4361ee;
+        color: #ffffff;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .back-button:hover {
+        background-color: #1e40af;
+    }
+</style>
+
+<main class="animate-fade-in">
+    <div class="dashboard-header">
+        <!-- Back Button -->
+        <button onclick="window.location.href='/UserDashboard'" class="back-button">Back to Dashboard</button>
+    </div>
+    <h1 class="dashboard-title">Your Applications</h1>
+
+    <div class="card-container" id="applicationsCardContainer">
+        <!-- Dynamic cards will be populated here -->
+    </div>
+</main>
+
+@section Scripts {
+    <script>
+        function getUserIdFromToken() {
+            let token = localStorage.getItem("token");
+            if (!token) return null; // No token found
+
+            let payload = JSON.parse(atob(token.split('.')[1])); // Decode JWT payload
+            return payload.uid; // Extract User ID
+        }
+
+        // Get User ID dynamically
+        var userId = getUserIdFromToken();
+        $(document).ready(function () {
+            const container = $("#applicationsCardContainer");
+
+            // Make an AJAX call to fetch applications data
+            $.ajax({
+                url: `http://localhost:5086/api/ApplyJob/GetUserAppliedJobApplication/${userId}`, // Update with your backend endpoint
+                method: 'GET',
+                success: function (applications) {
+                    applications.forEach(app => {
+                    
+                        const card = `
+                                <div class="application-card" onclick="window.location.href='/CandidateJob/JobDetails?c_job_id=${app.c_job_id}'">
+                                    <img src="${app.company.c_company_logo}" alt="${app.company.c_company_name} Logo">
+                                    <div class="application-card-body">
+                                        <h3 class="application-card-title">${app.job_Post.c_job_title}</h3>
+                                        <p class="application-card-text">${app.company.c_company_name}</p>
+                                        <p class="application-card-location">${app.job_Post.c_job_location}</p>
+                                    </div>
+                                </div>
+                            `;
+                        container.append(card);
+                    });
+                },
+                error: function (error) {
+                    console.error('Error fetching applications:', error);
+                }
+            });
+        });
+    </script>
+}

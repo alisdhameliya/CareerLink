@@ -1,0 +1,725 @@
+@{
+    ViewData["Title"] = "User Profile";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --danger-color: #f72585;
+            --success-color: #4cc9f0;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gray-color: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: #f5f7ff;
+            font-family: 'Poppins', sans-serif;
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .profile-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 0;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .profile-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 2.5rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            transform: rotate(30deg);
+        }
+
+        .navbar-container {
+            width: 98%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar-brand img {
+            height: 9vh;
+            transition: var(--transition);
+            margin-left: 1rem;
+        }
+
+        .nav-link.active {
+            color: white;
+            background: var(--primary-500);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+            height: 2.5rem;
+            display: flex;
+            width: 8rem;
+        }
+
+        .profile-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+            flex-wrap: wrap;
+        }
+
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        .profile-image:hover {
+            transform: scale(1.05);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+            color: white;
+        }
+
+        .profile-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .meta-item i {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .profile-body {
+            padding: 2rem;
+        }
+
+        .section-title {
+            position: relative;
+            margin: 2rem 0 1.5rem 0;
+            color: var(--primary-color);
+            font-weight: 600;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 3px;
+        }
+
+        .info-card {
+            background: var(--light-color);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+            transition: var(--transition);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .info-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 0.8rem;
+            align-items: flex-start;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-icon {
+            font-size: 1rem;
+            color: var(--primary-color);
+            margin-right: 1rem;
+            margin-top: 0.2rem;
+            min-width: 20px;
+        }
+
+        .info-content {
+            flex: 1;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 0.2rem;
+            display: inline-block;
+        }
+
+        .info-value {
+            color: var(--gray-color);
+        }
+
+        .info-value a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .info-value a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-tag {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .skill-tag:hover {
+            background: rgba(67, 97, 238, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .download-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--light-color);
+            border-radius: var(--border-radius);
+        }
+
+        .download-btn {
+            padding: 0.75rem 1.75rem;
+            border-radius: 8px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            transition: var(--transition);
+            cursor: pointer;
+            font-size: 0.95rem;
+            border: none;
+        }
+
+        .download-btn i {
+            margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gray-color);
+            border: 1px solid var(--light-gray);
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-gray);
+            transform: translateY(-2px);
+            color: var(--dark-color);
+        }
+
+        /* Animations */
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* Responsive adjustments */
+        @@media (max-width: 768px) {
+            .profile-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-meta {
+                justify-content: center;
+            }
+
+            .profile-body {
+                padding: 1.5rem;
+            }
+
+            .info-row {
+                flex-direction: column;
+            }
+
+            .info-icon {
+                margin-bottom: 0.5rem;
+            }
+
+            .download-actions {
+                flex-direction: column;
+            }
+
+            .download-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .profile-header {
+                padding: 1.5rem;
+            }
+
+            .profile-name {
+                font-size: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.25rem;
+            }
+        }
+
+        .swal2-confirm {
+            background-color: #4361ee;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="profile-container" id="profile-container">
+        <div class="profile-header">
+            <div class="profile-content">
+                <img id="user-image" src="default.jpg" alt="User Image" class="profile-image">
+                <div class="profile-info">
+                    <h1 class="profile-name" id="user-name">John Doe</h1>
+                    <div class="profile-meta">
+                        <span class="meta-item"><i class="fas fa-envelope"></i> <span
+                                id="user-email">johndoe@example.com</span></span>
+                        <span class="meta-item"><i class="fas fa-phone"></i> <span id="user-phone">+91
+                                1234567890</span></span>
+                        <span class="meta-item"><i class="fas fa-user"></i> <span id="user-gender">Male</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-body">
+            <h3 class="section-title animate-fade">Education</h3>
+            <div class="info-card animate-fade">
+                <div class="info-row">
+                    <i class="fas fa-graduation-cap info-icon"></i>
+                    <div class="info-content">
+                        <span class="info-label">Degree:</span>
+                        <span class="info-value" id="user-degree">B.Tech in Computer Science</span>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <i class="fas fa-university info-icon"></i>
+                    <div class="info-content">
+                        <span class="info-label">University:</span>
+                        <span class="info-value" id="user-university">XYZ University</span>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <i class="fas fa-calendar-alt info-icon"></i>
+                    <div class="info-content">
+                        <span class="info-label">Year of Passing:</span>
+                        <span class="info-value" id="user-year">2024</span>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <i class="fas fa-certificate info-icon"></i>
+                    <div class="info-content">
+                        <span class="info-label">Highest Qualification:</span>
+                        <span class="info-value" id="user-qualification">Bachelor's Degree</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-title animate-fade">Work Experience</h3>
+            <div class="info-card animate-fade">
+                <div class="info-row">
+                    <i class="fas fa-building info-icon"></i>
+                    <div class="info-content">
+                        <span class="info-label">Company:</span>
+                        <span class="info-value" id="user-company">ABC Tech Solutions</span>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <i class="fas fa-briefcase info-icon"></i>
+                    <div class="info-content">
+                        <span class="info-label">Job Title:</span>
+                        <span class="info-value" id="user-job-title">Frontend Developer</span>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <i class="fas fa-clock info-icon"></i>
+                    <div class="info-content">
+                        <span class="info-label">Years Worked:</span>
+                        <span class="info-value" id="user-years-worked">2 years</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-title animate-fade">Skills</h3>
+            <div class="info-card animate-fade">
+                <div class="skills-container" id="user-skills">
+                    <span class="skill-tag">React</span>
+                    <span class="skill-tag">JavaScript</span>
+                    <span class="skill-tag">Node.js</span>
+                    <span class="skill-tag">HTML/CSS</span>
+                    <span class="skill-tag">TypeScript</span>
+                </div>
+            </div>
+
+            <h3 class="section-title animate-fade">Job Preferences</h3>
+            <div class="info-card animate-fade">
+                <div class="info-row">
+                    <i class="fas fa-map-marker-alt info-icon"></i>
+                    <div class="info-content">
+                        <span class="info-label">Preferred Locations:</span>
+                        <span class="info-value" id="user-locations">Bengaluru, Pune, Remote</span>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <i class="fas fa-briefcase info-icon"></i>
+                    <div class="info-content">
+                        <span class="info-label">Preferred Roles:</span>
+                        <span class="info-value" id="user-roles">Frontend Developer, UI Engineer</span>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <i class="fas fa-money-bill-wave info-icon"></i>
+                    <div class="info-content">
+                        <span class="info-label">Preferred Salary:</span>
+                        <span class="info-value" id="user-salary">₹10-12 LPA</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-title animate-fade">Projects</h3>
+            <div class="info-card animate-fade">
+                <div class="info-row">
+                    <i class="fas fa-folder-open info-icon"></i>
+                    <div class="info-content">
+                        <span class="info-label">Project Title:</span>
+                        <span class="info-value" id="user-project-title">E-Waste Trading Platform</span>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <i class="fas fa-info-circle info-icon"></i>
+                    <div class="info-content">
+                        <span class="info-label">Description:</span>
+                        <span class="info-value" id="user-project-desc">An online marketplace for buying and selling
+                            electronic waste with recycling options.</span>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <i class="fas fa-link info-icon"></i>
+                    <div class="info-content">
+                        <span class="info-label">Project Link:</span>
+                        <a href="#" class="info-value" id="user-project-link">View Project</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="download-actions">
+            <button class="download-btn btn-primary" id="download-img">
+                <i class="fas fa-image"></i> Download as Image
+            </button>
+            <button class="download-btn btn-secondary" id="download-pdf">
+                <i class="fas fa-file-pdf"></i> Download as PDF
+            </button>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            function getUserIdFromToken() {
+                let token = localStorage.getItem("token");
+                if (!token) return null;
+                let payload = JSON.parse(atob(token.split('.')[1]));
+                return payload.uid;
+            }
+
+            // Get User ID dynamically
+            var userId = getUserIdFromToken();
+            if (!userId) {
+                console.error("User ID not found in token.");
+            } else {
+                console.log("User ID:", userId);
+            }
+
+            $.ajax({
+                url: `http://localhost:5086/api/UserDetails/GetUserProfileDetail/${userId}`,
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    if (response) {
+                        console.log(response);
+
+                        // Update profile image, name, contact info
+                        $("#user-image").attr("src", response.c_image || "default.jpg");
+                        $("#user-name").text(response.c_fullname || "N/A");
+                        $("#user-email").text(response.c_email || "N/A");
+                        $("#user-phone").text(response.c_mobile_number || "N/A");
+                        $("#user-gender").text(response.c_gender || "N/A");
+
+                        // Update education details
+                        if (response.education_Details) {
+                            $("#user-degree").text(response.education_Details.c_Degree || "N/A");
+                            $("#user-qualification").text(response.education_Details.c_HighestQualification || "N/A");
+                            $("#user-university").text(response.education_Details.c_UniversityName || "N/A");
+                            $("#user-year").text(response.education_Details.c_YearOfPassing || "N/A");
+                        }
+
+                        // Update work experience
+                        if (response.experience) {
+                            $("#user-company").text(response.experience.c_CompanyName || "N/A");
+                            $("#user-job-title").text(response.experience.c_JobTitle || "N/A");
+                            $("#user-years-worked").text(response.experience.c_years_work ?
+                                response.experience.c_years_work + " years" : "N/A");
+                        }
+
+                        // Update skills
+                        if (response.skills) {
+                            let skillsContainer = $("#user-skills");
+                            skillsContainer.empty();
+                            if (response.skills.c_skill_name) {
+                                const skills = response.skills.c_skill_name.split(',').map(skill => skill.trim());
+                                skills.forEach(skill => {
+                                    if (skill) {
+                                        skillsContainer.append(`<span class="skill-tag">${skill}</span>`);
+                                    }
+                                });
+                            }
+                        }
+
+                        // Update job preferences
+                        if (response.preference) {
+                            $("#user-locations").text(response.preference.c_PreferredLocations || "N/A");
+                            $("#user-roles").text(response.preference.c_PreferredRoles || "N/A");
+                            $("#user-salary").text(response.preference.c_PreferredSalary || "N/A");
+                        }
+
+                        // Update projects
+                        if (response.projects) {
+                            $("#user-project-title").text(response.projects.c_Project_Title || "N/A");
+                            $("#user-project-desc").text(response.projects.c_Project_Description || "N/A");
+                            $("#user-project-link").attr("href", response.projects.c_ProjectLink || "#");
+                        }
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching user data:", error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Failed to load profile data. Please try again later.",
+                        confirmButtonColor: "var(--primary-color)"
+                    });
+                }
+            });
+
+            // Download as Image
+            document.getElementById('download-img').addEventListener('click', function () {
+                const button = this;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                button.disabled = true;
+
+                html2canvas(document.getElementById('profile-container'), {
+                    scale: 2,
+                    logging: true,
+                    useCORS: true,
+                    allowTaint: true
+                }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.href = canvas.toDataURL('image/png');
+                    link.download = 'profile_' + new Date().toISOString().slice(0, 10) + '.png';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    button.innerHTML = '<i class="fas fa-image"></i> Download as Image';
+                    button.disabled = false;
+
+                    Swal.fire({
+                        icon: "success",
+                        title: "Download Complete",
+                        text: "Your profile image has been downloaded.",
+                        confirmButtonColor: "var(--primary-color)",
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                }).catch(err => {
+                    console.error("Error generating image:", err);
+                    button.innerHTML = '<i class="fas fa-image"></i> Download as Image';
+                    button.disabled = false;
+
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Failed to generate image. Please try again.",
+                        confirmButtonColor: "var(--primary-color)"
+                    });
+                });
+            });
+
+            // Download as PDF
+            document.getElementById('download-pdf').addEventListener('click', function () {
+                const button = this;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                button.disabled = true;
+
+                html2canvas(document.getElementById('profile-container'), {
+                    scale: 2,
+                    logging: true,
+                    useCORS: true,
+                    allowTaint: true
+                }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+
+                    // Calculate image dimensions to fit PDF
+                    const imgWidth = 190;
+                    const pageHeight = 277;
+                    const imgHeight = canvas.height * imgWidth / canvas.width;
+                    let heightLeft = imgHeight;
+                    let position = 10; // top margin
+
+                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+
+                    // Add new pages if content is longer than one page
+                    while (heightLeft >= 0) {
+                        position = heightLeft - imgHeight;
+                        pdf.addPage();
+                        pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                    }
+
+                    pdf.save('profile_' + new Date().toISOString().slice(0, 10) + '.pdf');
+
+                    button.innerHTML = '<i class="fas fa-file-pdf"></i> Download as PDF';
+                    button.disabled = false;
+
+                    Swal.fire({
+                        icon: "success",
+                        title: "Download Complete",
+                        text: "Your profile PDF has been downloaded.",
+                        confirmButtonColor: "var(--primary-color)",
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                }).catch(err => {
+                    console.error("Error generating PDF:", err);
+                    button.innerHTML = '<i class="fas fa-file-pdf"></i> Download as PDF';
+                    button.disabled = false;
+
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Failed to generate PDF. Please try again.",
+                        confirmButtonColor: "var(--primary-color)"
+                    });
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

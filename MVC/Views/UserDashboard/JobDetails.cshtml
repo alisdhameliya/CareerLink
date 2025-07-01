@@ -1,0 +1,328 @@
+<style>
+    .job-details-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .job-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .job-header .title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #000;
+    }
+
+    .swal2-confirm {
+        background-color: #4361ee;
+    }
+
+    .job-header .company {
+        font-size: 16px;
+        color: #666;
+    }
+
+    .job-header .logo {
+        width: 50px;
+        height: 50px;
+        background-color: #ff6200;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .job-details {
+        font-size: 16px;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    .job-details h3 {
+        font-size: 18px;
+        margin: 20px 0 10px;
+        color: #000;
+    }
+
+    .job-details p,
+    .job-details ul {
+        margin: 0 0 15px;
+    }
+
+    .job-details ul {
+        list-style-type: disc;
+        padding-left: 20px;
+    }
+
+    .apply-btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #0b65c3;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-top: 20px;
+    }
+
+    .apply-btn:hover {
+        background-color: #094ea0;
+    }
+
+    .skill {
+        border: 2px solid whitesmoke;
+        border-radius: 24%;
+        padding: 5px;
+    }
+
+    .skills {
+        display: flex;
+        flex-direction: row;
+        column-gap: 1.15rem;
+    }
+
+    .skill:hover {
+        border-color: #094ea0;
+        color: blue;
+        cursor: pointer;
+    }
+
+    #company-details {
+        margin-top: 2rem;
+        font-weight: bold;
+    }
+
+    .experience {
+        display: flex;
+        column-gap: 0.50rem;
+    }
+
+    #experience-data,
+    #salary,
+    #vacancy {
+        margin-top: 1.15rem;
+    }
+
+    .company-info-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: #f5faff;
+        /* Light blue background like in the image */
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .company-description {
+        font-size: 14px;
+        color: #333;
+        line-height: 1.6;
+        margin: 0 0 15px;
+    }
+
+    .experience {
+        display: flex;
+        column-gap: 0.50rem;
+    }
+
+    #experience-data,
+    #salary,
+    #vacancy {
+        margin-top: 1.15rem;
+    }
+
+    .company-info-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: #f5faff;
+        /* Light blue background like in the image */
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .k-card {
+        background-color: transparent;
+        /* No additional background since the container has one */
+        border: none;
+    }
+
+    .k-card-header {
+        padding: 10px 0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .k-card-header h5 {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        margin: 0;
+    }
+
+    .k-card-body {
+        padding: 15px 0;
+    }
+
+    .company-description {
+        font-size: 14px;
+        color: #333;
+        line-height: 1.6;
+        margin: 0 0 15px;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .info-item i {
+        font-size: 16px;
+        color: #0b65c3;
+        /* Blue color for icons */
+        margin-right: 10px;
+    }
+
+    .info-item h6 {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+        margin: 0;
+    }
+
+    .info-item h6 span {
+        font-weight: 400;
+        color: #666;
+    }
+</style>
+
+<div class="job-details-container" id="jobDetails"></div>
+
+<script>
+    function timeAgo(dateString) {
+        const [datePart, timePart] = dateString.split(' ');
+        const [day, month, year] = datePart.split('-');
+        const [hours, minutes, seconds] = timePart.split(':');
+        const posted = new Date(year, month - 1, day, hours, minutes, seconds);
+        const now = new Date();
+        const diffInMs = now - posted;
+        const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+        const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+        const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+        if (diffInMinutes < 60) {
+            return `${diffInMinutes} minute${diffInMinutes === 1 ? '' : 's'} ago`;
+        } else if (diffInHours < 24) {
+            return `${diffInHours} hour${diffInHours === 1 ? '' : 's'} ago`;
+        } else {
+            return `${diffInDays} day${diffInDays === 1 ? '' : 's'} ago`;
+        }
+    }
+    function formatDescription(description) {
+        if (!description) return '<ul><li>No description available</li></ul>';
+        // Split by period, trim whitespace, filter out empty strings
+        const sentences = description.split('.')
+            .map(sentence => sentence.trim())
+            .filter(sentence => sentence.length > 0);
+        // Map to list items and join
+        const listItems = sentences.map(sentence => `<li>${sentence}</li>`).join('');
+        return `<ul>${listItems}</ul>`;
+    }
+
+    function loadJobDetails() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const jobId = urlParams.get('c_job_id');
+        if (!jobId) {
+            $("#jobDetails").html("<p>No job ID provided.</p>");
+            return;
+        }
+
+        $.ajax({
+            url: `http://localhost:5086/api/postedjob/getJobDescription?id=${jobId}`,
+            dataType: "json",
+            success: function (job) {
+                console.log("Job Details:", job);
+                const skillsArray = job.c_skills ? job.c_skills.split(',').map(skill => skill.trim()) : [];
+                const descriptionHtml = formatDescription(job.c_job_desc);
+                const html = `
+    <div class="job-details-container" id="jobDetails">
+        <div class="job-header">
+            <div>
+                <h1 class="title">${job.c_job_title || "No Title"}</h1>
+                <p class="company">${job.company?.c_company_name || "Unknown Company"} - ${job.c_job_location || "N/A"}</p>
+            </div>
+            <div class="logo">
+                <img src="${job.company?.c_company_logo || '/default-logo.png'}" alt="Company Logo" width="50px" height="50px" style="border-radius: 50%;" />
+            </div>
+        </div>
+        <div class="job-details">
+            <h3>Job Type</h3>
+            <p>${job.c_job_type || "Not specified"}</p>
+            <h3>Job Location</h3>
+            <p>${job.c_job_location || "Not specified"}</p>
+            <div class="experience">
+                            <h3>Experience:</h3>
+                            <span id="experience-data">${job.c_job_experience || "N/A"} Years</span>
+                        </div>
+                        <div class="experience">
+                            <h3>Salary Range:</h3>
+                            <span id="salary">₹ ${job.c_salary_range || "Not disclosed"}</span>
+                        </div>
+                        <div class="experience">
+                            <h3>Vacancies:</h3>
+                            <span id="vacancy">${job.c_vacancy || "N/A"}</span>
+                        </div>
+                        <h3>Department</h3>
+                        <p>${job.department?.c_deptname || "Not specified"}</p>
+                        <h3>Qualification</h3>
+                        <p>${job.c_qualification_title || "Not specified"}</p>
+                        <h3>Description</h3>
+                        ${descriptionHtml}
+                        <h3>Skills Required</h3>
+                        <div class="skills">${skillsArray.length ? skillsArray.map(skill => `<div class="skill">${skill}</div>`).join('') : '<li>Not specified</li>'}</div>
+                        <p>Posted ${job.c_post_date ? timeAgo(job.c_post_date) : "N/A"}</p>
+                        <a href="#" class="apply-btn">Apply Now</a>
+                    </div>
+                </div>
+                <div class="company-info-container">
+                    <div class="k-card" id="company-details">
+                        <div class="k-card-header">
+                            <h5>Company Info</h5>
+                        </div>
+                        <div class="k-card-body">
+                            <div class="info-item">
+                                <i class="fas fa-envelope"></i>
+                                <h6>Email: <a href="mailto:${job.company.c_company_email}">${job.company.c_company_email || "Not provided"}</a></h6>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <h6>Address: <span>${job.company.c_company_address || "Not provided"}</span></h6>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-globe"></i>
+                                <h6>Website: <a href="${job.company.c_company_website}">${job.company.c_company_website || "Not provided"}</span></h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+`;
+                ("#jobDetails").html(html);
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching job details:", status, error);
+                ("#jobDetails").html("<p>Failed to load job details. Please try again later.</p>");
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        loadJobDetails();
+    });
+</script>

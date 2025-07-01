@@ -1,0 +1,1097 @@
+@{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewData["Title"] = "Resume";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --primary-color: #4361ee;
+        --primary-dark: #3a56d4;
+        --secondary-color: #3f37c9;
+        --accent-color: #4895ef;
+        --danger-color: #f72585;
+        --success-color: #4cc9f0;
+        --light-color: #f8f9fa;
+        --dark-color: #212529;
+        --gray-color: #6c757d;
+        --light-gray: #e9ecef;
+        --border-radius: 12px;
+        --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        --transition: all 0.3s ease;
+    }
+
+    .resume-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1.5rem;
+    }
+
+    .resume-card {
+        background: #fff;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        overflow: hidden;
+        transition: var(--transition);
+    }
+
+    .resume-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        padding: 1.75rem 2rem;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+        transform: rotate(30deg);
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .title-section {
+        flex: 1;
+    }
+
+    .header-icon {
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .resume-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin: 0;
+        color: white;
+    }
+
+    .resume-subtitle {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        margin-top: 0.25rem;
+        font-weight: 300;
+    }
+
+    .upload-resume-btn {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        transition: var(--transition);
+        cursor: pointer;
+        backdrop-filter: blur(5px);
+        font-size: 0.95rem;
+    }
+
+    .upload-resume-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .resume-form-container {
+        padding: 0;
+        animation: fadeIn 0.4s ease-out;
+        position: relative;
+        z-index: 10;
+    }
+
+    .resume-form-container.d-none {
+        display: none;
+    }
+
+    .resume-form-container.show-form {
+        display: block;
+    }
+
+    .form-card {
+        background: #fff;
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
+        padding: 2rem;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        border-top: 4px solid var(--primary-color);
+    }
+
+    .form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-title {
+        font-size: 1.35rem;
+        color: var(--primary-color);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        font-weight: 600;
+    }
+
+    .close-form-btn {
+        background: none;
+        border: none;
+        color: var(--gray-color);
+        font-size: 1.25rem;
+        cursor: pointer;
+        transition: var(--transition);
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .close-form-btn:hover {
+        background: var(--light-gray);
+        color: var(--danger-color);
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: var(--gray-color);
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .file-upload-wrapper {
+        position: relative;
+        margin-bottom: 1rem;
+    }
+
+    .file-upload-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid var(--light-gray);
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: var(--transition);
+        background-color: #fff;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .file-upload-input:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        outline: none;
+    }
+
+    .file-upload-label {
+        display: flex;
+        align-items: center;
+        padding: 1.5rem;
+        border: 2px dashed var(--light-gray);
+        border-radius: 8px;
+        background-color: rgba(248, 249, 250, 0.5);
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .file-upload-label:hover {
+        border-color: var(--primary-color);
+        background-color: rgba(67, 97, 238, 0.05);
+    }
+
+    .file-upload-icon {
+        font-size: 2rem;
+        color: var(--primary-color);
+        margin-right: 1rem;
+    }
+
+    .file-upload-text {
+        flex: 1;
+        text-align: left;
+    }
+
+    .file-upload-text h5 {
+        margin: 0;
+        color: var(--dark-color);
+        font-weight: 600;
+    }
+
+    .file-upload-text p {
+        margin: 0.25rem 0 0;
+        color: var(--gray-color);
+        font-size: 0.85rem;
+    }
+
+    .file-name {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--primary-color);
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+    }
+
+    .file-name i {
+        margin-right: 0.5rem;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--light-gray);
+    }
+
+    .save-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.75rem;
+        border-radius: 8px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        transition: var(--transition);
+        cursor: pointer;
+        font-size: 0.95rem;
+    }
+
+    .save-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    }
+
+    .cancel-btn {
+        background: #fff;
+        color: var(--gray-color);
+        border: 1px solid var(--light-gray);
+        padding: 0.75rem 1.75rem;
+        border-radius: 8px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        transition: var(--transition);
+        cursor: pointer;
+        font-size: 0.95rem;
+    }
+
+    .cancel-btn:hover {
+        background: var(--light-gray);
+        transform: translateY(-2px);
+        color: var(--dark-color);
+    }
+
+    .resume-list-container {
+        padding: 1.5rem 2rem;
+    }
+
+    .resume-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .resume-item {
+        background: #fff;
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        border-left: 4px solid var(--primary-color);
+        transition: var(--transition);
+        display: flex;
+        flex-direction: column;
+        width: 28vw;
+    }
+
+    .resume-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .resume-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .resume-icon {
+        font-size: 2rem;
+        color: var(--primary-color);
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+
+    .resume-details {
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .resume-name {
+        font-weight: 600;
+        color: var(--dark-color);
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .resume-date {
+        font-size: 0.8rem;
+        color: var(--gray-color);
+        margin-top: 0.25rem;
+    }
+
+    .resume-actions {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: auto;
+    }
+
+    .download-btn {
+        background: rgba(67, 97, 238, 0.1);
+        color: var(--primary-color);
+        border: 1px solid rgba(67, 97, 238, 0.2);
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: var(--transition);
+        flex: 1;
+        justify-content: center;
+    }
+
+    .download-btn:hover {
+        background: rgba(67, 97, 238, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .delete-btn {
+        background: rgba(220, 53, 69, 0.1);
+        color: var(--danger-color);
+        border: 1px solid rgba(220, 53, 69, 0.2);
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: var(--transition);
+        flex: 1;
+        justify-content: center;
+    }
+
+    .btn-outline-secondary {}
+
+    .btn-outline-secondary {
+        background: rgba(88, 166, 74, 0.1);
+        /* light green background */
+        color: #58a64a;
+        /* avocado green text */
+        border: 1px solid rgba(88, 166, 74, 0.2);
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        justify-content: center;
+    }
+
+    .swal2-confirm {
+        background-color: #4361ee;
+    }
+
+    .btn-outline-secondary:hover {
+        background: rgba(88, 166, 74, 0.2);
+        border-color: rgba(88, 166, 74, 0.4);
+        color: #3b7b33;
+    }
+
+    .delete-btn:hover {
+        background: rgba(220, 53, 69, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: var(--gray-color);
+        grid-column: 1 / -1;
+    }
+
+    .empty-icon-container {
+        width: 80px;
+        height: 80px;
+        background: rgba(67, 97, 238, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+    }
+
+    .empty-icon {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+    }
+
+    .empty-state h4 {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+        color: var(--dark-color);
+        font-weight: 600;
+    }
+
+    .empty-state p {
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    .empty-state-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.75rem;
+        border-radius: 8px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        transition: var(--transition);
+        cursor: pointer;
+        font-size: 0.95rem;
+    }
+
+    .empty-state-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade {
+        animation: fadeIn 0.4s ease forwards;
+    }
+
+    @@media (max-width: 768px) {
+        .card-header {
+            padding: 1.5rem;
+        }
+
+        .header-content {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .upload-resume-btn {
+            width: 100%;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .resume-form-container {
+            padding: 0;
+        }
+
+        .form-card {
+            padding: 1.5rem;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .save-btn,
+        .cancel-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .resume-list-container {
+            padding: 1.25rem;
+        }
+
+        .resume-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="resume-container">
+    <div class="resume-card">
+        <!-- Card Header -->
+        <div class="card-header">
+            <div class="header-content">
+                <div class="title-section">
+                    <i class="fas fa-file-alt header-icon"></i>
+                    <h2 class="resume-title">Resume Management</h2>
+                    <p class="resume-subtitle">Upload and manage your professional resumes</p>
+                </div>
+                <button class="upload-resume-btn" onclick="showResumeForm()">
+                    <i class="fas fa-plus me-2"></i>Upload Resume
+                </button>
+            </div>
+        </div>
+
+        <!-- Resume Form -->
+        <div id="resumeForm" class="resume-form-container d-none">
+            <div class="form-card">
+                <div class="form-header">
+                    <h4 class="form-title"><i class="fas fa-file-upload me-2"></i><span id="resumeFormTitle">Upload
+                            Resume</span></h4>
+                    <button class="close-form-btn" onclick="hideResumeForm()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <input type="hidden" id="resumeId">
+
+                <div class="form-group">
+                    <label class="form-label">Select Resume File</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="resumeFile" name="resumeFile" class="d-none" accept=".pdf">
+                        <label for="resumeFile" class="file-upload-label">
+                            <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
+                            <div class="file-upload-text">
+                                <h5>Drag & drop your file here</h5>
+                                <p>or click to browse (PDF, DOC, DOCX, or images)</p>
+                            </div>
+                        </label>
+                        <div id="fileNameDisplay" class="file-name d-none">
+                            <i class="fas fa-file-alt"></i>
+                            <span id="selectedFileName"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="cancel-btn" onclick="hideResumeForm()">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                    <button class="save-btn" onclick="uploadResume()">
+                        <i class="fas fa-upload me-2"></i>Upload Resume
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resume List -->
+        <div class="resume-list-container">
+            <div id="resumeList" class="resume-grid">
+                <!-- Dynamic content will be inserted here -->
+                <div class="empty-state">
+                    <div class="empty-icon-container">
+                        <i class="fas fa-file-alt empty-icon"></i>
+                    </div>
+                    <h4>No Resumes Found</h4>
+                    <p>Upload your resume to get started</p>
+                    <button class="empty-state-btn" onclick="showResumeForm()">
+                        <i class="fas fa-plus me-2"></i>Upload Resume
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function getUserIdFromToken() {
+            let token = localStorage.getItem("token");
+            if (!token) return null;
+            let payload = JSON.parse(atob(token.split('.')[1]));
+            return payload.uid;
+        }
+
+        // Get User ID dynamically
+        var userId = getUserIdFromToken();
+        if (!userId) {
+            console.error("User ID not found in token.");
+        } else {
+            console.log("User ID:", userId);
+        }
+
+        $(document).ready(function () {
+            loadResumes();
+            setupFileUpload();
+        });
+
+        function setupFileUpload() {
+            const fileInput = document.getElementById('resumeFile');
+            const fileLabel = document.querySelector('.file-upload-label');
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+            const selectedFileName = document.getElementById('selectedFileName');
+
+            // Handle drag and drop
+            fileLabel.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                fileLabel.style.borderColor = 'var(--primary-color)';
+                fileLabel.style.backgroundColor = 'rgba(67, 97, 238, 0.05)';
+            });
+
+            fileLabel.addEventListener('dragleave', () => {
+                fileLabel.style.borderColor = 'var(--light-gray)';
+                fileLabel.style.backgroundColor = 'rgba(248, 249, 250, 0.5)';
+            });
+
+            fileLabel.addEventListener('drop', (e) => {
+                e.preventDefault();
+                fileLabel.style.borderColor = 'var(--light-gray)';
+                fileLabel.style.backgroundColor = 'rgba(248, 249, 250, 0.5)';
+
+                if (e.dataTransfer.files.length) {
+                    fileInput.files = e.dataTransfer.files;
+                    updateFileNameDisplay();
+                }
+            });
+
+            // Handle file selection
+            fileInput.addEventListener('change', updateFileNameDisplay);
+
+            function updateFileNameDisplay() {
+                let file = fileInput.files[0];
+                if (file.type !== "application/pdf") {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Invalid File Format",
+                        text: "Only PDF files are allowed.",
+                        confirmButtonColor: "var(--primary-color)"
+                    });
+                    return;
+                }
+                if (fileInput.files.length) {
+                    const file = fileInput.files[0];
+                    selectedFileName.textContent = file.name;
+                    fileNameDisplay.classList.remove('d-none');
+                    fileLabel.querySelector('h5').textContent = 'File selected';
+                    fileLabel.querySelector('p').textContent = 'Click to change file';
+                } else {
+                    fileNameDisplay.classList.add('d-none');
+                    fileLabel.querySelector('h5').textContent = 'Drag & drop your file here';
+                    fileLabel.querySelector('p').textContent = 'or click to browse (PDF, DOC, DOCX, or images)';
+                }
+            }
+        }
+
+        function showResumeForm() {
+            $("#resumeForm").hide().removeClass("d-none").fadeIn();
+            $("#resumeFormTitle").text("Upload Resume");
+            $("#resumeId").val("");
+            $("#resumeFile").val("");
+            $("#fileNameDisplay").addClass("d-none");
+            $('html, body').animate({
+                scrollTop: $("#resumeForm").offset().top - 20
+            }, 300);
+        }
+
+        function hideResumeForm() {
+            $("#resumeForm").fadeOut(function () {
+                $(this).addClass("d-none");
+                $("#resumeFile").val("");
+                $("#fileNameDisplay").addClass("d-none");
+            });
+        }
+
+        function uploadResume() {
+            let fileInput = document.getElementById("resumeFile");
+
+            // Validate if a file is selected
+            if (!fileInput.files.length) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "No File Selected",
+                    text: "Please select a resume file to upload.",
+                    confirmButtonColor: "var(--primary-color)"
+                });
+                return;
+            }
+
+
+            let formData = new FormData();
+            formData.append("c_user_id", userId);
+            formData.append("c_ResumeFile", fileInput.files[0]);
+
+            let resumeId = $("#resumeId").val();
+            let url = "http://localhost:5086/api/UserDetails/AddUserResume";
+            let type = "POST";
+            let actionText = "upload";
+
+            // If updating an existing resume
+            if (resumeId) {
+                url = `http://localhost:5086/api/UserDetails/UpdateUserResume/${resumeId}`;
+                type = "PUT";
+                formData.append("c_ResumeID", resumeId);
+                actionText = "update";
+            }
+
+            // Show confirmation before uploading
+            Swal.fire({
+                title: "Confirm Upload",
+                text: `Are you sure you want to ${actionText} your resume?`,
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "var(--primary-color)",
+                cancelButtonColor: "var(--gray-color)",
+                confirmButtonText: `Yes, ${actionText}!`,
+                cancelButtonText: "Cancel",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Show loading indicator
+                    Swal.fire({
+                        title: `${actionText === 'upload' ? 'Uploading' : 'Updating'}...`,
+                        html: `
+                                            <div class="progress mt-3" style="height: 10px; border-radius: 5px;">
+                                                <div id="uploadProgress" class="progress-bar bg-primary" role="progressbar" style="width: 0%;"></div>
+                                            </div>
+                                            <p class="mt-2">Please wait while we process your file...</p>
+                                        `,
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            // Simulate progress (in real app, you'd use XHR progress events)
+                            let progress = 0;
+                            const progressInterval = setInterval(() => {
+                                progress += Math.random() * 10;
+                                if (progress > 90) clearInterval(progressInterval);
+                                document.getElementById('uploadProgress').style.width = `${progress}%`;
+                            }, 200);
+                        }
+                    });
+
+                    $.ajax({
+                        url: url,
+                        type: type,
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        dataType: "json",
+                        xhr: function () {
+                            const xhr = new window.XMLHttpRequest();
+                            xhr.upload.addEventListener('progress', function (e) {
+                                if (e.lengthComputable) {
+                                    const percentComplete = (e.loaded / e.total) * 100;
+                                    document.getElementById('uploadProgress').style.width = `${percentComplete}%`;
+                                }
+                            }, false);
+                            return xhr;
+                        },
+                        success: function (response) {
+                            console.log("Upload Response:", response);
+
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Success!",
+                                    text: response.msg || `Resume ${actionText}ed successfully!`,
+                                    confirmButtonColor: "var(--primary-color)",
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                }).then(() => {
+                                    loadResumes();
+                                    hideResumeForm();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Upload Failed",
+                                    text: response.msg || "Unexpected error occurred.",
+                                    confirmButtonColor: "var(--primary-color)"
+                                });
+                            }
+                        },
+                        error: function (xhr) {
+                            console.error("Error uploading resume:", xhr.responseText);
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error",
+                                text: "Error uploading/updating resume. Please try again.",
+                                confirmButtonColor: "var(--primary-color)"
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        function loadResumes() {
+            $.ajax({
+                url: `http://localhost:5086/api/UserDetails/GetUserResume?id=${userId}`,
+                type: "GET",
+                beforeSend: function () {
+                    $("#resumeList").html(`
+                                        <div class="col-12 text-center py-4">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                            <p class="mt-2">Loading resumes...</p>
+                                        </div>
+                                    `);
+                },
+                success: function (response) {
+                    console.log("Resume Data:", response);
+                    let resumeList = $("#resumeList");
+                    resumeList.empty();
+
+                    if (response && response.data) {
+                        let resume = response.data;
+                        if (resume) {
+                            // Format the date for display
+                            let uploadDate = new Date(resume.c_UploadDate);
+                            let formattedDate = uploadDate.toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric'
+                            });
+
+                            let resumeCard = `
+                                                <div class="resume-item animate-fade" id="resume-${resume.c_ResumeID}">
+                                                    <div class="resume-content">
+                                                        <i class="fas resume-icon"></i>
+                                                        <div class="resume-details">
+                                                            <h5 class="resume-name" title="${resume.c_ResumeFilePath.split('/').pop()}">
+                                                                ${resume.c_ResumeFilePath.split('/').pop()}
+                                                            </h5>
+    @* <p class="resume-date">Uploaded: ${formattedDate}</p> *@
+                                                        </div>
+                                                    </div>
+                                                    <div class="resume-actions">
+                                                        <button class="download-btn" onclick="downloadResume('${resume.c_ResumeFilePath}')">
+                                                            <i class="fas fa-download"></i> Download
+                                                        </button>
+                                                        <button class="delete-btn" onclick="deleteResume(${resume.c_ResumeID})">
+                                                            <i class="fas fa-trash-alt"></i> Delete
+                                                        </button>
+                                                        <button class="btn btn-outline-secondary btn-sm px-3" onclick="previewResume('${resume.c_ResumeFilePath}')">
+                                                            <i class="fas fa-eye me-1"></i> Preview
+                                                        </button>
+                                                    </div>
+                                                </div>`;
+                            resumeList.append(resumeCard);
+                        } else {
+                            showEmptyState();
+                        }
+                    } else {
+                        showEmptyState();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX Error:", xhr.responseText);
+                    showEmptyState();
+                }
+            });
+        }
+
+        function showEmptyState() {
+            $("#resumeList").html(`
+                                <div class="empty-state">
+                                    <div class="empty-icon-container">
+                                        <i class="fas fa-file-alt empty-icon"></i>
+                                    </div>
+                                    <h4>No Resumes Found</h4>
+                                    <p>Upload your resume to get started</p>
+                                    <button class="empty-state-btn" onclick="showResumeForm()">
+                                        <i class="fas fa-plus me-2"></i>Upload Resume
+                                    </button>
+                                </div>
+                            `);
+        }
+        function previewResume(fileName) {
+            if (!fileName) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Preview Error",
+                    text: "No file selected to preview.",
+                });
+                return;
+            }
+
+            let filePath = `/user_resume/${fileName}`;
+            let fullPath = window.location.origin + filePath;
+
+            console.log("Previewing resume:", fullPath);
+
+            // Open the file in a new tab for preview
+            window.open(fullPath, "_blank");
+        }
+        function downloadResume(filePath) {
+            if (!filePath) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Download Error",
+                    text: "No file selected to download.",
+                    confirmButtonColor: "var(--primary-color)"
+                });
+                return;
+            }
+
+            // Extract just the filename from the path
+            let fileName = filePath.split('/').pop();
+            let fullPath = window.location.origin + '/user_resume/' + fileName;
+
+            console.log("Downloading resume:", fullPath);
+
+            // Show download confirmation
+            Swal.fire({
+                title: "Download Resume",
+                text: `Are you sure you want to download "${fileName}"?`,
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "var(--primary-color)",
+                cancelButtonColor: "var(--gray-color)",
+                confirmButtonText: "Download",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Create a temporary anchor element to trigger the download
+                    let link = document.createElement("a");
+                    link.href = fullPath;
+                    link.setAttribute("download", fileName);
+                    link.style.display = "none";
+
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    // Show success feedback
+                    Swal.fire({
+                        icon: "success",
+                        title: "Download Started",
+                        text: "Your resume download has started.",
+                        confirmButtonColor: "var(--primary-color)",
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                }
+            });
+        }
+
+        function deleteResume(id) {
+            Swal.fire({
+                title: "Delete Resume?",
+                text: "This action cannot be undone. Are you sure you want to delete this resume?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "var(--danger-color)",
+                cancelButtonColor: "var(--gray-color)",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "Cancel",
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Show loading indicator
+                    Swal.fire({
+                        title: "Deleting...",
+                        html: `
+                                            <div class="progress mt-3" style="height: 10px; border-radius: 5px;">
+                                                <div class="progress-bar bg-danger" role="progressbar" style="width: 0%;"></div>
+                                            </div>
+                                        `,
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            // Simulate progress
+                            let progress = 0;
+                            const progressInterval = setInterval(() => {
+                                progress += 20;
+                                if (progress > 100) {
+                                    clearInterval(progressInterval);
+                                }
+                                Swal.getHtmlContainer().querySelector('.progress-bar').style.width = `${progress}%`;
+                            }, 200);
+                        }
+                    });
+
+                    $.ajax({
+                        url: `http://localhost:5086/api/UserDetails/DeleteUserResume/${id}`,
+                        type: "DELETE",
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Deleted!",
+                                    text: "Your resume has been deleted.",
+                                    confirmButtonColor: "var(--primary-color)",
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                }).then(() => {
+                                    loadResumes();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error",
+                                    text: response.msg || "Failed to delete resume.",
+                                    confirmButtonColor: "var(--primary-color)"
+                                });
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("AJAX Error:", xhr, status, error);
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error",
+                                text: "Error deleting resume. Please try again.",
+                                confirmButtonColor: "var(--primary-color)"
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        function showEditResumeForm(resume) {
+            showResumeForm();
+            $("#resumeFormTitle").text("Update Resume");
+            $("#resumeId").val(resume.c_ResumeID);
+            $("#selectedFileName").text(resume.c_ResumeFilePath.split('/').pop());
+            $("#fileNameDisplay").removeClass("d-none");
+        }
+    </script>
+}

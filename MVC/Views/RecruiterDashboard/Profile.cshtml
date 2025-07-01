@@ -1,0 +1,651 @@
+@{
+    Layout = "~/Views/Shared/_RecruiterLayout.cshtml";
+}
+
+<style>
+    :root {
+        --primary-color: #4361ee;
+        --primary-hover: #1d4ed8;
+        --secondary-color: #64748b;
+        --light-bg: #f8fafc;
+        --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        --border-radius: 16px;
+        --detail-bg: #f8fafc;
+        --detail-border: #e2e8f0;
+    }
+
+    /* Enhanced Container */
+    .recruiter-profile-container {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        position: relative;
+    }
+
+    /* Background accent element */
+    .bg-accent {
+        position: absolute;
+        top: -50px;
+        right: -80px;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.05));
+        z-index: -1;
+        filter: blur(40px);
+    }
+
+    /* Improved Profile Header */
+    .profile-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        position: relative;
+    }
+
+    .profile-header h2 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #1e293b;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 0.75rem;
+    }
+
+    .profile-header h2::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
+        border-radius: 2px;
+    }
+
+    /* Enhanced Profile Card */
+    .profile-card {
+        background: linear-gradient(145deg, #ffffff, #f8fafc);
+        border-radius: var(--border-radius);
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+        padding: 3.5rem;
+        position: relative;
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        backdrop-filter: blur(10px);
+    }
+
+    .card-pattern {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 150px;
+        height: 150px;
+        background-image: radial-gradient(circle, rgba(59, 130, 246, 0.1) 2px, transparent 2px);
+        background-size: 20px 20px;
+        opacity: 0.5;
+        z-index: 0;
+    }
+
+    .profile-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Improved Profile Image Section */
+    .profile-image-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .profile-image-container {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto;
+        border: 6px solid #e0e7ff;
+        box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(226, 232, 240, 0.8);
+        position: relative;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .profile-image-container::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+        pointer-events: none;
+    }
+
+    .profile-image-container:hover {
+        transform: scale(1.05) translateY(-5px);
+        box-shadow: 0 20px 30px -12px rgba(59, 130, 246, 0.3), 0 0 0 1px rgba(226, 232, 240, 0.8);
+    }
+
+    .profile-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s ease;
+    }
+
+    .profile-image-container:hover .profile-image {
+        transform: scale(1.08);
+    }
+
+    .profile-name {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .verified-badge {
+        width: 20px;
+        height: 20px;
+        background-color: var(--primary-color);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        color: white;
+    }
+
+    /* Profile Completion Indicator */
+    .profile-completion {
+        width: 100%;
+        max-width: 600px;
+        margin-bottom: 1rem;
+        background-color: #f1f5f9;
+        border-radius: 10px;
+        overflow: hidden;
+        padding: 1rem 1.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .completion-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+        font-weight: 600;
+        color: #334155;
+    }
+
+    .completion-percentage {
+        font-size: 0.9rem;
+        color: var(--primary-color);
+    }
+
+    .progress-bar {
+        height: 8px;
+        background-color: #e2e8f0;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        width: 80%;
+        background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
+        border-radius: 4px;
+        transition: width 0.5s ease;
+    }
+
+    /* Enhanced Detail Items */
+    .profile-details {
+        width: 100%;
+        max-width: 600px;
+        position: relative;
+    }
+
+    .details-section {
+        margin-bottom: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 1rem;
+        padding-left: 1rem;
+        border-left: 3px solid var(--primary-color);
+    }
+
+    .detail-item {
+        background: var(--detail-bg);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.25rem;
+        border-left: 5px solid var(--primary-color);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        transition: all 0.4s ease;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(5px);
+    }
+
+    .detail-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, rgba(59, 130, 246, 0.08), transparent);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .detail-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 4px 8px rgba(59, 130, 246, 0.15);
+    }
+
+    .detail-item:hover::before {
+        opacity: 1;
+    }
+
+    .detail-label {
+        min-width: 140px;
+        font-weight: 600;
+        color: #334155;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.95rem;
+        z-index: 1;
+    }
+
+    .detail-label i {
+        color: var(--primary-color);
+        width: 24px;
+        text-align: center;
+        font-size: 1.1rem;
+    }
+
+    .detail-value {
+        flex: 1;
+        color: #475569;
+        font-weight: 500;
+        padding: 0.5rem 0;
+        position: relative;
+        font-size: 1rem;
+        z-index: 1;
+    }
+
+    .detail-value::before {
+        content: ":";
+        position: absolute;
+        left: -15px;
+        color: var(--secondary-color);
+        font-weight: normal;
+    }
+
+    .empty-value {
+        color: #94a3b8;
+        font-style: italic;
+    }
+
+    /* Enhanced Action Buttons */
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-top: 3rem;
+        flex-wrap: wrap;
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+        border: none;
+        padding: 1rem 2.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        color: white;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1rem;
+        cursor: pointer;
+        box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.6s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 15px rgba(59, 130, 246, 0.35);
+    }
+
+    .btn-primary:hover::before {
+        left: 100%;
+    }
+
+    .btn-outline {
+        background: transparent;
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+        padding: calc(0.95rem - 2px) calc(2.2rem - 2px);
+        box-shadow: 0 4px 10px rgba(59, 130, 246, 0.1);
+    }
+
+    .btn-outline:hover {
+        background-color: rgba(59, 130, 246, 0.08);
+        box-shadow: 0 6px 15px rgba(59, 130, 246, 0.2);
+    }
+
+    /* Enhanced Animations */
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes pulseGlow {
+        0% {
+            box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5);
+        }
+        70% {
+            box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+        }
+        100% {
+            box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+        }
+    }
+
+    .profile-card {
+        animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .profile-image-container {
+        animation: pulseGlow 2s infinite;
+    }
+
+    .detail-item {
+        animation: fadeInUp 0.4s ease forwards;
+        opacity: 0;
+    }
+
+    .detail-item:nth-child(1) { animation-delay: 0.1s; }
+    .detail-item:nth-child(2) { animation-delay: 0.2s; }
+    .detail-item:nth-child(3) { animation-delay: 0.3s; }
+    .detail-item:nth-child(4) { animation-delay: 0.4s; }
+    .detail-item:nth-child(5) { animation-delay: 0.5s; }
+
+    /* Enhanced Responsive adjustments */
+    @@media (max-width: 768px) {
+        .profile-card {
+            padding: 2rem 1.5rem;
+        }
+
+        .profile-content {
+            gap: 2rem;
+        }
+
+        .profile-image-container {
+            width: 150px;
+            height: 150px;
+        }
+
+        .detail-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 1rem;
+        }
+
+        .detail-label {
+            min-width: 100%;
+            padding-bottom: 0.25rem;
+            border-bottom: 1px dashed var(--detail-border);
+        }
+
+        .detail-value {
+            width: 100%;
+            padding-left: 1.5rem;
+        }
+
+        .detail-value::before {
+            display: none;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-primary, .btn-outline {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+<!-- Enhanced Recruiter Profile Section -->
+<div class="recruiter-profile-container">
+    <div class="bg-accent"></div>
+    
+    <div class="profile-header">
+        <h2>Recruiter Profile</h2>
+    </div>
+
+    <div class="profile-card">
+        <div class="card-pattern"></div>
+        <div class="profile-content">
+            <div class="profile-image-section">
+                <div class="profile-image-container">
+                    <img id="r_image" src="/default.jpg" alt="Profile Image" class="profile-image" />
+                </div>
+                <h3 id="r_display_name" class="profile-name">
+                    <span id="r_fullname_display">Recruiter Name</span>
+                    <span class="verified-badge">
+                        <i class="fas fa-check" style="font-size: 10px;"></i>
+                    </span>
+                </h3>
+            </div>
+
+            <!-- Profile Completion Indicator -->
+            <div class="profile-completion">
+                <div class="completion-title">
+                    <span>Profile Completion</span>
+                    <span class="completion-percentage">80%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="completionBar"></div>
+                </div>
+            </div>
+
+            <div class="profile-details">
+                <!-- Personal Details Section -->
+                <div class="details-section">
+                    <h4 class="section-title">Personal Information</h4>
+                    
+                    <div class="detail-item">
+                        <span class="detail-label"><i class="fas fa-user"></i>Username</span>
+                        <span id="r_username" class="detail-value empty-value">Not provided</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label"><i class="fas fa-id-card"></i>Full Name</span>
+                        <span id="r_fullname" class="detail-value empty-value">Not provided</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label"><i class="fas fa-venus-mars"></i>Gender</span>
+                        <span id="r_gender" class="detail-value empty-value">Not provided</span>
+                    </div>
+                </div>
+                
+                <!-- Contact Details Section -->
+                <div class="details-section">
+                    <h4 class="section-title">Contact Information</h4>
+                    
+                    <div class="detail-item">
+                        <span class="detail-label"><i class="fas fa-envelope"></i>Email</span>
+                        <span id="r_email" class="detail-value empty-value">Not provided</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label"><i class="fas fa-phone"></i>Phone</span>
+                        <span id="r_phone" class="detail-value empty-value">Not provided</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button id="updateBtn" class="btn-primary">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </button>
+                <button id="changePasswordBtn" class="btn-primary btn-outline">
+                    <i class="fas fa-lock"></i> Change Password
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function getUserIdFromToken() {
+        let token = localStorage.getItem("token");
+        if (!token) return null;
+
+        try {
+            let payload = JSON.parse(atob(token.split('.')[1]));
+            return payload.uid;
+        } catch (e) {
+            console.error("Error decoding token:", e);
+            return null;
+        }
+    }
+
+    $(document).ready(function () {
+        // Load Font Awesome for icons
+        $('head').append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">');
+
+        var userId = getUserIdFromToken();
+        if (!userId) {
+            console.error("User ID not found in token.");
+            return;
+        }
+
+        // Fetch recruiter data
+        $.ajax({
+            url: "http://localhost:5086/api/CompanyApi/getRecruiter?id=" + userId,
+            type: "GET",
+            success: function (data) {
+                console.log("Recruiter data:", data);
+                
+                // Update profile fields
+                const setField = (id, value) => {
+                    if (value) $(`#${id}`).text(value).removeClass('empty-value');
+                };
+
+                setField('r_username', data.Name);
+                setField('r_fullname', data.c_fullName);
+                setField('r_email', data.Email);
+                setField('r_phone', data.c_phoneNumber);
+                setField('r_gender', data.c_gender);
+                
+                // Also update the display name at the top
+                if (data.c_fullName) {
+                    $('#r_fullname_display').text(data.c_fullName);
+                } else if (data.Name) {
+                    $('#r_fullname_display').text(data.Name);
+                }
+                
+                if (data.c_profileImage) {
+                    $('#r_image').attr('src', data.c_profileImage);
+                }
+                
+                // Calculate profile completion
+                let completionFields = [
+                    data.Name,
+                    data.c_fullName,
+                    data.Email,
+                    data.c_phoneNumber,
+                    data.c_gender,
+                    data.c_profileImage
+                ];
+                
+                let filledFields = completionFields.filter(field => field).length;
+                let completionPercentage = Math.round((filledFields / completionFields.length) * 100);
+                
+                $('.completion-percentage').text(completionPercentage + '%');
+                $('#completionBar').css('width', completionPercentage + '%');
+                
+                // Add visual cue for completion level
+                if (completionPercentage < 50) {
+                    $('#completionBar').css('background', 'linear-gradient(90deg, #f87171, #ef4444)');
+                } else if (completionPercentage < 80) {
+                    $('#completionBar').css('background', 'linear-gradient(90deg, #fbbf24, #f59e0b)');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching recruiter details:", error);
+                alert("Error loading profile data. Please try again later.");
+            }
+        });
+
+        // Update button click handler with enhanced feedback
+        $("#updateBtn").click(function () {
+            if (userId) {
+                $(this).html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+                setTimeout(() => {
+                    window.location.href = "/RecruiterDashboard/UpdatePersonalDetail?id=" + userId;
+                }, 300);
+            } else {
+                alert("Please login again to continue.");
+            }
+        });
+
+        // Change password button click handler with enhanced feedback
+        $("#changePasswordBtn").click(function () {
+            if (userId) {
+                $(this).html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+                setTimeout(() => {
+                    window.location.href = "/RecruiterDashboard/ChangePassword?id=" + userId;
+                }, 300);
+            } else {
+                alert("Please login again to continue.");
+            }
+        });
+    });
+</script>

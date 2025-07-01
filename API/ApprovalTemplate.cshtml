@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .logo {
+            width: 200px;
+            /* Adjust width as needed */
+            height: 50px;
+            /* Maintain aspect ratio */
+            margin-bottom: 5px;
+            object-fit: contain;
+        }
+
+        .content {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px 0;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 20px;
+            color: white;
+            background-color: #0b5ed7;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .footer {
+            font-size: 14px;
+            color: #777;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img src="https://res.cloudinary.com/dhruvil20/image/upload/v1743946773/2removebg-preview_x58xrm.png"
+            alt="Company Logo" class="logo">
+        <div class="content">
+            <h2>Congratulations, {{CompanyName}}!</h2>
+            <p>Your company <strong>{{CompanyName}}</strong> has been successfully <b>approved</b> on <b>CareerLink</b>.
+            </p>
+            <p>You can now start posting job listings and connecting with talented professionals.</p>
+            <a href="../Auth/Login" class="button" style="color: white;">Go to Dashboard</a>
+        </div>
+        <div class="footer">©CareerLink. All Rights Reserved.</div>
+    </div>
+</body>
+
+</html>

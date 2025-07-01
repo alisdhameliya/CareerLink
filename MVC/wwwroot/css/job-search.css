@@ -1,0 +1,171 @@
+.main-content {
+    min-height: calc(100vh - 56px); /* Adjust based on your navbar height */
+    background-color: #f8f9fa;
+}
+
+.card {
+    border-radius: 12px;
+    background-color: white;
+    margin-bottom: 1rem;
+}
+
+.job-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 1rem;
+}
+
+.company-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.job-tags span {
+    background: #f8f9fa;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    color: #495057;
+}
+
+.k-button {
+    font-weight: 500;
+}
+
+.k-dropdown {
+    border-radius: 8px;
+}
+
+.k-checkbox {
+    margin-right: 0.5rem;
+}
+
+.btn-outline-primary {
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+}
+
+.form-control {
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+}
+
+/* Ensure proper spacing for the filters sidebar */
+.col-lg-3 {
+    position: sticky;
+    top: 76px; /* Adjust based on your navbar height */
+    height: fit-content;
+}
+
+/* Style for the skills tags */
+.badge {
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+}
+
+/* Ensure proper spacing between job listings */
+#jobListings {
+    min-height: 200px;
+}
+
+/* Style for the search section */
+.search-section {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Featured Jobs Card Styles */
+.featured-jobs-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border: 1px solid rgba(255, 193, 7, 0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+}
+
+.featured-jobs-header {
+    background: linear-gradient(45deg, #fff3cd, #fff9e6);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    border-left: 4px solid #ffc107;
+    margin: -1rem -1.5rem 1rem -1.5rem;
+}
+
+.featured-jobs-header i {
+    font-size: 1.5rem;
+    color: #ffc107;
+}
+
+.featured-job-card {
+    min-width: 300px;
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    position: relative;
+    border: 2px solid transparent;
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(45deg, #ffc107, #ff9800) border-box;
+}
+
+.featured-badge {
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    background: linear-gradient(45deg, #ffc107, #ff9800);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.featured-job-card .company-logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.featured-job-card h6 {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.featured-job-card .k-button {
+    background: linear-gradient(45deg, #ffc107, #ff9800);
+    border: none;
+    color: white;
+    font-weight: 600;
+}
+
+.featured-jobs-scroll {
+    overflow-x: auto;
+    padding: 20px 0;
+    scrollbar-width: thin;
+    margin: 0 -1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.featured-jobs-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+.featured-jobs-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.featured-jobs-scroll::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #ffc107, #ff9800);
+    border-radius: 4px;
+}
+

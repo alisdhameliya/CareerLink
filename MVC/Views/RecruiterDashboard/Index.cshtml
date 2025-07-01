@@ -1,0 +1,433 @@
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "_RecruiterLayout";
+}
+<style>
+    .text-muted {
+        --bs-text-opacity: 1;
+        color: white !important;
+    }
+</style>
+<main class="animate-fade-in">
+    <div class="welcome-banner animate-slide-up">
+        <h1 class="h2">Welcome, Recruiter!</h1>
+        <p class="text-muted">Manage your recruitment process efficiently with CareerLink.</p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-4 mt-4 mb-4">
+        <div class="col-md-3">
+            <div class="card stat-card animate-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-briefcase fa-2x text-primary mb-2"></i>
+                    <h5 class="card-title">Active Jobs</h5>
+                    <p class="card-text display-6">12</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card animate-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-2x text-primary mb-2"></i>
+                    <h5 class="card-title">Applications</h5>
+                    <p class="card-text display-6">45</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card animate-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-eye fa-2x text-primary mb-2"></i>
+                    <h5 class="card-title">Job Views</h5>
+                    <p class="card-text display-6">1,230</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card animate-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-clock fa-2x text-primary mb-2"></i>
+                    <h5 class="card-title">Pending Tasks</h5>
+                    <p class="card-text display-6">8</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards with Improved Design -->
+    @* <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-subtitle mb-2 text-muted">Active Jobs</h6>
+                            <h2 class="card-title mb-0">12</h2>
+                            <small class="text-success">+2 from last month</small>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 p-3 rounded">
+                            <i class="fas fa-briefcase text-primary fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-subtitle mb-2 text-muted">Total Applications</h6>
+                            <h2 class="card-title mb-0">156</h2>
+                            <small class="text-success">+23 this week</small>
+                        </div>
+                        <div class="bg-success bg-opacity-10 p-3 rounded">
+                            <i class="fas fa-file-alt text-success fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-subtitle mb-2 text-muted">Profile Views</h6>
+                            <h2 class="card-title mb-0">1,234</h2>
+                            <small class="text-success">+45 today</small>
+                        </div>
+                        <div class="bg-info bg-opacity-10 p-3 rounded">
+                            <i class="fas fa-eye text-info fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-subtitle mb-2 text-muted">Shortlisted</h6>
+                            <h2 class="card-title mb-0">28</h2>
+                            <small class="text-success">+5 this week</small>
+                        </div>
+                        <div class="bg-warning bg-opacity-10 p-3 rounded">
+                            <i class="fas fa-star text-warning fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> *@
+
+    <!-- Recent Applications -->
+    <div class="card mb-4">
+        <div class="card-header bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Recent Applications</h5>
+                <a href="/RecruiterDashboard/Applications" class="btn btn-link">View All</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div id="recentApplicationsGrid"></div>
+        </div>
+    </div>
+
+    <!-- Job Performance -->
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card h-100">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Job Performance</h5>
+                </div>
+                <div class="card-body">
+                    <div id="jobPerformanceChart"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Top Skills</h5>
+                </div>
+                <div class="card-body">
+                    <div id="topSkillsChart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    <script>
+        function getUserIdFromToken() {
+            let token = localStorage.getItem("token");
+            if (!token) return null; // No token found
+
+            let payload = JSON.parse(atob(token.split('.')[1])); // Decode JWT payload
+            return payload.uid; // Extract User ID
+        }
+
+        // Get User ID dynamically
+        var userId = getUserIdFromToken();
+        if (!userId) {
+            console.error("User ID not found in token.");
+        } else {
+            console.log("User ID:", userId);
+            $.ajax({
+                url: `http://localhost:5086/api/UserDetails/GetUserProfile/${userId}`,
+                type: 'GET',
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    console.log(data); // Log the response data for debugging
+                    if (data) {
+                        $(".welcome-banner h1").html(`Welcome, ${data.data.c_fullName || "Recruiter"}!`);
+                    }
+                },
+                error: function () {
+                    console.error('Failed to fetch profile data.');
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            // Initialize Recent Applications Grid
+            $("#recentApplicationsGrid").kendoGrid({
+                dataSource: {
+                    data: [
+                        {
+                            candidate: "John Doe",
+                            position: "Senior Software Engineer",
+                            appliedDate: "2024-03-25",
+                            status: "New",
+                            experience: "5 years"
+                        },
+                        {
+                            candidate: "Jane Smith",
+                            position: "Frontend Developer",
+                            appliedDate: "2024-03-24",
+                            status: "Shortlisted",
+                            experience: "3 years"
+                        },
+                        {
+                            candidate: "Mike Johnson",
+                            position: "Backend Developer",
+                            appliedDate: "2024-03-23",
+                            status: "Interviewed",
+                            experience: "4 years"
+                        }
+                    ],
+                    schema: {
+                        model: {
+                            fields: {
+                                candidate: { type: "string" },
+                                position: { type: "string" },
+                                appliedDate: { type: "date" },
+                                status: { type: "string" },
+                                experience: { type: "string" }
+                            }
+                        }
+                    }
+                },
+                columns: [
+                    { field: "candidate", title: "Candidate", width: "150px" },
+                    { field: "position", title: "Position", width: "200px" },
+                    { field: "appliedDate", title: "Applied Date", format: "{0:MM/dd/yyyy}", width: "120px" },
+                    { field: "status", title: "Status", width: "100px" },
+                    { field: "experience", title: "Experience", width: "100px" },
+                    {
+                        command: [
+                            {
+                                name: "view",
+                                iconClass: "fas fa-eye",
+                                text: "View",
+                                click: function (e) {
+                                    e.preventDefault();
+                                    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                                    // Handle view action
+                                    console.log("View", dataItem);
+                                }
+                            },
+                            {
+                                name: "edit",
+                                iconClass: "fas fa-edit",
+                                text: "Edit",
+                                click: function (e) {
+                                    e.preventDefault();
+                                    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                                    // Handle edit action
+                                    console.log("Edit", dataItem);
+                                }
+                            }
+                        ],
+                        title: "Actions",
+                        width: "150px",
+                        attributes: {
+                            style: "text-align: center;"
+                        },
+                        headerAttributes: {
+                            style: "text-align: center;"
+                        }
+                    }
+                ],
+                sortable: true,
+                filterable: true,
+                pageable: {
+                    pageSize: 5,
+                    buttonCount: 5,
+                    responsive: true
+                },
+                height: 300,
+                responsive: true,
+                mobile: "phone",
+                resizable: true,
+                reorderable: true,
+                columnMenu: true,
+                columnMenuInit: function (e) {
+                    var menu = e.container.find(".k-menu").data("kendoMenu");
+                    menu.bind("select", function (e) {
+                        var grid = $("#recentApplicationsGrid").data("kendoGrid");
+                        var column = grid.columns[e.item.index()];
+                        column.hidden = !column.hidden;
+                        grid.refresh();
+                    });
+                }
+            });
+
+            // Initialize Job Performance Chart
+            $("#jobPerformanceChart").kendoChart({
+                dataSource: {
+                    data: [
+                        { month: "Jan", views: 120, applications: 15 },
+                        { month: "Feb", views: 180, applications: 25 },
+                        { month: "Mar", views: 250, applications: 35 },
+                        { month: "Apr", views: 300, applications: 45 },
+                        { month: "May", views: 350, applications: 55 },
+                        { month: "Jun", views: 400, applications: 65 }
+                    ]
+                },
+                title: {
+                    text: "Monthly Job Performance",
+                    align: "left",
+                    font: "16px Arial, sans-serif"
+                },
+                legend: {
+                    position: "bottom",
+                    labels: {
+                        font: "12px Arial, sans-serif"
+                    }
+                },
+                seriesDefaults: {
+                    type: "line",
+                    style: "smooth",
+                    markers: {
+                        visible: true,
+                        size: 6
+                    }
+                },
+                series: [
+                    {
+                        field: "views",
+                        name: "Profile Views",
+                        color: "#4361ee",  // Changed from #2563eb to #4361ee
+                        markers: {
+                            background: "#4361ee"  // Changed from #2563eb to #4361ee
+                        }
+                    },
+                    {
+                        field: "applications",
+                        name: "Applications",
+                        color: "#22c55e",
+                        markers: {
+                            background: "#22c55e"
+                        }
+                    }
+                ],
+                categoryAxis: {
+                    field: "month",
+                    labels: {
+                        rotation: -45,
+                        font: "12px Arial, sans-serif"
+                    }
+                },
+                valueAxis: {
+                    labels: {
+                        format: "N0",
+                        font: "12px Arial, sans-serif"
+                    }
+                },
+                tooltip: {
+                    visible: true,
+                    format: "N0",
+                    font: "12px Arial, sans-serif"
+                },
+                chartArea: {
+                    background: "transparent"
+                },
+                plotArea: {
+                    background: "transparent"
+                }
+            });
+
+            // Initialize Top Skills Chart
+            $("#topSkillsChart").kendoChart({
+                dataSource: {
+                    data: [
+                        { skill: "JavaScript", count: 25 },
+                        { skill: "React", count: 35 },
+                        { skill: "Node.js", count: 30 },
+                        { skill: "Java", count: 20 }
+                    ]
+                },
+                title: {
+                    text: "Top Skills Distribution",
+                    align: "left",
+                    font: "16px Arial, sans-serif"
+                },
+                legend: {
+                    position: "right",
+                    labels: {
+                        font: "12px Arial, sans-serif"
+                    }
+                },
+                chartArea: {
+                    background: "transparent"
+                },
+                seriesDefaults: {
+                    labels: {
+                        visible: true,
+                        background: "transparent",
+                        template: "#= category #: #= value #%",
+                        font: "12px Arial, sans-serif"
+                    }
+                },
+                series: [{
+                    type: "donut",
+                    field: "count",
+                    categoryField: "skill",
+                    holeSize: 40,
+                    color: function (point) {
+                        var colors = {
+                            "JavaScript": "#f7df1e", // JavaScript yellow
+                            "Java": "#007396",      // Java blue
+                            "Node.js": "#68a063",   // Node.js green
+                            "React": "#61dafb"      // React blue
+                        };
+                        return colors[point.dataItem.skill];
+                    }
+                }],
+                tooltip: {
+                    visible: true,
+                    template: "#= category #: #= value #%",
+                    font: "12px Arial, sans-serif"
+                },
+                plotArea: {
+                    background: "transparent"
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,1025 @@
+@{
+    ViewData["Title"] = "Edit Profile";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+
+<style>
+    .education-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        padding: 10px 0;
+    }
+
+    .education-item h6 {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .education-item p {
+        margin: 0;
+        color: #6c757d;
+    }
+
+    .edit-icon i {
+        cursor: pointer;
+        color: #6c757d;
+    }
+
+    .swal2-confirm {
+        background-color: #4361ee;
+    }
+
+    .edit-icon i:hover {
+        color: #000;
+    }
+
+    #educationList {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        /* Adjust spacing between cards */
+        width: 100%;
+    }
+
+    .education-card {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: 1px solid #ddd;
+        padding: 1rem;
+        border-radius: 5px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        background-color: white;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-3">
+            <!-- Profile Navigation -->
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <img src="https://via.placeholder.com/120" alt="Profile" class="rounded-circle mb-3">
+                        <h5 class="mb-0">John Doe</h5>
+                        <p class="text-muted">Software Developer</p>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#personal-info" data-bs-toggle="tab">
+                                <i class="fas fa-user me-2"></i>Personal Info
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#education" data-bs-toggle="tab">
+                                <i class="fas fa-graduation-cap me-2"></i>Education
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#experience" data-bs-toggle="tab">
+                                <i class="fas fa-briefcase me-2"></i>Experience
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#project" data-bs-toggle="tab">
+                                <i class="fas fa-project-diagram me-2"></i>Projects
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#certificate" data-bs-toggle="tab">
+                                <i class="fas fa-certificate me-2"></i>Certificate
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#skills" data-bs-toggle="tab">
+                                <i class="fas fa-tools me-2"></i>Skills
+                            </a>
+                        </li>
+                        <li class="nav-item"></li>
+                        <a class="nav-link" href="#Resume" data-bs-toggle="tab">
+                            <i class="fas fa-tools me-2"></i>Upload Resume
+                        </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="CreateResume" asp-action="Resume">
+                                <i class="fa fa-file me-2" aria-hidden="true"></i> Make Your Resume
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-9">
+            <div class="tab-content">
+                <!-- Personal Info Tab -->
+                <div class="tab-pane fade show active" id="personal-info">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4">Personal Information</h4>
+                            <form id="personalInfoForm">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">First Name</label>
+                                        <input type="text" class="k-textbox form-control" value="John" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Last Name</label>
+                                        <input type="text" class="k-textbox form-control" value="Doe" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="k-textbox form-control"
+                                            value="john.doe@example.com" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Phone</label>
+                                        <input type="tel" class="k-textbox form-control" value="+1 234 567 8900" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Location</label>
+                                        <input type="text" class="k-textbox form-control" value="New York, USA" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Date of Birth</label>
+                                        <input type="date" class="k-textbox form-control" id="dob" />
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">About Me</label>
+                                        <textarea class="k-textbox form-control" rows="4">
+                            Experienced software developer with expertise in web development...
+                        </textarea>
+                                    </div>
+                                </div>
+                                <div class="mt-4 text-end">
+                                    <button type="submit" class="k-button k-button-solid k-button-solid-primary">
+                                        Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Education Tab -->
+                <div class="tab-pane fade" id="education">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="card-title mb-0">Education</h4>
+                                <button class="btn btn-primary" onclick="showEducationForm()">
+                                    <i class="fas fa-plus me-2"></i> Add Education
+                                </button>
+                            </div>
+
+                            <!-- Education Form (Initially Hidden) -->
+                            <div id="educationForm" class="mb-4" style="display: none;">
+                                <div class="card p-3">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Highest Qualification</label>
+                                            <select id="highestQualification" class="form-select"
+                                                onchange="toggleEducationFields()">
+                                                <option value="">Select Qualification</option>
+                                                <option value="10th">10th</option>
+                                                <option value="12th">12th</option>
+                                                <option value="Bachelor">Bachelor's Degree</option>
+                                                <option value="Master">Master's Degree</option>
+                                                <option value="PhD">PhD</option>
+                                                <option value="Diploma">Diploma</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Degree Field (Hidden Initially) -->
+                                        <div class="col-md-6 education-field" id="degreeField">
+                                            <label class="form-label">Degree</label>
+                                            <input type="text" id="degree" class="form-control"
+                                                placeholder="Enter degree">
+                                        </div>
+
+                                        <!-- Specialization Field (Hidden Initially) -->
+                                        <div class="col-md-6 education-field" id="specializationField">
+                                            <label class="form-label">Specialization</label>
+                                            <input type="text" id="specialization" class="form-control"
+                                                placeholder="Enter specialization">
+                                        </div>
+
+                                        <!-- University Name -->
+                                        <div class="col-md-6 education-field" id="universityField">
+                                            <label class="form-label">University Name</label>
+                                            <input type="text" id="universityName" class="form-control"
+                                                placeholder="Enter university name">
+                                        </div>
+
+                                        <!-- Year of Passing -->
+                                        <div class="col-md-6" id="yearField">
+                                            <label class="form-label">Year of Passing</label>
+                                            <input type="number" id="yearOfPassing" class="form-control"
+                                                placeholder="Enter year">
+                                        </div>
+
+                                        <!-- Percentage (Always Visible) -->
+                                        <div class="col-md-6" id="percentageField">
+                                            <label class="form-label">Percentage</label>
+                                            <input type="number" id="percentage" class="form-control"
+                                                placeholder="Enter percentage">
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <button class="btn btn-success" onclick="addEducation()">Save</button>
+                                        <button class="btn btn-secondary" onclick="hideEducationForm()">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Education Cards (Dynamic Display) -->
+                            <div id="educationList" class="d-flex flex-wrap gap-3">
+                                <!-- Dynamic Education Data Will Be Appended Here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Work Experience Tab -->
+                <div class="tab-pane fade" id="experience">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="card-title mb-0">Work Experience</h4>
+                                <button class="btn btn-primary" onclick="showExperienceForm()">
+                                    <i class="fas fa-plus me-2"></i>Add Experience
+                                </button>
+                            </div>
+                            <div id="experienceForm" class="card shadow-sm p-4" style="display: none;">
+                                <h4 class="mb-3">Add Work Experience</h4>
+                                <div class="mb-3">
+                                    <label class="form-label">Company Name</label>
+                                    <input type="text" id="companyName" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Job Title</label>
+                                    <input type="text" id="jobTitle" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Job Description</label>
+                                    <textarea id="jobDescription" class="form-control" rows="3"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Years Worked</label>
+                                    <input type="number" id="yearsWorked" class="form-control" required>
+                                </div>
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" id="currentlyWorking" class="form-check-input">
+                                    <label class="form-check-label">Currently Working</label>
+                                </div>
+                                <button class="btn btn-primary" onclick="saveExperience()">Save</button>
+                                <button class="btn btn-secondary" onclick="hideExperienceForm()">Cancel</button>
+                            </div>
+                            <div id="experienceList" class="mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Projects Tab -->
+                <div class="tab-pane fade" id="project">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="card-title mb-0">Projects</h4>
+                                <button class="btn btn-primary" onclick="showAddProjectForm()">
+                                    <i class="fas fa-plus me-2"></i>Add Project
+                                </button>
+                            </div>
+                            <div id="projectForm" class="card shadow-sm p-4" style="display: none;">
+                                <h4 class="mb-3">Add Project</h4>
+                                <div class="mb-3">
+                                    <label class="form-label">Project Title</label>
+                                    <input type="text" id="projectTitle" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Project Description</label>
+                                    <textarea id="projectDescription" class="form-control" rows="3"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Technologies Used</label>
+                                    <input type="text" id="technologiesUsed" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Project Link</label>
+                                    <input type="url" id="projectLink" class="form-control">
+                                </div>
+                                <button class="btn btn-primary" onclick="saveProject()">Save</button>
+                                <button class="btn btn-secondary" onclick="hideProjectForm()">Cancel</button>
+                            </div>
+                            <div id="projectList" class="mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <!-- Certificates Tab -->
+                <div class="tab-pane fade" id="certificate">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="card-title mb-0">Certificates</h4>
+                                <button class="btn btn-primary" onclick="showCertificateForm()">
+                                    <i class="fas fa-plus me-2"></i>Upload Certificate
+                                </button>
+                            </div>
+                            <div id="certificateForm" class="card shadow-sm p-4" style="display: none;">
+                                <h4 class="mb-3">Upload Certificate</h4>
+                                <div class="mb-3">
+                                    <label class="form-label">Select Certificate</label>
+                                    <input type="file" id="certificateFile" class="form-control"
+                                        accept="application/pdf, image/*">
+                                </div>
+                                <button class="btn btn-primary" onclick="uploadCertificate()">Upload</button>
+                                <button class="btn btn-secondary" onclick="hideCertificateForm()">Cancel</button>
+                            </div>
+                            <div id="certificateList" class="mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Skills Tab -->
+                <div class="tab-pane fade" id="skills">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4">Skills</h4>
+                            <div id="skillsList"></div>
+                            <div class="input-group mt-3">
+                                <input type="text" id="skillInput" class="form-control" placeholder="Enter Skill">
+                                <button class="btn btn-primary" onclick="addSkill()">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Resume Tab -->
+                <div class="tab-pane fade" id="Resume">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="card-title mb-0">Resume</h4>
+                                <button class="btn btn-primary" onclick="showResumeForm()">
+                                    <i class="fas fa-plus me-2"></i>Upload Resume
+                                </button>
+                            </div>
+                            <div id="resumeForm" class="card shadow-sm p-4" style="display: none;">
+                                <h4 class="mb-3">Upload Resume</h4>
+                                <div class="mb-3">
+                                    <label class="form-label">Select Resume</label>
+                                    <input type="file" id="resumeFile" class="form-control"
+                                        accept="application/pdf, image/*">
+                                </div>
+                                <button class="btn btn-primary" onclick="uploadResume()">Upload</button>
+                                <button class="btn btn-secondary" onclick="hideResumeForm()">Cancel</button>
+                            </div>
+                            <div id="resumeList" class="mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Documents Tab -->
+                <div class="tab-pane fade" id="documents">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4">Documents</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-4">
+                                        <label class="form-label">Resume</label>
+                                        <div class="k-upload">
+                                            <input type="file" name="resume" accept=".pdf,.doc,.docx,.txt" />
+                                        </div>
+                                        <div class="form-text">Accepted formats: PDF, DOC, DOCX, TXT (Max size: 5MB)
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Cover Letter</label>
+                                        <div class="k-upload">
+                                            <input type="file" name="coverLetter" accept=".pdf,.doc,.docx,.txt" />
+                                        </div>
+                                        <div class="form-text">Accepted formats: PDF, DOC, DOCX, TXT (Max size: 5MB)
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Portfolio</label>
+                                        <div class="k-upload">
+                                            <input type="file" name="portfolio" accept=".pdf,.doc,.docx,.txt,.zip" />
+                                        </div>
+                                        <div class="form-text">Accepted formats: PDF, DOC, DOCX, TXT, ZIP (Max size:
+                                            10MB)</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card bg-light">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Current Documents</h5>
+                                            <div class="list-group">
+                                                <div
+                                                    class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <i class="fas fa-file-pdf text-danger me-2"></i>
+                                                        <span>Resume.pdf</span>
+                                                    </div>
+                                                    <div>
+                                                        <button
+                                                            class="k-button k-button-solid k-button-solid-base k-button-sm me-2">
+                                                            <i class="fas fa-download"></i>
+                                                        </button>
+                                                        <button
+                                                            class="k-button k-button-solid k-button-solid-danger k-button-sm">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <i class="fas fa-file-word text-primary me-2"></i>
+                                                        <span>Cover_Letter.docx</span>
+                                                    </div>
+                                                    <div>
+                                                        <button
+                                                            class="k-button k-button-solid k-button-solid-base k-button-sm me-2">
+                                                            <i class="fas fa-download"></i>
+                                                        </button>
+                                                        <button
+                                                            class="k-button k-button-solid k-button-solid-danger k-button-sm">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Initialize DatePicker
+            $("#dob").kendoDatePicker({
+                value: new Date(),
+                format: "MM/dd/yyyy",
+                animation: false
+            });
+        });
+
+
+        $(document).ready(function () {
+            loadEducationData();
+
+            $("#addEducationBtn").click(function () {
+                addEducation();
+            });
+        });
+
+        //education done
+        function showEducationForm() {
+            $("#educationForm").show();
+        }
+
+        function hideEducationForm() {
+            $("#educationForm").hide();
+        }
+
+        function toggleEducationFields() {
+            let qualification = $("#highestQualification").val();
+            let fields = {
+                degree: $("#degreeField"),
+                specialization: $("#specializationField"),
+                university: $("#universityField"),
+                year: $("#yearField"),
+                percentage: $("#percentageField"),
+            };
+
+            if (qualification === "10th" || qualification === "12th") {
+                $.each(fields, function (key, field) {
+                    field.hide();
+                });
+                fields.year.show();
+                fields.percentage.show();
+            } else if (qualification) {
+                $.each(fields, function (key, field) {
+                    field.show();
+                });
+            } else {
+                $.each(fields, function (key, field) {
+                    field.hide();
+                });
+            }
+        }
+
+        function addEducation() {
+            let educationData = new FormData();
+            educationData.append("c_user_id", 19); // Assuming 0 for new entry
+            educationData.append("c_HighestQualification", $("#highestQualification").val());
+            educationData.append("c_Degree", $("#degree").val() || "N/A");
+            educationData.append("c_Specialization", $("#specialization").val() || "N/A");
+            educationData.append("c_UniversityName", $("#universityName").val() || "N/A");
+            educationData.append("c_YearOfPassing", $("#yearOfPassing").val());
+            educationData.append("c_percentage", $("#percentage").val());
+
+            $.ajax({
+                url: "http://localhost:5086/api/UserDetails/AddEducation", // Replace with actual endpoint
+                type: "POST",
+                data: educationData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    loadEducationData();
+                    clearEducationForm();
+                    hideEducationForm();
+                },
+                error: function (error) {
+                    alert("Error adding education");
+                }
+            });
+        }
+
+        function loadEducationData() {
+            $.ajax({
+                url: "http://localhost:5086/api/UserDetails/GetEducation/19", // Replace with actual endpoint
+                type: "GET",
+                success: function (response) {
+                    let educationList = $("#educationList");
+                    educationList.empty();
+
+                    response.forEach(function (edu) {
+                        let card = `<div class='education-card' data-id='${edu.c_education_id}'>
+                        <div><strong>Qualification:</strong> <span class='edu-qualification'>${edu.c_HighestQualification}</span></div>
+                        ${edu.qualification === "10th" || edu.qualification === "12th" ?
+                                `<div><strong>Year of Passing:</strong> <span class='edu-year'>${edu.c_YearOfPassing}</span></div>
+                            <div><strong>Percentage:</strong> <span class='edu-percentage'>${edu.c_percentage}%</span></div>` :
+                                `<div><strong>Degree:</strong> <span class='edu-degree'>${edu.c_Degree}</span></div>
+                            <div><strong>Specialization:</strong> <span class='edu-specialization'>${edu.c_Specialization}</span></div>
+                            <div><strong>University:</strong> <span class='edu-university'>${edu.c_UniversityName}</span></div>
+                            <div><strong>Year of Passing:</strong> <span class='edu-year'>${edu.c_YearOfPassing}</span></div>
+                            <div><strong>Percentage:</strong> <span class='edu-percentage'>${edu.c_percentage}%</span></div>`}
+                        <div class='card-buttons'>
+                            <button class='btn btn-warning btn-sm' onclick='editEducation(${edu.c_education_id})'>Edit</button>
+                            <button class='btn btn-danger btn-sm' onclick='removeEducation(${edu.c_education_id})'>Delete</button>
+                        </div>
+                    </div>`;
+                        educationList.append(card);
+                    });
+                },
+                error: function (error) {
+                    alert("Error loading education data");
+                }
+            });
+        }
+
+        function removeEducation(id) {
+            $.ajax({
+                url: `http://localhost:5086/api/UserDetails/DeleteEducationDetails/${14}`, // Replace with actual endpoint
+                type: "DELETE",
+                success: function () {
+                    loadEducationData();
+                },
+                error: function (error) {
+                    alert("Error deleting education record");
+                }
+            });
+        }
+
+        function editEducation(id) {
+            $.ajax({
+                url: `http://localhost:5086/api/UserDetails/GetOneEducation/${6}`, // Replace with actual endpoint
+                type: "GET",
+                success: function (edu) {
+                    $("#highestQualification").val(edu.c_HighestQualification);
+                    toggleEducationFields();
+                    if (edu.c_HighestQualification === "10th" || edu.c_HighestQualification === "12th") {
+                        $("#yearOfPassing").val(edu.c_YearOfPassing);
+                        $("#percentage").val(edu.c_percentage);
+                    } else {
+                        $("#degree").val(edu.c_Degree !== "N/A" ? edu.c_Degree : "");
+                        $("#specialization").val(edu.c_Specialization !== "N/A" ? edu.c_Specialization : "");
+                        $("#universityName").val(edu.c_UniversityName);
+                        $("#yearOfPassing").val(edu.c_YearOfPassing);
+                        $("#percentage").val(edu.c_percentage);
+                    }
+                    showEducationForm();
+                    $("#addEducationBtn").off("click").click(function () {
+                        updateEducation(6);
+                    });
+                },
+                error: function (error) {
+                    alert("Error fetching education record");
+                }
+            });
+        }
+
+        function updateEducation(id) {
+            let educationData = new FormData();
+            educationData.append("qualification", $("#highestQualification").val());
+            educationData.append("degree", $("#degree").val() || "N/A");
+            educationData.append("specialization", $("#specialization").val() || "N/A");
+            educationData.append("university", $("#universityName").val() || "N/A");
+            educationData.append("yearOfPassing", $("#yearOfPassing").val());
+            educationData.append("percentage", $("#percentage").val());
+
+            $.ajax({
+                url: `/api/education/${id}`, // Replace with actual endpoint
+                type: "PUT",
+                data: educationData,
+                processData: false,
+                contentType: false,
+                success: function () {
+                    loadEducationData();
+                    clearEducationForm();
+                    hideEducationForm();
+                    $("#addEducationBtn").off("click").click(addEducation);
+                },
+                error: function (error) {
+                    alert("Error updating education record");
+                }
+            });
+        }
+
+        function clearEducationForm() {
+            $("#educationForm input, #educationForm select").val("");
+        }
+        //education done
+
+        //Experience done
+
+        function showExperienceForm() {
+            document.getElementById("experienceForm").style.display = "block";
+        }
+
+        function hideExperienceForm() {
+            document.getElementById("experienceForm").style.display = "none";
+        }
+
+        function saveExperience() {
+            let companyName = document.getElementById("companyName").value;
+            let jobTitle = document.getElementById("jobTitle").value;
+            let jobDescription = document.getElementById("jobDescription").value;
+            let yearsWorked = document.getElementById("yearsWorked").value;
+            let currentlyWorking = document.getElementById("currentlyWorking").checked ? "Yes" : "No";
+
+            if (!companyName || !jobTitle || !yearsWorked) {
+                alert("Please fill all required fields");
+                return;
+            }
+
+            let experienceList = document.getElementById("experienceList");
+
+            let card = document.createElement("div");
+            card.className = "card shadow-sm p-3 mb-3";
+
+            card.innerHTML = `
+                            <h5><strong>${companyName}</strong> - ${jobTitle}</h5>
+                            <p>${jobDescription}</p>
+                            <p><strong>Years Worked:</strong> ${yearsWorked}</p>
+                            <p><strong>Currently Working:</strong> ${currentlyWorking}</p>
+                            <button class="btn btn-warning btn-sm" onclick="editExperience(this)">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="removeExperience(this)">Delete</button>
+                        `;
+
+            experienceList.appendChild(card);
+
+            clearExperienceForm();
+            hideExperienceForm();
+        }
+
+        function removeExperience(button) {
+            button.parentElement.remove();
+        }
+
+        function editExperience(button) {
+            let card = button.parentElement;
+            document.getElementById("companyName").value = card.querySelector("h5").innerText.split(" - ")[0];
+            document.getElementById("jobTitle").value = card.querySelector("h5").innerText.split(" - ")[1];
+            document.getElementById("jobDescription").value = card.querySelectorAll("p")[0].innerText;
+            document.getElementById("yearsWorked").value = card.querySelectorAll("p")[1].innerText.split(": ")[1];
+            document.getElementById("currentlyWorking").checked = card.querySelectorAll("p")[2].innerText.split(": ")[1] === "Yes";
+
+            showExperienceForm();
+            card.remove();
+        }
+
+        function clearExperienceForm() {
+            document.querySelectorAll("#experienceForm input, #experienceForm textarea").forEach(input => input.value = "");
+            document.getElementById("currentlyWorking").checked = false;
+        }
+        //Experience done
+
+        //Projects done
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("projectForm").style.display = "none";
+        });
+
+        function showAddProjectForm() {
+            document.getElementById("projectForm").style.display = "block";
+        }
+
+        function hideProjectForm() {
+            document.getElementById("projectForm").style.display = "none";
+            clearProjectForm();
+        }
+
+        function saveProject() {
+            let projectTitle = document.getElementById("projectTitle").value.trim();
+            let projectDescription = document.getElementById("projectDescription").value.trim();
+            let technologiesUsed = document.getElementById("technologiesUsed").value.trim();
+            let projectLink = document.getElementById("projectLink").value.trim();
+
+            if (!projectTitle || !technologiesUsed) {
+                alert("Please fill all required fields");
+                return;
+            }
+
+            let projectList = document.getElementById("projectList");
+            let card = document.createElement("div");
+            card.className = "card shadow-sm p-3 mb-3";
+
+            card.innerHTML = `
+                    <h5><strong>${projectTitle}</strong></h5>
+                    <p>${projectDescription}</p>
+                    <p><strong>Technologies Used:</strong> ${technologiesUsed}</p>
+                    <p><strong>Project Link:</strong> ${projectLink ? `<a href="${projectLink}" target="_blank">${projectLink}</a>` : "N/A"}</p>
+                    <button class="btn btn-warning btn-sm" onclick="editProject(this)">Edit</button>
+                    <button class="btn btn-danger btn-sm" onclick="removeProject(this)">Delete</button>
+                `;
+
+            projectList.appendChild(card);
+            hideProjectForm();
+        }
+
+        function removeProject(button) {
+            button.parentElement.remove();
+        }
+
+        function editProject(button) {
+            let card = button.parentElement;
+            document.getElementById("projectTitle").value = card.querySelector("h5").innerText;
+            document.getElementById("projectDescription").value = card.querySelectorAll("p")[0]?.innerText || "";
+            document.getElementById("technologiesUsed").value = card.querySelectorAll("p")[1]?.innerText.replace("Technologies Used:", "").trim();
+            let projectLinkElement = card.querySelector("p a");
+            document.getElementById("projectLink").value = projectLinkElement ? projectLinkElement.href : "";
+
+            showProjectForm();
+            card.remove();
+        }
+
+        function clearProjectForm() {
+            document.querySelectorAll("#projectForm input, #projectForm textarea").forEach(input => input.value = "");
+        }
+        //Projects done
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("projectForm").style.display = "none";
+            document.getElementById("certificateForm").style.display = "none";
+
+            let modal = document.createElement("div");
+            modal.id = "documentModal";
+            modal.style.display = "none";
+            modal.style.position = "fixed";
+            modal.style.top = "50%";
+            modal.style.left = "50%";
+            modal.style.transform = "translate(-50%, -50%)";
+            modal.style.width = "80%";
+            modal.style.height = "80%";
+            modal.style.backgroundColor = "white";
+            modal.style.border = "2px solid #333";
+            modal.style.zIndex = "1000";
+            modal.style.boxShadow = "0 4px 8px rgba(0,0,0,0.2)";
+            modal.innerHTML = `
+                <div style="display: flex; justify-content: space-between; padding: 10px; background: #333; color: white;">
+                    <h4>Uploaded Document</h4>
+                    <button onclick="closeModal()" style="background: red; color: white; border: none; padding: 5px 10px;">Close</button>
+                </div>
+                <iframe id="docViewer" style="width: 100%; height: 90%; border: none;"></iframe>
+            `;
+            document.body.appendChild(modal);
+        });
+
+        function openModal(docURL) {
+            document.getElementById("docViewer").src = docURL;
+            document.getElementById("documentModal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("documentModal").style.display = "none";
+            document.getElementById("docViewer").src = "";
+        }
+
+        function showProjectForm() {
+            document.getElementById("projectForm").style.display = "block";
+        }
+
+        function hideProjectForm() {
+            document.getElementById("projectForm").style.display = "none";
+            clearProjectForm();
+        }
+
+        function saveProject() {
+            let projectTitle = document.getElementById("projectTitle").value.trim();
+            let projectDescription = document.getElementById("projectDescription").value.trim();
+            let technologiesUsed = document.getElementById("technologiesUsed").value.trim();
+            let projectLink = document.getElementById("projectLink").value.trim();
+
+            if (!projectTitle || !technologiesUsed) {
+                alert("Please fill all required fields");
+                return;
+            }
+
+            let projectList = document.getElementById("projectList");
+            let card = document.createElement("div");
+            card.className = "card shadow-sm p-3 mb-3";
+
+            card.innerHTML = `
+                <h5><strong>${projectTitle}</strong></h5>
+                <p>${projectDescription}</p>
+                <p><strong>Technologies Used:</strong> ${technologiesUsed}</p>
+                <p><strong>Project Link:</strong> ${projectLink ? `<a href="${projectLink}" target="_blank">${projectLink}</a>` : "N/A"}</p>
+                <button class="btn btn-warning btn-sm" onclick="editProject(this)">Edit</button>
+                <button class="btn btn-danger btn-sm" onclick="removeProject(this)">Delete</button>
+            `;
+
+            projectList.appendChild(card);
+            hideProjectForm();
+        }
+
+        function removeProject(button) {
+            button.parentElement.remove();
+        }
+
+        function editProject(button) {
+            let card = button.parentElement;
+            document.getElementById("projectTitle").value = card.querySelector("h5").innerText;
+            document.getElementById("projectDescription").value = card.querySelectorAll("p")[0]?.innerText || "";
+            document.getElementById("technologiesUsed").value = card.querySelectorAll("p")[1]?.innerText.replace("Technologies Used:", "").trim();
+            let projectLinkElement = card.querySelector("p a");
+            document.getElementById("projectLink").value = projectLinkElement ? projectLinkElement.href : "";
+
+            showProjectForm();
+            card.remove();
+        }
+
+        function clearProjectForm() {
+            document.querySelectorAll("#projectForm input, #projectForm textarea").forEach(input => input.value = "");
+        }
+        //project done
+
+        //certificate done
+        function showCertificateForm() {
+            document.getElementById("certificateForm").style.display = "block";
+        }
+
+        function hideCertificateForm() {
+            document.getElementById("certificateForm").style.display = "none";
+            document.getElementById("certificateFile").value = "";
+        }
+
+        function uploadCertificate() {
+            let fileInput = document.getElementById("certificateFile");
+            if (fileInput.files.length === 0) {
+                alert("Please select a certificate file to upload");
+                return;
+            }
+
+            let certificateList = document.getElementById("certificateList");
+            let card = document.createElement("div");
+            card.className = "card shadow-sm p-3 mb-3";
+
+            let file = fileInput.files[0];
+            let fileURL = URL.createObjectURL(file);
+
+            card.innerHTML = `
+                <p><strong>Certificate:</strong> ${file.name}</p>
+                <button class="btn btn-primary btn-sm" onclick="openModal('${fileURL}')">View</button>
+                <button class="btn btn-danger btn-sm" onclick="removeCertificate(this)">Delete</button>
+            `;
+
+            certificateList.appendChild(card);
+            hideCertificateForm();
+        }
+
+        function removeCertificate(button) {
+            button.parentElement.remove();
+        }
+        //certificate done
+
+        //Resume
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("resumeForm").style.display = "none";
+
+            let modal = document.createElement("div");
+            modal.id = "resumeModal";
+            modal.style.display = "none";
+            modal.style.position = "fixed";
+            modal.style.top = "50%";
+            modal.style.left = "50%";
+            modal.style.transform = "translate(-50%, -50%)";
+            modal.style.width = "80%";
+            modal.style.height = "80%";
+            modal.style.backgroundColor = "white";
+            modal.style.border = "2px solid #333";
+            modal.style.zIndex = "1000";
+            modal.style.boxShadow = "0 4px 8px rgba(0,0,0,0.2)";
+            modal.innerHTML = `
+                <div style="display: flex; justify-content: space-between; padding: 10px; background: #333; color: white;">
+                    <h4>Uploaded Resume</h4>
+                    <button onclick="closeResumeModal()" style="background: red; color: white; border: none; padding: 5px 10px;">Close</button>
+                </div>
+                <iframe id="resumeViewer" style="width: 100%; height: 90%; border: none;"></iframe>
+            `;
+            document.body.appendChild(modal);
+        });
+
+        function openResumeModal(docURL) {
+            document.getElementById("resumeViewer").src = docURL;
+            document.getElementById("resumeModal").style.display = "block";
+        }
+
+        function closeResumeModal() {
+            document.getElementById("resumeModal").style.display = "none";
+            document.getElementById("resumeViewer").src = "";
+        }
+
+        function showResumeForm() {
+            document.getElementById("resumeForm").style.display = "block";
+        }
+
+        function hideResumeForm() {
+            document.getElementById("resumeForm").style.display = "none";
+            document.getElementById("resumeFile").value = "";
+        }
+
+        function uploadResume() {
+            let fileInput = document.getElementById("resumeFile");
+            if (fileInput.files.length === 0) {
+                alert("Please select a resume file to upload");
+                return;
+            }
+
+            let resumeList = document.getElementById("resumeList");
+            let card = document.createElement("div");
+            card.className = "card shadow-sm p-3 mb-3";
+
+            let file = fileInput.files[0];
+            let fileURL = URL.createObjectURL(file);
+
+            card.innerHTML = `
+                <p><strong>Resume:</strong> ${file.name}</p>
+                <button class="btn btn-primary btn-sm" onclick="openResumeModal('${fileURL}')">View</button>
+                <button class="btn btn-danger btn-sm" onclick="removeResume(this)">Delete</button>
+            `;
+
+            resumeList.appendChild(card);
+            hideResumeForm();
+        }
+
+        function removeResume(button) {
+            button.parentElement.remove();
+        }
+
+
+        //Add Skill done
+
+        function addSkill() {
+            let skillInput = document.getElementById("skillInput");
+            let skillValue = skillInput.value.trim();
+
+            if (skillValue) {
+                let skillBadge = document.createElement("span");
+                skillBadge.className = "badge bg-secondary me-2 p-2";
+                skillBadge.innerHTML = `${skillValue} <button type="button" class="btn-close btn-close-white ms-2" onclick="this.parentElement.remove()"></button>`;
+
+                document.getElementById("skillsList").appendChild(skillBadge);
+                skillInput.value = "";
+            }
+        }
+
+
+    </script>
+
+}

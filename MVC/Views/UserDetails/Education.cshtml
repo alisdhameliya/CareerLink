@@ -1,0 +1,1194 @@
+@{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewData["Title"] = "Education";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<div class="container">
+    <div class="education-wrapper">
+        <!-- Header Section -->
+        <div class="header">
+            <div class="header-content">
+                <div class="title-section">
+                    <i class="fas fa-graduation-cap icon"></i>
+                    <div>
+                        <h1>Education</h1>
+                        <p>Manage your academic qualifications</p>
+                    </div>
+                </div>
+                <button class="add-btn" id="addEducationBtn">
+                    <i class="fas fa-plus"></i> Add Education
+                </button>
+            </div>
+        </div>
+
+        <!-- Form Section -->
+        <div id="educationForm" class="form-section">
+            <div class="form-card">
+                <div class="form-header">
+                    <h3><i class="fas fa-book-open"></i> Add Education</h3>
+                    <button class="close-btn" onclick="hideEducationForm()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="form-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Qualification*</label>
+                            <select id="highestQualification" class="form-control" onchange="toggleEducationFields()">
+                                <option value="">Select Qualification</option>
+                                <option value="10th">10th Standard</option>
+                                <option value="12th">12th Standard</option>
+                                <option value="Bachelor">Bachelor's Degree</option>
+                                <option value="Master">Master's Degree</option>
+                                <option value="PhD">PhD</option>
+                                <option value="Diploma">Diploma</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group education-field" id="degreeField">
+                            <label>Degree*</label>
+                            <input type="text" id="degree" class="form-control" placeholder="Enter degree">
+                        </div>
+                        <div class="form-group education-field" id="specializationField">
+                            <label>Specialization*</label>
+                            <input type="text" id="specialization" class="form-control"
+                                placeholder="Enter specialization">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group education-field" id="universityField">
+                            <label>University/Institution*</label>
+                            <input type="text" id="universityName" class="form-control"
+                                placeholder="Enter university/institution">
+                        </div>
+                        <div class="form-group" id="yearField">
+                            <label>Year of Passing*</label>
+                            <input type="number" id="yearOfPassing" class="form-control" placeholder="Enter year"
+                                min="1900" max="2030">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group" id="percentageField">
+                            <label>Percentage/CGPA*</label>
+                            <input type="number" id="percentage" class="form-control"
+                                placeholder="Enter percentage/CGPA" min="0" max="100" step="0.01">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <button class="btn cancel" onclick="hideEducationForm()">Cancel</button>
+                    <button class="btn primary" onclick="addEducation()">Save Education</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Form Section -->
+        <div id="editEducationForm" class="form-section">
+            <div class="form-card">
+                <div class="form-header">
+                    <h3><i class="fas fa-edit"></i> Edit Education</h3>
+                    <button class="close-btn" onclick="hideEditEducationForm()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <input type="hidden" id="editEducationId">
+
+                <div class="form-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Qualification</label>
+                            <select id="editHighestQualification" class="form-control" disabled>
+                                <option value="">Select Qualification</option>
+                                <option value="10th">10th Standard</option>
+                                <option value="12th">12th Standard</option>
+                                <option value="Bachelor">Bachelor's Degree</option>
+                                <option value="Master">Master's Degree</option>
+                                <option value="PhD">PhD</option>
+                                <option value="Diploma">Diploma</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group education-field" id="editDegreeField">
+                            <label>Degree*</label>
+                            <input type="text" id="editDegree" class="form-control" placeholder="Enter degree">
+                        </div>
+                        <div class="form-group education-field" id="editSpecializationField">
+                            <label>Specialization*</label>
+                            <input type="text" id="editSpecialization" class="form-control"
+                                placeholder="Enter specialization">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group education-field" id="editUniversityField">
+                            <label>University/Institution*</label>
+                            <input type="text" id="editUniversityName" class="form-control"
+                                placeholder="Enter university/institution">
+                        </div>
+                        <div class="form-group" id="editYearField">
+                            <label>Year of Passing*</label>
+                            <input type="number" id="editYearOfPassing" class="form-control" placeholder="Enter year"
+                                min="1900" max="2030">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group" id="editPercentageField">
+                            <label>Percentage/CGPA*</label>
+                            <input type="number" id="editPercentage" class="form-control"
+                                placeholder="Enter percentage/CGPA" min="0" max="100" step="0.01">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <button class="btn cancel" onclick="hideEditEducationForm()">Cancel</button>
+                    <button class="btn primary" onclick="updateEducation()">Update Education</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Education List Section -->
+        <div class="content-section">
+            <div id="educationList">
+                <!-- Empty State -->
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>No Education Added</h3>
+                    <p>You haven't added any education details yet. Add your first qualification to get started.</p>
+                    <button class="btn primary" onclick="showEducationForm()">
+                        <i class="fas fa-plus"></i> Add Education
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Base Styles */
+    :root {
+        --primary: #4361ee;
+        --primary-dark: #3a56d4;
+        --secondary: #3f37c9;
+        --danger: #f72585;
+        --success: #4cc9f0;
+        --light: #f8f9fa;
+        --dark: #212529;
+        --gray: #6c757d;
+        --light-gray: #e9ecef;
+        --border-radius: 8px;
+        --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        --transition: all 0.3s ease;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f5f7fa;
+        color: var(--dark);
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    /* Header Styles */
+    .header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        border-radius: var(--border-radius);
+        margin: 20px 0;
+        padding: 25px 30px;
+        box-shadow: var(--box-shadow);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+        transform: rotate(30deg);
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    .title-section {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .title-section .icon {
+        font-size: 32px;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .title-section h1 {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .title-section p {
+        font-size: 14px;
+        opacity: 0.9;
+        font-weight: 300;
+    }
+
+    .add-btn {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        padding: 10px 20px;
+        border-radius: var(--border-radius);
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+        cursor: pointer;
+        backdrop-filter: blur(5px);
+        font-size: 14px;
+    }
+
+    .add-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+    }
+
+    /* Form Styles */
+    .form-section {
+        display: none;
+        margin-bottom: 20px;
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    .form-card {
+        background: #fff;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        overflow: hidden;
+    }
+
+    .form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        border-bottom: 1px solid var(--light-gray);
+    }
+
+    .form-header h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        color: var(--gray);
+        font-size: 18px;
+        cursor: pointer;
+        transition: var(--transition);
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .close-btn:hover {
+        background: var(--light-gray);
+        color: var(--danger);
+    }
+
+    .form-body {
+        padding: 20px;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+    .swal2-confirm {
+        background-color: #4361ee;
+    }
+
+    .form-group {
+        flex: 1;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--gray);
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid var(--light-gray);
+        border-radius: var(--border-radius);
+        font-size: 14px;
+        transition: var(--transition);
+        background-color: #fff;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        outline: none;
+    }
+
+    .form-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        padding: 20px;
+        border-top: 1px solid var(--light-gray);
+    }
+
+    /* Button Styles */
+    .btn {
+        padding: 10px 20px;
+        border-radius: var(--border-radius);
+        font-weight: 500;
+        font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        transition: var(--transition);
+        border: none;
+    }
+
+    .btn.primary {
+        background: var(--primary);
+        color: white;
+    }
+
+    .btn.primary:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+    }
+
+    .btn.cancel {
+        background: #fff;
+        color: var(--gray);
+        border: 1px solid var(--light-gray);
+    }
+
+    .btn.cancel:hover {
+        background: var(--light-gray);
+        color: var(--dark);
+    }
+
+    /* Content Section */
+    .content-section {
+        background: #fff;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+
+    /* Education List */
+    .education-list {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .education-item {
+        background: #fff;
+        border-radius: var(--border-radius);
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border-left: 4px solid var(--primary);
+        transition: var(--transition);
+    }
+
+    .education-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .education-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .education-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--primary);
+    }
+
+    .education-actions {
+        display: flex;
+        gap: 10px;
+        position: relative;
+        top: 5rem;
+        right: 2.5rem;
+    }
+
+    .action-btn {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .edit-btn {
+        background: rgba(67, 97, 238, 0.1);
+        color: var(--primary);
+        border: 1px solid rgba(67, 97, 238, 0.2);
+    }
+
+    .edit-btn:hover {
+        background: rgba(67, 97, 238, 0.2);
+    }
+
+    .delete-btn {
+        background: rgba(220, 53, 69, 0.1);
+        color: var(--danger);
+        border: 1px solid rgba(220, 53, 69, 0.2);
+    }
+
+    .delete-btn:hover {
+        background: rgba(220, 53, 69, 0.2);
+    }
+
+    .education-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+    }
+
+    .detail-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .detail-label {
+        font-size: 12px;
+        color: var(--gray);
+        font-weight: 500;
+        margin-bottom: 5px;
+    }
+
+    .detail-value {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--dark);
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+    }
+
+    .empty-icon {
+        width: 70px;
+        height: 70px;
+        background: rgba(67, 97, 238, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        color: var(--primary);
+        font-size: 28px;
+    }
+
+    .empty-state h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: var(--dark);
+        font-weight: 600;
+    }
+
+    .empty-state p {
+        color: var(--gray);
+        font-size: 14px;
+        margin-bottom: 20px;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Loading State */
+    .loading-state {
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+    }
+
+    .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(67, 97, 238, 0.1);
+        border-radius: 50%;
+        border-top-color: var(--primary);
+        animation: spin 1s ease-in-out infinite;
+    }
+
+    /* Animations */
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Responsive Styles */
+    @@media (max-width: 768px) {
+        .header-content {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .add-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .form-row {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-footer {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .education-details {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .header {
+            padding: 20px;
+        }
+
+        .education-actions {
+            width: 100%;
+        }
+
+        .action-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    .nav-menu {
+        display: flex;
+        align-items: center;
+        gap: 0px;
+        flex-grow: 1;
+        justify-content: space-evenly;
+        margin: 0 20px;
+    }
+</style>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Your existing JavaScript code remains the same
+        // Only the UI has been enhanced
+        function getUserIdFromToken() {
+            let token = localStorage.getItem("token");
+            if (!token) return null;
+            let payload = JSON.parse(atob(token.split('.')[1]));
+            return payload.uid;
+        }
+
+        var userId = getUserIdFromToken();
+
+        $(document).ready(function () {
+            $("#addEducationBtn").click(function () {
+                $("#educationForm").show();
+                $("#editEducationForm").hide();
+                $('html, body').animate({
+                    scrollTop: $("#educationForm").offset().top - 20
+                }, 300);
+            });
+            loadEducationData();
+        });
+
+        function showEducationForm() {
+            $("#educationForm").show();
+            $("#editEducationForm").hide();
+            $('html, body').animate({
+                scrollTop: $("#educationForm").offset().top - 20
+            }, 300);
+        }
+
+        function hideEducationForm() {
+            $("#educationForm").hide();
+        }
+
+        function showEditEducationForm() {
+            $("#editEducationForm").show();
+            $("#educationForm").hide();
+            $('html, body').animate({
+                scrollTop: $("#editEducationForm").offset().top - 20
+            }, 300);
+        }
+
+        function hideEditEducationForm() {
+            $("#editEducationForm").hide();
+        }
+
+        function toggleEducationFields() {
+            let qualification = $("#highestQualification").val();
+            $(".education-field").hide();
+
+            if (qualification === "10th" || qualification === "12th") {
+                $("#yearField, #percentageField").show();
+            } else {
+                $(".education-field, #yearField, #percentageField").show();
+            }
+        }
+
+        function toggleEditEducationFields() {
+            let qualification = $("#editHighestQualification").val();
+            $(".education-field").hide();
+
+            if (qualification === "10th" || qualification === "12th") {
+                $("#editYearField, #editPercentageField").show();
+            } else {
+                $(".education-field, #editYearField, #editPercentageField").show();
+            }
+        }
+
+        function addEducation() {
+            let newQualification = $("#highestQualification").val();
+            let newYearOfPassing = $("#yearOfPassing").val();
+            let newPercentage = $("#percentage").val();
+            let isValid = true;
+
+            if (!newQualification) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Please select a qualification.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            isValid = false;
+            }
+
+            if (newYearOfPassing && (!/^\d{4}$/.test(newYearOfPassing) || parseInt(newYearOfPassing) < 1000 || parseInt(newYearOfPassing) > 2030)) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Year of Passing must be a valid 4-digit number.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            isValid = false;
+            }
+
+            if (newYearOfPassing && parseInt(newYearOfPassing) > 2030) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Year of Passing cannot be greater than 2030.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            isValid = false;
+            }
+
+            if (newYearOfPassing && parseInt(newYearOfPassing) < 0) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Year of Passing cannot be negative.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            isValid = false;
+            }
+            if (newYearOfPassing && parseInt(newYearOfPassing) < 1900) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Year of Passing cannot be less than 1900.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            isValid = false;
+            }
+            if (newPercentage && parseFloat(newPercentage) < 0) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Percentage cannot be negative.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            isValid = false;
+            }
+
+            if ((newQualification === "10th" || newQualification === "12th") && (!newYearOfPassing || !newPercentage)) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Year of Passing and Percentage are required.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            isValid = false;
+            }
+
+            if (newQualification !== "10th" && newQualification !== "12th") {
+            if (!$("#degree").val() || !$("#specialization").val() || !$("#universityName").val() || !newYearOfPassing || !newPercentage) {
+                Swal.fire({
+                title: 'Error!',
+                text: 'All fields are required for qualifications.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+                });
+                isValid = false;
+            }
+            }
+
+            if (!isValid) return;
+
+            // Show loading state
+            $("#educationList").html(`
+            <div class="loading-state">
+                <div class="loading-spinner"></div>
+            </div>
+            `);
+
+            $.ajax({
+            url: `http://localhost:5086/api/UserDetails/GetEducation/${userId}`,
+            type: "GET",
+            success: function (response) {
+                // Check if the qualification already exists for 10th or 12th
+                if (newQualification === "10th" || newQualification === "12th") {
+                let isDuplicateQualification = response.some(edu => edu.c_HighestQualification === newQualification);
+                if (isDuplicateQualification) {
+                    Swal.fire({
+                    title: 'Warning!',
+                    text: `You can only add ${newQualification} qualification once.`,
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                    });
+                    return;
+                }
+                }
+
+                let educationData = new FormData();
+                educationData.append("c_user_id", userId);
+                educationData.append("c_HighestQualification", newQualification);
+                educationData.append("c_Degree", $("#degree").val() || "N/A");
+                educationData.append("c_Specialization", $("#specialization").val() || "N/A");
+                educationData.append("c_UniversityName", $("#universityName").val() || "N/A");
+                educationData.append("c_YearOfPassing", newYearOfPassing);
+                educationData.append("c_percentage", newPercentage);
+
+                // Add the new education record
+                $.ajax({
+                url: "http://localhost:5086/api/UserDetails/AddEducation",
+                type: "POST",
+                data: educationData,
+                processData: false,
+                contentType: false,
+                success: function () {
+                    Swal.fire({
+                    title: 'Success!',
+                    text: 'Education added successfully.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                    });
+
+                    loadEducationData();  // Reload education data
+                    clearEducationForm(); // Clear the form
+                    hideEducationForm();  // Hide the form
+                },
+                error: function () {
+                    Swal.fire({
+                    title: 'Error!',
+                    text: 'Error adding education.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                    });
+                }
+                });
+            },
+            error: function () {
+                Swal.fire({
+                title: 'Error!',
+                text: 'Error checking for duplicates.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+                });
+            }
+            });
+        }
+
+        function loadEducationData() {
+            // Show loading state
+            $("#educationList").html(`
+                                                    <div class="loading-state">
+                                                        <div class="loading-spinner"></div>
+                                                    </div>
+                                                `);
+
+            $.ajax({
+                url: `http://localhost:5086/api/UserDetails/GetEducation/${userId}`,
+                type: "GET",
+                success: function (response) {
+                    let educationList = $("#educationList");
+                    educationList.empty();
+
+                    if (response.length === 0) {
+                        educationList.html(`
+                                                                <div class="empty-state">
+                                                                    <div class="empty-icon">
+                                                                        <i class="fas fa-graduation-cap"></i>
+                                                                    </div>
+                                                                    <h3>No Education Added Yet</h3>
+                                                                    <p>Start building your academic profile by adding your qualifications</p>
+                                                                    <button class="btn primary" onclick="showEducationForm()">
+                                                                        <i class="fas fa-plus"></i> Add First Education
+                                                                    </button>
+                                                                </div>
+                                                            `);
+                        return;
+                    }
+
+                    // Sort by year of passing (newest first)
+                    response.sort((a, b) => b.c_YearOfPassing - a.c_YearOfPassing);
+
+                    let listHtml = '<div class="education-list">';
+
+                    response.forEach(function (edu) {
+                        listHtml += `
+                                                                <div class="education-item">
+                                                                    <div class="education-header">
+                                                                        <h3 class="education-title">${edu.c_HighestQualification}</h3>
+                                                                        <div class="education-actions">
+                                                                            <button class="action-btn edit-btn" onclick="editEducation(${edu.c_education_id})">
+                                                                                <i class="fas fa-edit"></i> Edit
+                                                                            </button>
+                                                                            <button class="action-btn delete-btn" onclick="removeEducation(${edu.c_education_id})">
+                                                                                <i class="fas fa-trash"></i> Delete
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="education-details">
+                                                                        ${edu.c_Degree && edu.c_Degree !== "N/A" ? `
+                                                                            <div class="detail-item">
+                                                                                <span class="detail-label">Degree</span>
+                                                                                <span class="detail-value">${edu.c_Degree}</span>
+                                                                            </div>
+                                                                        ` : ''}
+                                                                        ${edu.c_Specialization && edu.c_Specialization !== "N/A" ? `
+                                                                            <div class="detail-item">
+                                                                                <span class="detail-label">Specialization</span>
+                                                                                <span class="detail-value">${edu.c_Specialization}</span>
+                                                                            </div>
+                                                                        ` : ''}
+                                                                        ${edu.c_UniversityName && edu.c_UniversityName !== "N/A" ? `
+                                                                            <div class="detail-item">
+                                                                                <span class="detail-label">Institution</span>
+                                                                                <span class="detail-value">${edu.c_UniversityName}</span>
+                                                                            </div>
+                                                                        ` : ''}
+                                                                        <div class="detail-item">
+                                                                            <span class="detail-label">Year of Passing</span>
+                                                                            <span class="detail-value">${edu.c_YearOfPassing}</span>
+                                                                        </div>
+                                                                        <div class="detail-item">
+                                                                            <span class="detail-label">Score</span>
+                                                                            <span class="detail-value">${edu.c_percentage}%</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            `;
+                    });
+
+                    listHtml += '</div>';
+                    educationList.html(listHtml);
+                },
+                error: function () {
+                    $("#educationList").html(`
+                                                            <div class="alert alert-danger">
+                                                                Error loading education data. Please try again later.
+                                                            </div>
+                                                        `);
+                }
+            });
+        }
+
+        function removeEducation(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#4361ee',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Show loading state
+                    $("#educationList").html(`
+                                                            <div class="loading-state">
+                                                                <div class="loading-spinner"></div>
+                                                            </div>
+                                                        `);
+
+                    $.ajax({
+                        url: `http://localhost:5086/api/UserDetails/DeleteEducationDetails/${id}`,
+                        type: "DELETE",
+                        success: function () {
+                            Swal.fire({
+                                title: 'Deleted!',
+                                text: 'The education record has been deleted.',
+                                icon: 'success',
+                                confirmButtonColor: '#4361ee'
+                            });
+                            loadEducationData();
+                        },
+                        error: function (error) {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'There was an error deleting the education record.',
+                                icon: 'error',
+                                confirmButtonColor: '#4361ee'
+                            });
+                            loadEducationData();
+                        }
+                    });
+                }
+            });
+        }
+
+        function editEducation(id) {
+            // Show loading state
+            $("#educationList").html(`
+                                                    <div class="loading-state">
+                                                        <div class="loading-spinner"></div>
+                                                    </div>
+                                                `);
+
+            $.ajax({
+                url: `http://localhost:5086/api/UserDetails/GetOneEducation/${id}`,
+                type: "GET",
+                success: function (edu) {
+                    if (!edu || !edu.data) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error!",
+                            text: "No data found!",
+                        });
+                        loadEducationData();
+                        return;
+                    }
+
+                    $("#editEducationId").val(edu.data.c_education_id);
+                    $("#editPercentage").val(edu.data.c_percentage || "");
+                    $("#editYearOfPassing").val(edu.data.c_YearOfPassing || "");
+                    $("#editHighestQualification").val(edu.data.c_HighestQualification || "");
+                    $("#editDegree").val(edu.data.c_Degree !== "N/A" ? edu.data.c_Degree : "");
+                    $("#editSpecialization").val(edu.data.c_Specialization !== "N/A" ? edu.data.c_Specialization : "");
+                    $("#editUniversityName").val(edu.data.c_UniversityName || "");
+
+                    if (edu.data.c_HighestQualification === "10th" || edu.data.c_HighestQualification === "12th") {
+                        $("#editDegree").prop("disabled", true).val("");
+                        $("#editSpecialization").prop("disabled", true).val("");
+                        $("#editUniversityName").prop("disabled", true).val("");
+                    } else {
+                        $("#editDegree").prop("disabled", false);
+                        $("#editSpecialization").prop("disabled", false);
+                        $("#editUniversityName").prop("disabled", false);
+                    }
+
+                    showEditEducationForm();
+                    loadEducationData();
+
+                    Swal.fire({
+                        icon: "success",
+                        title: "Data Loaded!",
+                        text: "Education details loaded successfully.",
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                },
+                error: function (error) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: "Error fetching education record.",
+                    });
+                    loadEducationData();
+                }
+            });
+        }
+
+        function updateEducation() {
+            let educationData = new FormData();
+            let educationId = $("#editEducationId").val();
+
+            if (!educationId) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: "Education ID is missing!",
+                });
+                return;
+            }
+
+            let updatedYearOfPassing = $("#editYearOfPassing").val();
+            let updatedPercentage = $("#editPercentage").val();
+
+            if (updatedYearOfPassing && parseInt(updatedYearOfPassing) < 0) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "Year of Passing cannot be negative.",
+                    icon: "error",
+                    confirmButtonText: "OK"
+                });
+                return;
+            }
+
+            if (updatedPercentage && parseFloat(updatedPercentage) < 0) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "Percentage cannot be negative.",
+                    icon: "error",
+                    confirmButtonText: "OK"
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you want to update these education details?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#4361ee",
+                cancelButtonColor: "#6c757d",
+                confirmButtonText: "Yes, update it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Show loading state
+                    $("#educationList").html(`
+                                                            <div class="loading-state">
+                                                                <div class="loading-spinner"></div>
+                                                            </div>
+                                                        `);
+
+                    educationData.append("c_education_id", educationId);
+                    educationData.append("c_HighestQualification", $("#editHighestQualification").val());
+                    educationData.append("c_Degree", $("#editDegree").val() || "N/A");
+                    educationData.append("c_Specialization", $("#editSpecialization").val() || "N/A");
+                    educationData.append("c_UniversityName", $("#editUniversityName").val() || "N/A");
+                    educationData.append("c_YearOfPassing", updatedYearOfPassing);
+                    educationData.append("c_percentage", updatedPercentage);
+
+                    $.ajax({
+                        url: "http://localhost:5086/api/UserDetails/UpdateEducationDetails",
+                        type: "PUT",
+                        data: educationData,
+                        processData: false,
+                        contentType: false,
+                        success: function () {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Success!",
+                                text: "Education details updated successfully.",
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+
+                            loadEducationData();
+                            hideEditEducationForm();
+                        },
+                        error: function (error) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error!",
+                                text: "Failed to update education record.",
+                            });
+                            loadEducationData();
+                        }
+                    });
+                }
+            });
+        }
+
+        function clearEducationForm() {
+            $("#educationForm input, #educationForm select").val("");
+        }
+    </script>
+}

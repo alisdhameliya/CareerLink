@@ -1,0 +1,1129 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CareerLink</title>
+    <!-- Primary Meta Tags -->
+    <meta name="theme-color" content="#4361ee">
+    <meta name="description" content="Find your dream job with CareerLink - The most advanced job search platform">
+
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/lib/kendo/kendo.default-v2.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-hover: #3a56d4;
+            --primary-light: #eef2ff;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --gray-color: #64748b;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            padding-top: 72px;
+            /* For fixed navbar */
+        }
+
+        /* Enhanced Navigation Bar */
+        .navbar {
+            height: 72px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            background: white;
+            padding: 0 24px;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            transition: var(--transition);
+        }
+
+        .navbar-brand:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Search Bar */
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-color);
+            font-size: 16px;
+        }
+
+        #GodSearch {
+            padding-left: 44px;
+            height: 48px;
+            border-radius: var(--border-radius) 0 0 var(--border-radius);
+            border: 1px solid #e2e8f0;
+            border-right: none;
+            transition: var(--transition);
+        }
+
+        #GodSearch:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+        }
+
+        .search-button {
+            height: 48px;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            background-color: var(--primary-color);
+            border: none;
+            padding: 0 24px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .profile-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0px;
+        }
+
+        .search-button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            color: white;
+        }
+
+        /* Notification System */
+        .notification-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: white;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .fa-bell {
+            color: black;
+        }
+
+        .notification-btn:hover {
+            background: #e0e7ff;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.15);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 1.1rem;
+            color: white;
+            height: 1.1rem;
+            background: #ef4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-panel {
+            position: absolute;
+            right: 0;
+            top: 56px;
+            width: 380px;
+            max-width: 90vw;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            z-index: 1050;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: var(--transition);
+        }
+
+        .notification-panel-visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .notification-header {
+            padding: 16px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+            color: var(--dark-color);
+        }
+
+        .notification-body {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .notification-item {
+            padding: 16px;
+            border-bottom: 1px solid #f1f5f9;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background: #f8fafc;
+        }
+
+        .notification-item-unread {
+            background: var(--primary-light);
+        }
+
+        .notification-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-message {
+            font-size: 14px;
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: var(--gray-color);
+        }
+
+        .notification-footer {
+            padding: 12px 16px;
+            border-top: 1px solid #f1f5f9;
+            text-align: center;
+        }
+
+        /* Profile Dropdown */
+        .profile-dropdown {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border-radius: 50px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .profile-dropdown:hover {
+            background: #f1f5f9;
+        }
+
+        .profile-name {
+            font-weight: 500;
+            margin-right: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 120px;
+        }
+
+        .dropdown-menu {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 8px 0;
+            margin-top: 8px;
+        }
+
+        .dropdown-item {
+            padding: 10px 16px;
+            font-size: 14px;
+            color: var(--dark-color);
+            border-radius: 6px;
+            margin: 0 8px;
+            width: calc(100% - 16px);
+            transition: var(--transition);
+        }
+
+        .dropdown-item:hover {
+            background: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .dropdown-item i {
+            width: 20px;
+            margin-right: 12px;
+            text-align: center;
+        }
+
+        .dropdown-divider {
+            border-color: #f1f5f9;
+            margin: 8px 0;
+        }
+
+        /* Sidebar */
+        .offcanvas {
+            background: white;
+            width: 280px !important;
+        }
+
+        .offcanvas-header {
+            padding: 20px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .offcanvas-title {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .nav-link {
+            padding: 12px 20px;
+            color: var(--gray-color);
+            border-radius: 8px;
+            margin: 4px 12px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .nav-link i {
+            width: 24px;
+            text-align: center;
+            margin-right: 12px;
+        }
+
+        /* Main Content */
+        main {
+            min-height: calc(100vh - 180px);
+            padding: 24px 0;
+        }
+
+        /* Footer */
+        .footer {
+            background: white;
+            padding: 40px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .footer h5 {
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--dark-color);
+        }
+
+        .footer p,
+        .footer a {
+            color: var(--gray-color);
+            font-size: 14px;
+        }
+
+        .footer a:hover {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .footer ul {
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .footer li {
+            margin-bottom: 8px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            color: var(--gray-color);
+            margin-right: 8px;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--primary-light);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Adjustments */
+        @@media (max-width: 992px) {
+            .search-container {
+                display: none;
+            }
+
+            .navbar {
+                padding: 0 16px;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .profile-name {
+                display: none;
+            }
+
+            .notification-panel {
+                right: -20px;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .notification-panel {
+                width: 90vw;
+                right: 5vw;
+            }
+        }
+
+        /* Animations */
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .notification-item {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .notification-item:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .notification-item:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .notification-item:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .notification-item:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .notification-item:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        /* Swipe to dismiss */
+        .notification-swipe-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .notification-swipe-content {
+            position: relative;
+            z-index: 1;
+            background: white;
+            transition: transform 0.3s ease;
+            width: 100%;
+        }
+
+        .notification-swipe-background {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 80px;
+            background: #ef4444;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 0;
+        }
+
+        @@keyframes slideOut {
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+                height: 0;
+                padding: 0;
+                margin: 0;
+                border: none;
+            }
+        }
+
+        .notification-dismissing {
+            animation: slideOut 0.3s forwards;
+        }
+
+        .navbar-brand img {
+            height: 9.5vh;
+            transition: var(--transition);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="~/css/Default/images/CL.png" alt="Career Success" class="floating-animation">
+            </a>
+
+            <!-- Mobile Menu Button -->
+            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Search Bar (Desktop) -->
+            <div class="d-none d-lg-flex flex-grow-1 justify-content-center mx-4">
+                <div class="search-container">
+                    <div class="input-group">
+                        <div class="search-input-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="GodSearch" class="form-control"
+                                placeholder="Job title, keywords, or company">
+                        </div>
+                        <button class="btn search-button Godfather" type="button">
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side Menu -->
+            <div class="d-flex align-items-center">
+                <!-- Notification System -->
+                <div class="position-relative me-2">
+                    <button class="notification-button" id="notificationButton">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+                    </button>
+
+                    <div class="notification-panel" id="notificationPanel">
+                        <div class="notification-header">
+                            <h5 class="notification-title">Notifications</h5>
+                            <button class="btn btn-sm btn-link text-danger p-0" id="markAllRead">
+                                Clear All
+                            </button>
+                        </div>
+                        <div class="notification-body" id="notificationsList">
+                            <div class="text-center py-4">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mt-2 text-muted">Loading notifications...</p>
+                            </div>
+                        </div>
+                        <div class="notification-footer">
+                            <button class="btn btn-sm btn-link text-primary" id="viewAllNotifications">
+                                View All Notifications
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Dropdown -->
+                <div class="dropdown">
+                    <div class="profile-dropdown" id="profileDropdown" data-bs-toggle="dropdown">
+                        @* <img src="https://via.placeholder.com/150" class="profile-avatar" id="profileImageDropdown" alt="Profile"> *@
+                        <span style="margin: 0px;" class="profile-name d-none d-lg-inline"
+                            id="profileName">Loading...</span>
+                        <i class="fas fa-chevron-down text-muted d-none d-lg-block" style="font-size: 12px;"></i>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="/UserDetails/PersonalInfo"><i class="fas fa-user"></i>My
+                                Profile</a></li>
+                        <li><a class="dropdown-item" href="/UserDashboard/Applications"><i class="fas fa-file-alt"></i>My
+                                Applications</a></li>
+                        <li><a class="dropdown-item" href="/saved-jobs"><i class="fas fa-bookmark"></i>Saved Jobs</a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="/settings"><i class="fas fa-cog"></i>Settings</a></li>
+                        <li><a class="dropdown-item text-danger logout-btn" href="javascript:void(0);"><i
+                                    class="fas fa-sign-out-alt"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Menu</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/dashboard">
+                        <i class="fas fa-home"></i>Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/jobs">
+                        <i class="fas fa-briefcase"></i>Find Jobs
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/companies">
+                        <i class="fas fa-building"></i>Companies
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/salary-insights">
+                        <i class="fas fa-chart-line"></i>Salary Insights
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/career-advice">
+                        <i class="fas fa-lightbulb"></i>Career Advice
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/resume-builder">
+                        <i class="fas fa-file-alt"></i>Resume Builder
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main role="main" class="container">
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <img src="~/css/Default/images/CL.png" alt="CareerLink" style="height: 9.5vh;transition: var(--transition);">
+                    <p>Your trusted partner in finding the perfect job opportunity. Connecting talent with opportunity
+                        since 2023.</p>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h5>For Job Seekers</h5>
+                    <ul>
+                        <li><a href="/jobs">Browse Jobs</a></li>
+                        <li><a href="/companies">Company Reviews</a></li>
+                        <li><a href="/salary-insights">Salary Calculator</a></li>
+                        <li><a href="/resume-builder">Resume Builder</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h5>Resources</h5>
+                    <ul>
+                        <li><a href="/career-advice">Career Advice</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="/faq">Help Center</a></li>
+                        <li><a href="/webinars">Webinars</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h5>Company</h5>
+                    <ul>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/careers">Careers</a></li>
+                        <li><a href="/press">Press</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 mb-4">
+                    <h5>Legal</h5>
+                    <ul>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                        <li><a href="/cookies">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row pt-4">
+                <div class="col-md-6 mb-3">
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">© 2023 CareerLink. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/kendo/kendo.all.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        $(document).ready(function () {
+            // Modern notification system
+            let notificationPanelVisible = false;
+            let allNotifications = [];
+            let showingUnreadOnly = false;
+            let touchStartX, touchEndX;
+            let currentSwipeElement = null;
+            const swipeThreshold = 50;
+
+            // Initialize notification system
+            function initNotificationSystem() {
+                // Toggle notification panel
+                $("#notificationButton").click(function (e) {
+                    e.stopPropagation();
+                    toggleNotificationPanel();
+                });
+
+                // Close panel when clicking outside
+                $(document).click(function (e) {
+                    if (!$(e.target).closest("#notificationPanel").length &&
+                        !$(e.target).is("#notificationButton")) {
+                        hideNotificationPanel();
+                    }
+                });
+
+                // Mark all as read
+                $("#markAllRead").click(function () {
+                    clearAllNotifications();
+                });
+
+                // Toggle view all/view unread
+                $("#viewAllNotifications").click(function () {
+                    loadNotifications(!showingUnreadOnly);
+                });
+
+                // Load initial data
+                updateUnreadCountBadge();
+            }
+
+            // Toggle notification panel
+            function toggleNotificationPanel() {
+                if (notificationPanelVisible) {
+                    hideNotificationPanel();
+                } else {
+                    showNotificationPanel();
+                    loadNotifications(false);
+                }
+            }
+
+            function showNotificationPanel() {
+                $("#notificationPanel").addClass("notification-panel-visible");
+                notificationPanelVisible = true;
+            }
+
+            function hideNotificationPanel() {
+                $("#notificationPanel").removeClass("notification-panel-visible");
+                notificationPanelVisible = false;
+            }
+
+            // Load notifications
+            function loadNotifications(showUnreadOnly = false) {
+                showingUnreadOnly = showUnreadOnly;
+
+                const userId = getUserIdFromToken();
+                if (!userId) return;
+
+                $("#notificationsList").html(`
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2 text-muted">Loading notifications...</p>
+                    </div>
+                `);
+
+                const token = localStorage.getItem("token");
+                const url = showUnreadOnly
+                    ? "http://localhost:5086/api/Notifications?unreadOnly=true"
+                    : "http://localhost:5086/api/Notifications";
+
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    headers: { "Authorization": "Bearer " + token },
+                    success: function (response) {
+                        allNotifications = response;
+                        displayNotifications(response);
+                    },
+                    error: function () {
+                        showNotificationError();
+                    }
+                });
+            }
+
+            // Display notifications
+            function displayNotifications(notifications) {
+                const notificationsList = $("#notificationsList");
+                notificationsList.empty();
+
+                if (!notifications || notifications.length === 0) {
+                    const message = showingUnreadOnly
+                        ? "No unread notifications"
+                        : "No notifications found";
+
+                    notificationsList.html(`
+                        <div class="text-center py-4">
+                            <i class="fas fa-bell-slash text-muted mb-3" style="font-size: 2rem;"></i>
+                            <p class="text-muted">${message}</p>
+                        </div>
+                    `);
+                    return;
+                }
+
+                // Sort by date (newest first)
+                notifications.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+                notifications.forEach(notification => {
+                    const notificationItem = createNotificationItem(notification);
+                    notificationsList.append(notificationItem);
+                    setupSwipeHandlers(notificationItem);
+                });
+
+                // Update view all button
+                $("#viewAllNotifications").text(showingUnreadOnly ? "View All" : "View Unread");
+            }
+
+            // Create notification item HTML
+            function createNotificationItem(notification) {
+                const isRead = notification.isRead || false;
+                const notificationType = notification.type || "notification";
+                const iconClass = getNotificationIcon(notificationType);
+
+                return $(`
+                    <div class="notification-item ${isRead ? '' : 'notification-item-unread'}" 
+                         data-id="${notification.notificationId}">
+                        <div class="d-flex align-items-start">
+                            <div class="notification-icon">
+                                <i class="${iconClass}"></i>
+                            </div>
+                            <div class="notification-content">
+                                <h6 class="mb-1">${formatNotificationType(notificationType)}</h6>
+                                <p class="notification-message mb-1">${notification.message}</p>
+                                <small class="notification-time">${formatNotificationTime(notification.createdAt)}</small>
+                            </div>
+                        </div>
+                    </div>
+                `);
+            }
+
+            // Get user ID from token
+            function getUserIdFromToken() {
+                const token = localStorage.getItem("token");
+                if (!token) return null;
+                try {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    return payload.uid;
+                } catch (e) {
+                    console.error("Error decoding token:", e);
+                    return null;
+                }
+            }
+
+            // Format notification time
+            function formatNotificationTime(dateString) {
+                if (!dateString) return "Just now";
+
+                const date = new Date(dateString);
+                const now = new Date();
+                const diffInMinutes = Math.floor((now - date) / (1000 * 60));
+
+                if (diffInMinutes < 1) return "Just now";
+                if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+                if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h ago`;
+                return `${Math.floor(diffInMinutes / 1440)}d ago`;
+            }
+
+            // Format notification type for display
+            function formatNotificationType(type) {
+                if (!type) return "Notification";
+                return type.replace(/_/g, ' ')
+                    .replace(/\b\w/g, l => l.toUpperCase());
+            }
+
+            // Get appropriate icon for notification type
+            function getNotificationIcon(type) {
+                if (!type) return "fas fa-bell";
+
+                const lowerType = type.toLowerCase();
+
+                if (lowerType.includes("job")) return "fas fa-briefcase";
+                if (lowerType.includes("confirmation")) return "fas fa-check-circle";
+                if (lowerType.includes("alert")) return "fas fa-exclamation-triangle";
+                if (lowerType.includes("message")) return "fas fa-envelope";
+                return "fas fa-bell";
+            }
+
+            // Setup swipe handlers for a notification element
+            function setupSwipeHandlers(element) {
+                const container = element;
+
+                // Touch events for mobile
+                container.on("touchstart", function (e) {
+                    touchStartX = e.originalEvent.touches[0].clientX;
+                    currentSwipeElement = container;
+                });
+
+                container.on("touchmove", function (e) {
+                    if (!currentSwipeElement) return;
+                    touchEndX = e.originalEvent.touches[0].clientX;
+                    const diff = touchStartX - touchEndX;
+                    if (diff > 0) { // Only allow swipe to left
+                        container.css("transform", `translateX(-${Math.min(diff, 80)}px`);
+                    }
+                });
+
+                container.on("touchend", function () {
+                    handleSwipeEnd(container);
+                });
+            }
+
+            // Handle swipe end logic
+            function handleSwipeEnd(container) {
+                if (!currentSwipeElement) return;
+                container.css("transform", "translateX(0)");
+
+                const diff = touchStartX - touchEndX;
+                if (diff > swipeThreshold) {
+                    const notificationId = container.data("id");
+                    dismissNotification(notificationId, container);
+                }
+                currentSwipeElement = null;
+            }
+
+            // Dismiss a single notification
+            function dismissNotification(notificationId, element) {
+                const token = localStorage.getItem("token");
+                if (!token) return;
+
+                element.addClass("notification-dismissing");
+
+                $.ajax({
+                    url: `http://localhost:5086/api/Notifications/mark-as-read/${notificationId}`,
+                    type: "POST",
+                    headers: { "Authorization": "Bearer " + token },
+                    success: function () {
+                        setTimeout(() => {
+                            element.remove();
+                            updateUnreadCountBadge();
+
+                            // If showing unread only, reload the notifications
+                            if (showingUnreadOnly) {
+                                loadNotifications(true);
+                            }
+                        }, 300);
+                    },
+                    error: function () {
+                        console.error("Failed to dismiss notification");
+                        element.removeClass("notification-dismissing");
+                        element.css("transform", "translateX(0)");
+                    }
+                });
+            }
+
+            // Clear all notifications
+            function clearAllNotifications() {
+                const token = localStorage.getItem("token");
+                if (!token) return;
+
+                const notifications = $(".notification-item");
+                if (notifications.length === 0) return;
+
+                // Get all unread notification IDs
+                const unreadNotificationIds = allNotifications
+                    .filter(n => !n.isRead)
+                    .map(n => n.notificationId);
+
+                if (unreadNotificationIds.length === 0) {
+                    return;
+                }
+
+                // Mark all as read
+                Promise.all(unreadNotificationIds.map(id =>
+                    $.ajax({
+                        url: `http://localhost:5086/api/Notifications/mark-as-read/${id}`,
+                        type: "POST",
+                        headers: { "Authorization": "Bearer " + token }
+                    })
+                )).then(() => {
+                    // Update UI
+                    updateUnreadCountBadge();
+                    if (showingUnreadOnly) {
+                        loadNotifications(true); // Reload to show empty state
+                    } else {
+                        // Just update the read state visually
+                        $(".notification-item").removeClass("notification-item-unread");
+                    }
+                }).catch(error => {
+                    console.error("Failed to clear notifications:", error);
+                });
+            }
+
+            // Update unread count badge
+            function updateUnreadCountBadge() {
+                const token = localStorage.getItem("token");
+                if (!token) return;
+
+                $.ajax({
+                    url: "http://localhost:5086/api/Notifications/unread-count",
+                    type: "GET",
+                    headers: { "Authorization": "Bearer " + token },
+                    success: function (response) {
+                        const count = response.count || 0;
+                        const badge = $("#notificationBadge");
+                        badge.text(count.toString());
+                        if (count > 0) {
+                            badge.show();
+                        } else {
+                            badge.hide();
+                        }
+                    },
+                    error: function () {
+                        console.error("Failed to get unread count");
+                    }
+                });
+            }
+
+            // Show error message
+            function showNotificationError() {
+                $("#notificationsList").html(`
+                    <div class="text-center py-4">
+                        <i class="fas fa-exclamation-triangle text-danger mb-3" style="font-size: 2rem;"></i>
+                        <p class="text-danger">Failed to load notifications</p>
+                        <button class="btn btn-sm btn-outline-primary" onclick="loadNotifications(${showingUnreadOnly})">
+                            <i class="fas fa-sync-alt me-1"></i> Retry
+                        </button>
+                    </div>
+                `);
+            }
+
+            // Initialize everything
+            initNotificationSystem();
+
+            // User profile and logout functionality
+            const userId = getUserIdFromToken();
+            if (!userId) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Session Expired',
+                    text: 'You need to log in again',
+                    confirmButtonColor: '#4361ee',
+                }).then(() => {
+                    window.location.href = '/Auth/Login';
+                });
+            } else {
+                // Fetch user profile data via AJAX
+                $.ajax({
+                    url: `http://localhost:5086/api/UserDetails/GetUserProfile/${userId}`,
+                    type: "GET",
+                    headers: { "Authorization": "Bearer " + localStorage.getItem("token") },
+                    success: function (response) {
+                        const userData = response.data || response;
+                        if (userData) {
+                            $("#profileName").text(userData.c_fullName || "User");
+                            const profileImagePath = "/profile_images/" + (userData.c_profileImage || "default.png");
+                            $("#profileImageDropdown").attr("src", profileImagePath);
+                        }
+                    },
+                    error: function () {
+                        $("#profileName").text("User");
+                        $("#profileImageDropdown").attr("src", "/profile_images/default.png");
+                    }
+                });
+
+                // Logout functionality
+                $(".logout-btn").click(function () {
+                    Swal.fire({
+                        title: 'Logout?',
+                        text: 'Are you sure you want to log out?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#4361ee',
+                        cancelButtonColor: '#64748b',
+                        confirmButtonText: 'Yes, log out'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            localStorage.removeItem("token");
+                            window.location.href = "/Auth/Login";
+                        }
+                    });
+                });
+            }
+
+            // Search functionality
+            $(".Godfather").click(function () {
+                const searchTerm = $("#GodSearch").val().trim();
+                if (searchTerm) {
+                    window.location.href = `/jobs?search=${encodeURIComponent(searchTerm)}`;
+                }
+            });
+
+            // Press Enter in search field
+            $("#GodSearch").keypress(function (e) {
+                if (e.which === 13) {
+                    $(".Godfather").click();
+                }
+            });
+        });
+    </script>
+    @{
+        IgnoreSection("Styles");
+    }
+</body>
+
+</html>

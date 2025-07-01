@@ -1,0 +1,966 @@
+@{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewData["Title"] = "Experience";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --primary-color: #4361ee;
+        --primary-dark: #3a56d4;
+        --secondary-color: #3f37c9;
+        --accent-color: #4895ef;
+        --danger-color: #f72585;
+        --success-color: #4cc9f0;
+        --light-color: #f8f9fa;
+        --dark-color: #212529;
+        --gray-color: #6c757d;
+        --light-gray: #e9ecef;
+        --border-radius: 12px;
+        --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        --transition: all 0.3s ease;
+    }
+
+    .experience-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1.5rem;
+    }
+
+    .experience-card {
+        background: #fff;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        overflow: hidden;
+        transition: var(--transition);
+    }
+
+    .experience-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        padding: 1.75rem 2rem;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+        transform: rotate(30deg);
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .title-section {
+        flex: 1;
+    }
+
+    .header-icon {
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .experience-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin: 0;
+        color: white;
+    }
+
+    .experience-subtitle {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        margin-top: 0.25rem;
+        font-weight: 300;
+    }
+
+    .add-experience-btn {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        transition: var(--transition);
+        cursor: pointer;
+        backdrop-filter: blur(5px);
+        font-size: 0.95rem;
+    }
+
+    .add-experience-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .experience-form-container {
+        padding: 0;
+        animation: fadeIn 0.4s ease-out;
+        position: relative;
+        z-index: 10;
+    }
+
+    .experience-form-container.d-none {
+        display: none;
+    }
+
+    .experience-form-container.show-form {
+        display: block;
+    }
+
+    .form-card {
+        background: #fff;
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
+        padding: 2rem;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        border-top: 4px solid var(--primary-color);
+    }
+
+    .form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-title {
+        font-size: 1.35rem;
+        color: var(--primary-color);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        font-weight: 600;
+    }
+
+    .close-form-btn {
+        background: none;
+        border: none;
+        color: var(--gray-color);
+        font-size: 1.25rem;
+        cursor: pointer;
+        transition: var(--transition);
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .close-form-btn:hover {
+        background: var(--light-gray);
+        color: var(--danger-color);
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: var(--gray-color);
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid var(--light-gray);
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: var(--transition);
+        background-color: #fff;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        outline: none;
+    }
+
+    .form-textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .form-check {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .form-check-input {
+        width: 18px;
+        height: 18px;
+        margin: 0;
+    }
+
+    .form-check-label {
+        font-weight: 500;
+        color: var(--gray-color);
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--light-gray);
+    }
+
+    .save-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.75rem;
+        border-radius: 8px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        transition: var(--transition);
+        cursor: pointer;
+        font-size: 0.95rem;
+    }
+
+    .save-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    }
+
+    .cancel-btn {
+        background: #fff;
+        color: var(--gray-color);
+        border: 1px solid var(--light-gray);
+        padding: 0.75rem 1.75rem;
+        border-radius: 8px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        transition: var(--transition);
+        cursor: pointer;
+        font-size: 0.95rem;
+    }
+
+    .cancel-btn:hover {
+        background: var(--light-gray);
+        transform: translateY(-2px);
+        color: var(--dark-color);
+    }
+
+    .experience-list-container {
+        padding: 1.5rem 2rem;
+    }
+
+    .experience-item {
+        background: #fff;
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        border-left: 4px solid var(--primary-color);
+        transition: var(--transition);
+    }
+
+    .experience-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .experience-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.5rem;
+    }
+
+    .experience-company {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin: 0;
+    }
+
+    .experience-job-title {
+        font-size: 1rem;
+        color: var(--gray-color);
+        margin: 0.25rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .experience-status {
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+    }
+
+    .status-current {
+        background: rgba(40, 167, 69, 0.1);
+        color: #28a745;
+    }
+
+    .status-past {
+        background: rgba(220, 53, 69, 0.1);
+        color: #dc3545;
+    }
+
+    .experience-details {
+        margin-top: 1rem;
+    }
+
+    .experience-description {
+        color: var(--dark-color);
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    .experience-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--gray-color);
+    }
+
+    .meta-value {
+        font-weight: 500;
+        color: var(--dark-color);
+    }
+
+    .experience-actions {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+
+    .edit-btn {
+        background: rgba(67, 97, 238, 0.1);
+        color: var(--primary-color);
+        border: 1px solid rgba(67, 97, 238, 0.2);
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .edit-btn:hover {
+        background: rgba(67, 97, 238, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .delete-btn {
+        background: rgba(220, 53, 69, 0.1);
+        color: var(--danger-color);
+        border: 1px solid rgba(220, 53, 69, 0.2);
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .delete-btn:hover {
+        background: rgba(220, 53, 69, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: var(--gray-color);
+    }
+
+    .empty-icon-container {
+        width: 80px;
+        height: 80px;
+        background: rgba(67, 97, 238, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+    }
+
+    .empty-icon {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+    }
+
+    .empty-state h4 {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+        color: var(--dark-color);
+        font-weight: 600;
+    }
+
+    .swal2-confirm {
+        background-color: #4361ee;
+    }
+
+    .empty-state p {
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    .empty-state-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.75rem;
+        border-radius: 8px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        transition: var(--transition);
+        cursor: pointer;
+        font-size: 0.95rem;
+    }
+
+    .empty-state-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade {
+        animation: fadeIn 0.4s ease forwards;
+    }
+
+    @@media (max-width: 768px) {
+        .card-header {
+            padding: 1.5rem;
+        }
+
+        .header-content {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .add-experience-btn {
+            width: 100%;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .experience-form-container {
+            padding: 0;
+        }
+
+        .form-card {
+            padding: 1.5rem;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .save-btn,
+        .cancel-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .experience-list-container {
+            padding: 1.25rem;
+        }
+
+        .experience-item-header {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .experience-status {
+            align-self: flex-start;
+        }
+
+        .experience-actions {
+            flex-direction: column;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="experience-container">
+    <div class="experience-card">
+        <!-- Card Header -->
+        <div class="card-header">
+            <div class="header-content">
+                <div class="title-section">
+                    <i class="fas fa-briefcase header-icon"></i>
+                    <h2 class="experience-title">Work Experience</h2>
+                    <p class="experience-subtitle">Add your professional work experience</p>
+                </div>
+                <button class="add-experience-btn" onclick="showExperienceForm()">
+                    <i class="fas fa-plus me-2"></i>Add Experience
+                </button>
+            </div>
+        </div>
+
+        <!-- Experience Form -->
+        <div id="experienceForm" class="experience-form-container d-none">
+            <div class="form-card">
+                <div class="form-header">
+                    <h4 class="form-title"><i class="fas fa-plus-circle me-2"></i>Add Work Experience</h4>
+                    <button class="close-form-btn" onclick="hideExperienceForm()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <input type="hidden" id="experienceId">
+
+                <div class="form-group">
+                    <label for="companyName" class="form-label">Company Name*</label>
+                    <input type="text" id="companyName" class="form-control" placeholder="Enter company name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="jobTitle" class="form-label">Job Title*</label>
+                    <input type="text" id="jobTitle" class="form-control" placeholder="Enter your job title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="jobDescription" class="form-label">Job Description</label>
+                    <textarea id="jobDescription" class="form-control form-textarea"
+                        placeholder="Describe your responsibilities and achievements"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="yearsWorked" class="form-label">Years Worked*</label>
+                    <input type="number" id="yearsWorked" class="form-control" placeholder="Enter number of years"
+                        min="0" step="0.5" required>
+                </div>
+
+                <div class="form-check">
+                    <input type="checkbox" id="currentlyWorking" class="form-check-input">
+                    <label for="currentlyWorking" class="form-check-label">I currently work here</label>
+                </div>
+
+                <div class="form-actions">
+                    <button class="cancel-btn" onclick="hideExperienceForm()">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                    <button class="save-btn" onclick="saveExperience()">
+                        <i class="fas fa-save me-2"></i>Save Experience
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Experience List -->
+        <div class="experience-list-container">
+            <div id="experienceList">
+                <!-- Dynamic content will be inserted here -->
+                <div class="empty-state">
+                    <div class="empty-icon-container">
+                        <i class="fas fa-briefcase empty-icon"></i>
+                    </div>
+                    <h4>No Work Experience Added Yet</h4>
+                    <p>Click the "Add Experience" button to get started</p>
+                    <button class="empty-state-btn" onclick="showExperienceForm()">
+                        <i class="fas fa-plus me-2"></i>Add Experience
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function getUserIdFromToken() {
+            let token = localStorage.getItem("token");
+            if (!token) return null;
+            let payload = JSON.parse(atob(token.split('.')[1]));
+            return payload.uid;
+        }
+
+        var userId = getUserIdFromToken();
+
+        $(document).ready(function () {
+            loadExperiences();
+        });
+
+        function loadExperiences() {
+            $.ajax({
+                url: `http://localhost:5086/api/UserDetails/GetWorkExperience/${userId}`,
+                type: "GET",
+                success: function (data) {
+                    $("#experienceList").empty();
+
+                    if (data.length === 0) {
+                        $("#experienceList").html(`
+                                <div class="empty-state">
+                                    <div class="empty-icon-container">
+                                        <i class="fas fa-briefcase empty-icon"></i>
+                                    </div>
+                                    <h4>No Work Experience Added Yet</h4>
+                                    <p>Click the "Add Experience" button to get started</p>
+                                    <button class="empty-state-btn" onclick="showExperienceForm()">
+                                        <i class="fas fa-plus me-2"></i>Add Experience
+                                    </button>
+                                </div>
+                            `);
+                        return;
+                    }
+
+                    data.forEach(experience => {
+                        appendExperienceToList(experience);
+                    });
+                },
+                error: function () {
+                    $("#experienceList").html(`
+                            <div class="alert alert-danger">
+                                Error loading work experiences. Please try again later.
+                            </div>
+                        `);
+                }
+            });
+        }
+
+        function appendExperienceToList(experience) {
+            let statusBadge = experience.c_CurrentlyWorking
+                ? `<span class="experience-status status-current"><i class="fas fa-check-circle"></i> Currently Working</span>`
+                : `<span class="experience-status status-past"><i class="fas fa-times-circle"></i> Past Employment</span>`;
+
+            let experienceItem = `
+                    <div class="experience-item animate-fade" id="exp-${experience.c_WorkID}">
+                        <div class="experience-item-header">
+                            <div>
+                                <h3 class="experience-company">${experience.c_CompanyName}</h3>
+                                <p class="experience-job-title">
+                                    <i class="fas fa-user-tie"></i> ${experience.c_JobTitle}
+                                </p>
+                            </div>
+                            ${statusBadge}
+                        </div>
+            
+                        <div class="experience-details">
+                            ${experience.c_JobDesc ? `
+                                <div class="experience-description">
+                                    <p>${experience.c_JobDesc}</p>
+                                </div>
+                            ` : ''}
+                
+                            <div class="experience-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span class="meta-value">${experience.c_years_work} years</span>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="experience-actions">
+                            <button class="edit-btn" onclick="editExperience(${experience.c_WorkID})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="delete-btn" onclick="removeExperience(${experience.c_WorkID})">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+            $("#experienceList").append(experienceItem);
+        }
+
+        function showExperienceForm() {
+            $("#experienceForm").removeClass("d-none").addClass("show-form");
+            $('html, body').animate({
+                scrollTop: $("#experienceForm").offset().top - 20
+            }, 300);
+        }
+
+        function hideExperienceForm() {
+            $("#experienceForm").addClass("d-none").removeClass("show-form");
+            clearExperienceForm();
+        }
+
+        function clearExperienceForm() {
+            $("#companyName").val('');
+            $("#jobTitle").val('');
+            $("#jobDescription").val('');
+            $("#yearsWorked").val('');
+            $("#currentlyWorking").prop("checked", false);
+            $("#experienceId").val('');
+        }
+
+        function saveExperience() {
+            let companyName = $("#companyName").val().trim();
+            let jobTitle = $("#jobTitle").val().trim();
+            let yearsWorked = $("#yearsWorked").val().trim();
+            let currentlyWorking = $("#currentlyWorking").prop("checked");
+
+            if (!companyName || !jobTitle || !yearsWorked) {
+                Swal.fire({
+                    title: "Missing Fields!",
+                    text: "Please fill all required fields.",
+                    icon: "warning",
+                    confirmButtonColor: "#4361ee"
+                });
+                return;
+            }
+
+            if (yearsWorked < 0) {
+                Swal.fire({
+                    title: "Invalid Input!",
+                    text: "Years Worked cannot be a negative value.",
+                    icon: "error",
+                    confirmButtonColor: "#4361ee"
+                });
+                return;
+            }
+
+            // Check for existing "Currently Working" experiences
+            let existingCurrentlyWorking = false;
+            $("#experienceList .experience-item").each(function () {
+                if ($(this).find(".status-current").length > 0) {
+                    existingCurrentlyWorking = true;
+                }
+            });
+
+            if (currentlyWorking && existingCurrentlyWorking && !$("#experienceId").val()) {
+                Swal.fire({
+                    title: "Conflict!",
+                    text: "You already have a work experience marked as 'Currently Working'. Please update or remove it before adding a new one.",
+                    icon: "error",
+                    confirmButtonColor: "#4361ee"
+                });
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append("c_WorkID", $("#experienceId").val() || 0);
+            formData.append("c_CompanyName", companyName);
+            formData.append("c_JobTitle", jobTitle);
+            formData.append("c_JobDesc", $("#jobDescription").val().trim());
+            formData.append("c_years_work", yearsWorked);
+            formData.append("c_CurrentlyWorking", currentlyWorking);
+            formData.append("c_user_id", userId);
+
+            let url = "http://localhost:5086/api/UserDetails/AddWorkExperience";
+            let type = "POST";
+
+            if ($("#experienceId").val()) {
+                url = "http://localhost:5086/api/UserDetails/UpdateWorkDetail";
+                type = "PUT";
+            }
+
+            Swal.fire({
+                title: "Saving...",
+                text: "Please wait while we save your experience.",
+                icon: "info",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            })
+
+            $.ajax({
+                url: url,
+                type: type,
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (data) {
+                    Swal.fire({
+                        title: "Success!",
+                        text: "Your work experience has been saved successfully.",
+                        icon: "success",
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = "./Experience"
+                    })
+
+                    if (type === "POST") {
+                        appendExperienceToList(data);
+                    } else {
+                        $(`#exp-${data.c_WorkID}`).remove();
+                        appendExperienceToList(data);
+                    }
+                    hideExperienceForm();
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Failed to save experience. Please try again.",
+                        icon: "error",
+                        confirmButtonColor: "#4361ee"
+                    });
+                }
+            });
+        }
+
+        function removeExperience(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This action cannot be undone!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#4361ee",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Deleting...",
+                        text: "Please wait while we delete the experience.",
+                        icon: "info",
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    $.ajax({
+                        url: `http://localhost:5086/api/UserDetails/DeleteWorkExperience/${id}`,
+                        type: "DELETE",
+                        success: function () {
+                            $(`#exp-${id}`).remove();
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Experience has been deleted successfully.",
+                                icon: "success",
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+
+                            // Show empty state if no experiences left
+                            if ($("#experienceList .experience-item").length === 0) {
+                                $("#experienceList").html(`
+                                        <div class="empty-state">
+                                            <div class="empty-icon-container">
+                                                <i class="fas fa-briefcase empty-icon"></i>
+                                            </div>
+                                            <h4>No Work Experience Added Yet</h4>
+                                            <p>Click the "Add Experience" button to get started</p>
+                                            <button class="empty-state-btn" onclick="showExperienceForm()">
+                                                <i class="fas fa-plus me-2"></i>Add Experience
+                                            </button>
+                                        </div>
+                                    `);
+                            }
+                        },
+                        error: function () {
+                            Swal.fire({
+                                title: "Error!",
+                                text: "Failed to delete experience.",
+                                icon: "error",
+                                confirmButtonColor: "#4361ee"
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        function editExperience(id) {
+            Swal.fire({
+                title: "Fetching Data...",
+                text: "Please wait while we fetch the experience details.",
+                icon: "info",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            $.ajax({
+                url: `http://localhost:5086/api/UserDetails/GetOneWorkExperience/${id}`,
+                type: "GET",
+                success: function (response) {
+                    Swal.close();
+
+                    if (response.success) {
+                        $("#companyName").val(response.data.c_CompanyName);
+                        $("#jobTitle").val(response.data.c_JobTitle);
+                        $("#jobDescription").val(response.data.c_JobDesc);
+                        $("#yearsWorked").val(response.data.c_years_work);
+                        $("#currentlyWorking").prop("checked", response.data.c_CurrentlyWorking);
+                        $("#experienceId").val(response.data.c_WorkID);
+
+                        showExperienceForm();
+                    } else {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Failed to fetch experience details.",
+                            icon: "error",
+                            confirmButtonColor: "#4361ee"
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "An error occurred while fetching experience details.",
+                        icon: "error",
+                        confirmButtonColor: "#4361ee"
+                    });
+                }
+            });
+        }
+    </script>
+}

@@ -1,0 +1,1056 @@
+@{
+    ViewData["Title"] = "Recruiter Management";
+    Layout = "_AdminLayout";
+}
+
+<style>
+    :root {
+        --primary-color: #4361ee;
+        --primary-light: rgba(67, 97, 238, 0.1);
+        --success-color: #10b981;
+        --danger-color: #ef4444;
+        --warning-color: #f59e0b;
+        --secondary-color: #6b7280;
+    }
+
+    /* Base Card Styles */
+    .card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        margin: 1rem 0;
+        overflow: hidden;
+    }
+
+    .card-header {
+        background: white;
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+        color: #1f2937;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    /* Header Styles */
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    /* Button Styles */
+    .btn {
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: #3a56e8;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-outline-success {
+        color: var(--success-color);
+        border-color: var(--success-color);
+    }
+
+    .btn-outline-success:hover {
+        background-color: var(--success-color);
+        color: white;
+    }
+
+    .btn-outline-danger {
+        color: var(--danger-color);
+        border-color: var(--danger-color);
+    }
+
+    .btn-outline-danger:hover {
+        background-color: var(--danger-color);
+        color: white;
+    }
+
+    .btn-success {
+        background-color: var(--success-color);
+        border-color: var(--success-color);
+    }
+
+    .btn-danger {
+        background-color: var(--danger-color);
+        border-color: var(--danger-color);
+    }
+
+    .btn-sm {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+    }
+
+    /* Filter Section */
+    .filter-section {
+        background: white;
+        border-radius: 12px;
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-select {
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        border: 1px solid #e5e7eb;
+    }
+
+    .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.25);
+    }
+
+    /* Grid Styles */
+    .k-grid {
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #e5e7eb;
+    }
+
+    .k-grid-header {
+        background-color: #f9fafb;
+    }
+
+    .k-grid-content {
+        background: white;
+    }
+
+    .k-grid tr:hover {
+        background-color: rgba(67, 97, 238, 0.05);
+    }
+
+    /* Badges */
+    .badge {
+        padding: 0.35rem 0.65rem;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 0.75rem;
+    }
+
+    .bg-success {
+        background-color: var(--success-color) !important;
+    }
+
+    .bg-danger {
+        background-color: var(--danger-color) !important;
+    }
+
+    .bg-warning {
+        background-color: var(--warning-color) !important;
+    }
+
+    /* Action Buttons */
+    .action-btn {
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Modal Styles */
+    .modal-content {
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-header {
+        background: var(--primary-color) !important;
+        color: white;
+        border-radius: 12px 12px 0 0 !important;
+        padding: 1.25rem;
+    }
+
+    .modal-title {
+        font-weight: 600;
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+    }
+
+    .modal-footer {
+        border-top: 1px solid #e5e7eb;
+        padding: 1.25rem;
+    }
+
+    /* Company Details */
+    .company-detail-item {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .company-detail-item:last-child {
+        border-bottom: none;
+    }
+
+    .company-detail-item i {
+        width: 24px;
+        color: var(--primary-color);
+    }
+
+    /* Document Preview */
+    .legal-docs-preview {
+        background: white;
+        border-radius: 12px;
+        padding: 1rem;
+        border: 1px solid #e5e7eb;
+    }
+
+    .doc-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem;
+        background: #f9fafb;
+        border-radius: 8px;
+        margin-bottom: 0.75rem;
+        border: 1px solid #e5e7eb;
+        transition: all 0.2s ease;
+    }
+
+    .doc-item:hover {
+        transform: translateX(4px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        background: white;
+    }
+
+    .doc-icon {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(67, 97, 238, 0.1);
+        border-radius: 8px;
+        margin-right: 1rem;
+    }
+
+    .doc-icon i {
+        font-size: 1.25rem;
+        color: var(--primary-color);
+    }
+
+    .doc-info {
+        flex: 1;
+    }
+
+    .doc-name {
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+        color: #1f2937;
+    }
+
+    .doc-size {
+        font-size: 0.75rem;
+        color: var(--secondary-color);
+    }
+
+    .doc-preview-btn {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    .doc-preview-btn:hover {
+        background: #3a56e8;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .no-docs {
+        text-align: center;
+        padding: 1.5rem;
+        color: var(--secondary-color);
+        background: #f9fafb;
+        border-radius: 8px;
+        border: 1px dashed #e5e7eb;
+    }
+
+    /* Responsive Adjustments */
+    @@media (max-width: 768px) {
+        .card-header {
+            padding: 1rem;
+        }
+
+        .card-body {
+            padding: 1rem;
+        }
+
+        .dashboard-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .filter-section .row {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-select,
+        #applyFilters {
+            width: 100%;
+        }
+
+        .k-grid {
+            font-size: 0.875rem;
+        }
+
+        .k-pager-numbers .k-link.k-state-selected {
+            color: white;
+            background-color: #3f51b5;
+        }
+
+        .k-pager-numbers .k-link {
+            color: #3f51b5;
+        }
+
+        .k-pager-numbers .k-link:hover {
+            color: white;
+            background-color: #3f51b575;
+        }
+
+        .action-btn {
+            width: 28px;
+            height: 28px;
+        }
+    }
+
+    /* Custom Styles for This Page */
+    #modalCompanyLogo {
+        height: 80px;
+        width: 80px;
+        object-fit: contain;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        padding: 0.5rem;
+        background: white;
+    }
+
+    #approveCompany,
+    #rejectCompany {
+        min-width: 120px;
+        margin-bottom: 0.5rem;
+    }
+
+    .btn-group-responsive {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .swal2-confirm {
+        background-color: var(--primary-color) !important;
+    }
+
+    .k-pager-numbers .k-link.k-state-selected {
+        color: white;
+        background-color: #3f51b5;
+    }
+
+    .k-pager-numbers .k-link {
+        color: #3f51b5;
+    }
+
+    .k-pager-numbers .k-link:hover {
+        color: white;
+        background-color: #3f51b575;
+    }
+
+    .k-grid-header .k-grid-filter.k-state-active,
+    .k-grid-header .k-header-column-menu.k-state-active,
+    .k-grid-header .k-hierarchy-cell .k-icon.k-state-active {
+        color: black;
+        background-color: white;
+    }
+
+    .text-muted {
+        display: none;
+    }
+</style>
+
+<div class="card">
+    <div class="card-header">
+        <div class="dashboard-header">
+            <h5 class="card-title">
+                <i class="fas fa-users-cog me-2"></i>Company Management
+            </h5>
+            <div class="btn-group-responsive">
+                <button type="button" class="btn btn-outline-success" id="bulkApproveBtn">
+                    <i class="fas fa-check-double me-1"></i>Bulk Approve
+                </button>
+                <button type="button" class="btn btn-outline-danger" id="bulkRejectBtn">
+                    <i class="fas fa-times me-1"></i>Bulk Reject
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <!-- Filters -->
+        <div class="filter-section">
+            <div class="row align-items-end g-3">
+                <div class="col-md-4 col-lg-3">
+                    <div class="form-group mb-0">
+                        <label class="form-label fw-bold mb-1">Verification Status</label>
+                        <select class="form-select" id="verificationFilter">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="true">Verified</option>
+                            <option value="false">Rejected</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-3">
+                    <button type="button" class="btn btn-primary w-100" id="applyFilters">
+                        <i class="fas fa-filter me-1"></i>Apply Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recruiters Grid -->
+        <div id="recruitersGrid"></div>
+    </div>
+</div>
+
+<!-- Company Details Modal -->
+<div class="modal fade" id="companyDetailsModal" tabindex="-1" aria-labelledby="companyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="companyModalLabel">
+                    <i class="fas fa-building me-2"></i> Company Details
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-4">
+                    <img id="modalCompanyLogo" src="" alt="Company Logo" class="img-fluid mb-3">
+                    <h5 id="modalCompanyName" class="mb-0"></h5>
+                    <p class="text-muted" id="modalCompanyIndustry"></p>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="company-detail-item">
+                            <i class="fas fa-envelope me-2"></i>
+                            <span id="modalCompanyEmail"></span>
+                        </div>
+                        <div class="company-detail-item">
+                            <i class="fas fa-phone me-2"></i>
+                            <span id="modalCompanyPhone"></span>
+                        </div>
+                        <div class="company-detail-item">
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            <span id="modalCompanyAddress"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="company-detail-item">
+                            <i class="fas fa-id-card me-2"></i>
+                            <span id="modalCompanyRegNumber"></span>
+                        </div>
+                        <div class="company-detail-item">
+                            <i class="fas fa-receipt me-2"></i>
+                            <span id="modalCompanyTaxId"></span>
+                        </div>
+                        <div class="company-detail-item">
+                            <i class="fas fa-globe me-2"></i>
+                            <span id="modalCompanyWebsite"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <p class="mb-0"><strong>Status:</strong> <span id="companyStatus" class="badge"></span></p>
+                </div>
+
+                <!-- Legal Documents Preview Section -->
+                <div class="mt-4">
+                    <h6 class="mb-3">
+                        <i class="fas fa-file-alt me-2"></i>Legal Documents
+                    </h6>
+                    <div class="legal-docs-preview" id="legalDocsPreview">
+                        <!-- Documents will be displayed here -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-success me-2" id="approveCompany">
+                    <i class="fas fa-check-circle me-1"></i> Approve
+                </button>
+                <button type="button" class="btn btn-danger" id="rejectCompany">
+                    <i class="fas fa-ban me-1"></i> Reject
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            var selectedCompanyId = null;
+
+            var grid = $("#recruitersGrid").kendoGrid({
+                dataSource: {
+                    transport: {
+                        read: {
+                            url: "http://localhost:5086/api/AdminApi/getrecruiter",
+                            dataType: "json",
+                            success: function (response) {
+                                console.log('API Response:', response);
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('API Error:', { xhr, status, error });
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Failed to load recruiter data. Please try again.'
+                                });
+                            }
+                        }
+                    },
+                    schema: {
+                        model: {
+                            id: "c_company_id",
+                            fields: {
+                                c_company_id: { type: "number" },
+                                c_company_name: { type: "string" },
+                                c_owner_id: { type: "number" },
+                                c_company_email: { type: "string" },
+                                c_company_phone: { type: "string" },
+                                c_company_address: { type: "string" },
+                                c_company_reg_number: { type: "string" },
+                                c_tax_id_number: { type: "string" },
+                                c_industry: { type: "string" },
+                                c_website: { type: "string" },
+                                c_verified_status: { type: "boolean" },
+                                c_legal_documents: { type: "object" },
+                                c_company_logo: { type: "string" }
+                            }
+                        }
+                    },
+                    pageSize: 10
+                },
+                columns: [
+                    {
+                        selectable: true,
+                        width: "50px",
+                        headerTemplate: '<input type="checkbox" id="selectAllCheckbox">',
+                        template: '<input type="checkbox" class="rowCheckbox" data-id="#= c_company_id #">'
+                    },
+                    {
+                        field: "c_company_logo",
+                        title: "Logo",
+                        template: function (dataItem) {
+                            return dataItem.c_company_logo
+                                ? `<img src="${dataItem.c_company_logo}" alt="Logo" style="width: 40px; height: 40px; object-fit: contain; border-radius: 6px;">`
+                                : '<i class="fas fa-building" style="font-size: 1.5rem; color: #9ca3af;"></i>';
+                        },
+                        width: "70px",
+                        attributes: { "class": "text-center" }
+                    },
+                    {
+                        field: "c_company_name",
+                        title: "Company Name",
+                        template: '<div class="fw-semibold">#: c_company_name #</div><div class="text-muted small">#: c_industry || "N/A" #</div>'
+                    },
+                    {
+                        field: "c_company_email",
+                        title: "Contact",
+                        template: '<div>#: c_company_email #</div><div class="text-muted small">#: c_company_phone || "N/A" #</div>'
+                    },
+                    {
+                        field: "c_verified_status",
+                        title: "Status",
+                        template: function (dataItem) {
+                            if (dataItem.c_verified_status === null) {
+                                return '<span class="badge bg-warning">Pending</span>';
+                            } else if (dataItem.c_verified_status) {
+                                return '<span class="badge bg-success">Verified</span>';
+                            } else {
+                                return '<span class="badge bg-danger">Rejected</span>';
+                            }
+                        },
+                        width: "100px",
+                        attributes: { "class": "text-center" }
+                    },
+                    {
+                        title: "Actions",
+                        template: function (dataItem) {
+                            return `
+                                                <div class="d-flex gap-2 justify-content-center">
+                                                    <button class="btn btn-sm btn-outline-primary action-btn view-details-btn" data-id="${dataItem.c_company_id}" title="View Details">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-success action-btn approve-btn" data-id="${dataItem.c_company_id}" title="Approve">
+                                                        <i class="fas fa-check"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-danger action-btn reject-btn" data-id="${dataItem.c_company_id}" title="Reject">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>`;
+                        },
+                        width: "150px",
+                        attributes: { "class": "text-center" }
+                    }
+                ],
+                sortable: true,
+                filterable: true,
+                selectable: "multiple, row",
+                pageable: {
+                    pageSizes: [10, 25, 50],
+                    buttonCount: 5,
+                    messages: {
+                        display: "Showing {0}-{1} of {2} items",
+                        empty: "No recruiters found",
+                        itemsPerPage: "items per page"
+                    }
+                },
+                height: 600,
+                noRecords: {
+                    template: '<div class="text-center p-4 text-muted">No recruiters found matching your criteria</div>'
+                },
+                dataBound: function () {
+                    // Handle select all checkbox
+                    $('#selectAllCheckbox').change(function () {
+                        $('.rowCheckbox').prop('checked', $(this).prop('checked'));
+                    });
+
+                    // Handle individual checkbox changes
+                    $('.rowCheckbox').change(function () {
+                        if (!$('.rowCheckbox:checked').length) {
+                            $('#selectAllCheckbox').prop('checked', false);
+                        } else if ($('.rowCheckbox:checked').length === $('.rowCheckbox').length) {
+                            $('#selectAllCheckbox').prop('checked', true);
+                        }
+                    });
+
+                    // Attach event handlers to action buttons
+                    $(".approve-btn").click(handleApproveClick);
+                    $(".reject-btn").click(handleRejectClick);
+                    $(".view-details-btn").click(handleViewDetailsClick);
+                }
+            }).data("kendoGrid");
+
+            function handleApproveClick() {
+                var companyId = $(this).data("id");
+                if (companyId) {
+                    Swal.fire({
+                        title: 'Approve Company',
+                        text: 'Are you sure you want to approve this Company?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, Approve',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            updateRecruiterStatus(companyId, true);
+                        }
+                    });
+                }
+            }
+
+            function handleRejectClick() {
+                var companyId = $(this).data("id");
+                if (companyId) {
+                    Swal.fire({
+                        title: 'Reject Company',
+                        html: '<div class="form-group text-start">' +
+                            '<label for="rejectReason" class="form-label">Reason for Rejection:</label>' +
+                            '<textarea id="rejectReason" class="form-control" rows="3" placeholder="Please specify the reason for rejection..." required></textarea>' +
+                            '</div>',
+                        showCancelButton: true,
+                        confirmButtonText: 'Reject',
+                        cancelButtonText: 'Cancel',
+                        focusConfirm: false,
+                        preConfirm: () => {
+                            const reason = $('#rejectReason').val();
+                            if (!reason) {
+                                Swal.showValidationMessage('Please provide a reason for rejection');
+                                return false;
+                            }
+                            return reason;
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed && result.value) {
+                            updateRecruiterStatus(companyId, false, result.value);
+                        }
+                    });
+                }
+            }
+
+            function handleViewDetailsClick() {
+                var companyId = $(this).data("id");
+                var dataItem = grid.dataSource.get(companyId);
+                if (dataItem) {
+                    selectedCompanyId = companyId;
+                    showCompanyDetails(dataItem);
+                }
+            }
+
+            function showCompanyDetails(company) {
+                // Set basic company info
+                $("#modalCompanyName").text(company.c_company_name || "N/A");
+                $("#modalCompanyEmail").text(company.c_company_email || "N/A");
+                $("#modalCompanyPhone").text(company.c_company_phone || "N/A");
+                $("#modalCompanyAddress").text(company.c_company_address || "N/A");
+                $("#modalCompanyRegNumber").text(company.c_company_reg_number || "N/A");
+                $("#modalCompanyTaxId").text(company.c_tax_id_number || "N/A");
+                $("#modalCompanyIndustry").text(company.c_industry || "N/A");
+                $("#modalCompanyWebsite").text(company.c_website || "N/A");
+
+                // Set company logo
+                const logoImg = $("#modalCompanyLogo");
+                if (company.c_company_logo) {
+                    logoImg.attr("src", company.c_company_logo).show();
+                } else {
+                    logoImg.hide();
+                }
+
+                // Set status badge
+                const statusBadge = $("#companyStatus");
+                statusBadge.removeClass("bg-warning bg-success bg-danger");
+
+                if (company.c_verified_status === null) {
+                    statusBadge.addClass("bg-warning").text("Pending");
+                    $("#approveCompany, #rejectCompany").show();
+                } else if (company.c_verified_status) {
+                    statusBadge.addClass("bg-success").text("Verified");
+                    $("#approveCompany, #rejectCompany").hide();
+                } else {
+                    statusBadge.addClass("bg-danger").text("Rejected");
+                    $("#approveCompany, #rejectCompany").show();
+                }
+
+                // Display legal documents
+                const legalDocsPreview = $("#legalDocsPreview");
+                if (company.c_legal_documents && company.c_legal_documents.length > 0) {
+                    const docsHtml = company.c_legal_documents.map(doc => `
+                                        <div class="doc-item">
+                                            <div class="doc-icon">
+                                                <i class="fas fa-file-pdf"></i>
+                                            </div>
+                                            <div class="doc-info">
+                                                <div class="doc-name">${doc.split('/').pop()}</div>
+                                                <div class="doc-size">${getFileSize(doc)}</div>
+                                            </div>
+                                            <button class="doc-preview-btn" data-doc-url="${doc}">
+                                                <i class="fas fa-eye"></i> Preview
+                                            </button>
+                                        </div>
+                                    `).join('');
+                    legalDocsPreview.html(docsHtml);
+                } else {
+                    legalDocsPreview.html(`
+                                        <div class="no-docs">
+                                            <i class="fas fa-folder-open"></i>
+                                            <p>No legal documents available</p>
+                                        </div>
+                                    `);
+                }
+
+                $("#companyDetailsModal").modal("show");
+            }
+
+            function getFileSize(url) {
+                // This is a placeholder - you should implement actual file size detection
+                return 'PDF Document';
+            }
+
+            $("#applyFilters").click(function () {
+                var verification = $("#verificationFilter").val();
+                var dataSource = grid.dataSource;
+                var filters = [];
+
+                if (verification !== "") {
+                    if (verification === "pending") {
+                        filters.push({ field: "c_verified_status", operator: "eq", value: null });
+                    } else {
+                        filters.push({ field: "c_verified_status", operator: "eq", value: verification === "true" });
+                    }
+                }
+
+                dataSource.filter(filters);
+            });
+
+            function getSelectedCompanyIds() {
+                return $('.rowCheckbox:checked').map(function () {
+                    return $(this).data('id');
+                }).get();
+            }
+
+            function updateRecruiterStatus(companyId, isApproved, reason = null) {
+                var apiUrl = isApproved
+                    ? `http://localhost:5086/api/AdminApi/updaterecruiterstatus/${companyId}?approved=true`
+                    : `http://localhost:5086/api/AdminApi/updaterecruiterstatusReject/${companyId}?reason=${encodeURIComponent(reason)}&approved=false`;
+
+                $.ajax({
+                    url: apiUrl,
+                    type: "PUT",
+                    contentType: "application/json",
+                    success: function () {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: isApproved ? 'Recruiter approved successfully.' : 'Recruiter rejected successfully.',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                        grid.dataSource.read();
+                        if (!isApproved) {
+                            $("#companyDetailsModal").modal("hide");
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error('Error response:', xhr.responseText);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseText || 'An error occurred while updating the recruiter status.'
+                        });
+                    }
+                });
+            }
+
+            $("#approveCompany").click(function () {
+                if (selectedCompanyId) {
+                    Swal.fire({
+                        title: 'Approve Recruiter',
+                        text: 'Are you sure you want to approve this recruiter?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, Approve',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            updateRecruiterStatus(selectedCompanyId, true);
+                            $("#companyDetailsModal").modal("hide");
+                        }
+                    });
+                }
+            });
+
+            $("#rejectCompany").click(function () {
+                if (selectedCompanyId) {
+                    Swal.fire({
+                        title: 'Reject Recruiter',
+                        html: '<div class="form-group text-start">' +
+                            '<label for="rejectReason" class="form-label">Reason for Rejection:</label>' +
+                            '<textarea id="rejectReason" class="form-control" rows="3" placeholder="Please specify the reason for rejection..." required></textarea>' +
+                            '</div>',
+                        showCancelButton: true,
+                        confirmButtonText: 'Reject',
+                        cancelButtonText: 'Cancel',
+                        focusConfirm: false,
+                        preConfirm: () => {
+                            const reason = $('#rejectReason').val();
+                            if (!reason) {
+                                Swal.showValidationMessage('Please provide a reason for rejection');
+                                return false;
+                            }
+                            return reason;
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed && result.value) {
+                            updateRecruiterStatus(selectedCompanyId, false, result.value);
+                            $("#companyDetailsModal").modal("hide");
+                        }
+                    });
+                }
+            });
+
+            $("#bulkApproveBtn").click(function () {
+                var selectedIds = getSelectedCompanyIds();
+                if (selectedIds.length === 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'No Selection',
+                        text: 'Please select at least one recruiter to approve.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                    return;
+                }
+
+                Swal.fire({
+                    title: "Bulk Approve Recruiters",
+                    text: `You are about to approve ${selectedIds.length} recruiter(s). Continue?`,
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, Approve All",
+                    cancelButtonText: "Cancel"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "http://localhost:5086/api/AdminApi/bulkupdaterecruiterstatus?approved=true",
+                            type: "PUT",
+                            contentType: "application/json",
+                            data: JSON.stringify(selectedIds),
+                            success: function () {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: `${selectedIds.length} recruiter(s) approved successfully.`,
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
+                                grid.dataSource.read();
+                            },
+                            error: function (xhr) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: xhr.responseText || 'An error occurred during bulk approval.'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            $("#bulkRejectBtn").click(function () {
+                var selectedIds = getSelectedCompanyIds();
+                if (selectedIds.length === 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'No Selection',
+                        text: 'Please select at least one recruiter to reject.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'Bulk Reject Recruiters',
+                    html: '<div class="form-group text-start">' +
+                        '<label for="rejectReason" class="form-label">Reason for Rejection:</label>' +
+                        '<textarea id="rejectReason" class="form-control" rows="3" placeholder="Please specify the reason for rejection..." required></textarea>' +
+                        '</div>',
+                    showCancelButton: true,
+                    confirmButtonText: 'Reject All',
+                    cancelButtonText: 'Cancel',
+                    focusConfirm: false,
+                    preConfirm: () => {
+                        const reason = $('#rejectReason').val();
+                        if (!reason) {
+                            Swal.showValidationMessage('Please provide a reason for rejection');
+                            return false;
+                        }
+                        return reason;
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed && result.value) {
+                        $.ajax({
+                            url: `http://localhost:5086/api/AdminApi/bulkupdaterecruiterstatusreject?reason=${encodeURIComponent(result.value)}&approved=false`,
+                            type: "PUT",
+                            contentType: "application/json",
+                            data: JSON.stringify(selectedIds),
+                            success: function () {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: `${selectedIds.length} recruiter(s) rejected successfully.`,
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
+                                grid.dataSource.read();
+                            },
+                            error: function (xhr) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: xhr.responseText || 'An error occurred during bulk rejection.'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Document preview handler
+            $(document).on('click', '.doc-preview-btn', function (e) {
+                e.preventDefault();
+                var docUrl = $(this).data('doc-url');
+
+                if (!docUrl) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Document URL is not available'
+                    });
+                    return;
+                }
+
+                // For PDF files, show options to view or download
+                if (docUrl.toLowerCase().endsWith('.pdf')) {
+                    Swal.fire({
+                        title: 'Document Preview',
+                        html: `
+                                            <div class="text-center">
+                                                <i class="fas fa-file-pdf fa-4x text-danger mb-3"></i>
+                                                <p>This document is stored externally.</p>
+                                                <div class="d-flex justify-content-center gap-2 mt-3">
+                                                    <a href="${docUrl}" target="_blank" class="btn btn-primary">
+                                                        <i class="fas fa-external-link-alt me-1"></i>Open
+                                                    </a>
+                                                    <a href="${docUrl}" download class="btn btn-success">
+                                                        <i class="fas fa-download me-1"></i>Download
+                                                    </a>
+                                                </div>
+                                            </div>`,
+                        showConfirmButton: false,
+                        showCloseButton: true
+                    });
+                } else {
+                    // For other file types, open in new tab
+                    window.open(docUrl, '_blank');
+                }
+            });
+        });
+    </script>
+}

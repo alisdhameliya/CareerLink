@@ -1,0 +1,850 @@
+@{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewData["Title"] = "Job Preferences";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --primary-color: #4361ee;
+        --primary-dark: #3a56d4;
+        --secondary-color: #3f37c9;
+        --accent-color: #4895ef;
+        --danger-color: #f72585;
+        --success-color: #4cc9f0;
+        --light-color: #f8f9fa;
+        --dark-color: #212529;
+        --gray-color: #6c757d;
+        --light-gray: #e9ecef;
+        --border-radius: 12px;
+        --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        --transition: all 0.3s ease;
+    }
+    .swal2-confirm{
+        background-color: #4361ee;
+    }
+    .preferences-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1.5rem;
+    }
+
+    .preferences-card {
+        background: #fff;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        overflow: hidden;
+        transition: var(--transition);
+    }
+
+    .preferences-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        padding: 1.75rem 2rem;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+        transform: rotate(30deg);
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .title-section {
+        flex: 1;
+    }
+
+    .header-icon {
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .preferences-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin: 0;
+        color: white;
+    }
+
+    .preferences-subtitle {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        margin-top: 0.25rem;
+        font-weight: 300;
+    }
+
+    .add-preference-btn {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        transition: var(--transition);
+        cursor: pointer;
+        backdrop-filter: blur(5px);
+        font-size: 0.95rem;
+    }
+
+    .add-preference-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .edit-preference-btn {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        transition: var(--transition);
+        cursor: pointer;
+        backdrop-filter: blur(5px);
+        font-size: 0.95rem;
+    }
+
+    .edit-preference-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .preference-form-container {
+        padding: 0;
+        @* display: none; *@
+        animation: fadeIn 0.4s ease-out;
+        position: relative;
+        z-index: 10;
+    }
+
+    .form-card {
+        background: #fff;
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
+        padding: 2rem;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        border-top: 4px solid var(--primary-color);
+    }
+
+    .form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-title {
+        font-size: 1.35rem;
+        color: var(--primary-color);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        font-weight: 600;
+    }
+
+    .close-form-btn {
+        background: none;
+        border: none;
+        color: var(--gray-color);
+        font-size: 1.25rem;
+        cursor: pointer;
+        transition: var(--transition);
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .close-form-btn:hover {
+        background: var(--light-gray);
+        color: var(--danger-color);
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: var(--gray-color);
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid var(--light-gray);
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: var(--transition);
+        background-color: #fff;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        outline: none;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--light-gray);
+    }
+
+    .save-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.75rem;
+        border-radius: 8px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        transition: var(--transition);
+        cursor: pointer;
+        font-size: 0.95rem;
+    }
+
+    .save-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    }
+    .preference-form-container.d-none {
+    display: none;
+}
+
+.preference-form-container.show-form {
+    display: block;
+}
+    .cancel-btn {
+        background: #fff;
+        color: var(--gray-color);
+        border: 1px solid var(--light-gray);
+        padding: 0.75rem 1.75rem;
+        border-radius: 8px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        transition: var(--transition);
+        cursor: pointer;
+        font-size: 0.95rem;
+    }
+
+    .cancel-btn:hover {
+        background: var(--light-gray);
+        transform: translateY(-2px);
+        color: var(--dark-color);
+    }
+
+    .preferences-list-container {
+        padding: 1.5rem 2rem;
+    }
+
+    .preferences-display {
+        background: var(--light-color);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .preference-item {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--light-gray);
+    }
+
+    .preference-item:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+
+    .preference-label {
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .preference-label i {
+        margin-right: 0.75rem;
+        font-size: 1.1rem;
+    }
+
+    .preference-value {
+        font-size: 1rem;
+        color: var(--dark-color);
+        padding-left: 2rem;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: var(--gray-color);
+    }
+
+    .empty-icon-container {
+        width: 80px;
+        height: 80px;
+        background: rgba(67, 97, 238, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+    }
+
+    .empty-icon {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+    }
+
+    .empty-state h4 {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+        color: var(--dark-color);
+        font-weight: 600;
+    }
+
+    .empty-state p {
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    .empty-state-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.75rem;
+        border-radius: 8px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        transition: var(--transition);
+        cursor: pointer;
+        font-size: 0.95rem;
+    }
+
+    .empty-state-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    }
+
+    .delete-btn-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 1.5rem;
+    }
+
+    .delete-btn {
+        background: rgba(220, 53, 69, 0.1);
+        color: var(--danger-color);
+        border: 1px solid rgba(220, 53, 69, 0.2);
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        transition: var(--transition);
+        cursor: pointer;
+    }
+
+    .delete-btn:hover {
+        background: rgba(220, 53, 69, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(220, 53, 69, 0.1);
+    }
+
+    .input-group {
+        display: flex;
+        align-items: center;
+    }
+
+    .input-group-text {
+        padding: 0.75rem 1rem;
+        background: var(--light-gray);
+        border: 2px solid var(--light-gray);
+        border-right: none;
+        border-radius: 8px 0 0 8px;
+        color: var(--gray-color);
+    }
+
+    .input-group .form-control {
+        border-radius: 0 8px 8px 0;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade {
+        animation: fadeIn 0.4s ease forwards;
+    }
+
+    @@media (max-width: 992px) {
+        .preferences-container {
+            padding: 0 1rem;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .card-header {
+            padding: 1.5rem;
+        }
+        
+        .header-content {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .add-preference-btn,
+        .edit-preference-btn {
+            width: 100%;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        
+        .preference-form-container {
+            padding: 0;
+        }
+        
+        .form-card {
+            padding: 1.5rem;
+        }
+        
+        .form-actions {
+            flex-direction: column;
+        }
+        
+        .save-btn,
+        .cancel-btn {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .preferences-list-container {
+            padding: 1.25rem;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .preferences-title {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<div class="preferences-container">
+    <div class="preferences-card">
+        <!-- Card Header -->
+        <div class="card-header">
+            <div class="header-content">
+                <div class="title-section">
+                    <i class="fas fa-briefcase header-icon"></i>
+                    <h2 class="preferences-title">Job Preferences</h2>
+                    <p class="preferences-subtitle">Set your preferred job criteria for better matches</p>
+                </div>
+                <div class="action-buttons">
+                    <button id="addPreferenceBtn" class="add-preference-btn" onclick="showJobPreferenceForm()">
+                        <i class="fas fa-plus me-2"></i>Add Preferences
+                    </button>
+                    <button id="editPreferenceBtn" class="edit-preference-btn d-none" onclick="showJobPreferenceForm()">
+                        <i class="fas fa-edit me-2"></i>Edit Preferences
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Job Preferences Form -->
+        <div id="jobPreferenceForm" class="preference-form-container d-none">
+            <div class="form-card">
+                <div class="form-header">
+                    <h4 class="form-title"><i class="fas fa-edit me-2"></i>Job Preferences</h4>
+                    <button class="close-form-btn" onclick="hideJobPreferenceForm()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <input type="hidden" id="preferenceId">
+
+                <div class="form-group">
+                    <label class="form-label">Preferred Roles</label>
+                    <input type="text" id="preferredRoleInput" class="form-control" 
+                           placeholder="e.g., Software Engineer, Product Manager">
+                    <small class="text-muted">Separate multiple roles with commas</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Preferred Salary</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="text" id="preferredSalary" class="form-control" 
+                               placeholder="e.g., 50000-75000 or 80000">
+                    </div>
+                    <small class="text-muted">Enter a range or specific amount</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Preferred Locations</label>
+                    <input type="text" id="preferredLocationInput" class="form-control" 
+                           placeholder="e.g., New York, Remote, London">
+                    <small class="text-muted">Separate multiple locations with commas</small>
+                </div>
+
+                <div class="form-actions">
+                    <button class="cancel-btn" onclick="hideJobPreferenceForm()">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                    <button class="save-btn" onclick="saveJobPreferences()">
+                        <i class="fas fa-save me-2"></i>Save Preferences
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Job Preferences Display -->
+        <div class="preferences-list-container">
+            <div id="jobPreferenceDisplay" class="d-none animate-fade">
+                <div class="preferences-display">
+                    <div class="preference-item">
+                        <div class="preference-label">
+                            <i class="fas fa-user-tie"></i>Preferred Roles
+                        </div>
+                        <div class="preference-value" id="displayPreferredRoles">-</div>
+                    </div>
+                    <div class="preference-item">
+                        <div class="preference-label">
+                            <i class="fas fa-money-bill-wave"></i>Preferred Salary
+                        </div>
+                        <div class="preference-value" id="displayPreferredSalary">-</div>
+                    </div>
+                    <div class="preference-item">
+                        <div class="preference-label">
+                            <i class="fas fa-map-marker-alt"></i>Preferred Locations
+                        </div>
+                        <div class="preference-value" id="displayPreferredLocations">-</div>
+                    </div>
+                </div>
+                <div class="delete-btn-container">
+                    <button id="deletePreferenceBtn" class="delete-btn d-none" onclick="deleteJobPreferences()">
+                        <i class="fas fa-trash-alt me-2"></i>Delete Preferences
+                    </button>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyPreferenceState" class="empty-state">
+                <div class="empty-icon-container">
+                    <i class="fas fa-briefcase empty-icon"></i>
+                </div>
+                <h4>No Job Preferences Set</h4>
+                <p>Add your job preferences to help us find better matches for you</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function getUserIdFromToken() {
+            let token = localStorage.getItem("token");
+            if (!token) return null;
+            let payload = JSON.parse(atob(token.split('.')[1]));
+            return payload.uid;
+        }
+
+        // Get User ID dynamically
+        var userId = getUserIdFromToken();
+        if (!userId) {
+            console.error("User ID not found in token.");
+        } else {
+            console.log("User ID:", userId);
+        }
+        let preferenceId = null;
+
+        $(document).ready(function () {
+            loadJobPreferences();
+        });
+
+        function loadJobPreferences() {
+            $.ajax({
+                url: `http://localhost:5086/api/UserDetails/GetJobPreference?id=${userId}`,
+                type: "GET",
+                dataType: "json",
+                success: function (response) {
+                    console.log("Job Preferences Response:", response);
+
+                    if (!response || !response.c_PreferenceID) {
+                        showAddPreferenceButton();
+                        return;
+                    }
+
+                    updateJobPreferenceUI(response);
+                    preferenceId = response.c_PreferenceID;
+                },
+                error: function (xhr) {
+                    console.error("Error loading job preferences:", xhr.responseText);
+                    Swal.fire({
+                        title: "Error",
+                        text: "Failed to load job preferences. Please try again.",
+                        icon: "error",
+                        confirmButtonColor: "#4361ee"
+                    });
+                }
+            });
+        }
+
+        function showAddPreferenceButton() {
+            $("#addPreferenceBtn").removeClass("d-none");
+            $("#editPreferenceBtn, #deletePreferenceBtn, #jobPreferenceDisplay").addClass("d-none");
+            $("#emptyPreferenceState").removeClass("d-none");
+            $("#jobPreferenceForm").addClass("d-none");
+        }
+
+        function updateJobPreferenceUI(response) {
+            $("#displayPreferredRoles").text(response.c_PreferredRoles || "-");
+            $("#displayPreferredSalary").text(response.c_PreferredSalary || "-");
+            $("#displayPreferredLocations").text(response.c_PreferredLocations || "-");
+
+            $("#addPreferenceBtn").addClass("d-none");
+            $("#editPreferenceBtn, #deletePreferenceBtn, #jobPreferenceDisplay").removeClass("d-none");
+            $("#emptyPreferenceState").addClass("d-none");
+            $("#jobPreferenceForm").addClass("d-none");
+        }
+
+        function showJobPreferenceForm() {
+    console.log("Showing job preference form");
+    
+    // Hide other sections
+    $("#jobPreferenceDisplay").addClass("d-none");
+    $("#emptyPreferenceState").addClass("d-none");
+    
+    // Show the form by removing d-none and adding a class to make it visible
+    $("#jobPreferenceForm").removeClass("d-none").addClass("show-form");
+    
+    // Clear or populate form fields
+    if (!preferenceId) {
+        // New preference - clear fields
+        $("#preferredRoleInput").val("");
+        $("#preferredSalary").val("");
+        $("#preferredLocationInput").val("");
+    } else {
+        // Editing existing preference - populate fields
+        $("#preferredRoleInput").val($("#displayPreferredRoles").text().trim() === "-" ? "" : $("#displayPreferredRoles").text().trim());
+        $("#preferredSalary").val($("#displayPreferredSalary").text().trim() === "-" ? "" : $("#displayPreferredSalary").text().trim());
+        $("#preferredLocationInput").val($("#displayPreferredLocations").text().trim() === "-" ? "" : $("#displayPreferredLocations").text().trim());
+    }
+    
+    // Scroll to form for better UX
+    $('html, body').animate({
+        scrollTop: $("#jobPreferenceForm").offset().top - 20
+    }, 300);
+}
+
+function hideJobPreferenceForm() {
+    // Hide the form by adding d-none and removing show-form
+    $("#jobPreferenceForm").addClass("d-none").removeClass("show-form");
+    
+    if (preferenceId) {
+        $("#jobPreferenceDisplay").removeClass("d-none");
+    } else {
+        $("#emptyPreferenceState").removeClass("d-none");
+    }
+}
+
+        function saveJobPreferences() {
+            let preferredRoles = $("#preferredRoleInput").val().trim();
+            let preferredSalary = $("#preferredSalary").val().trim();
+            let preferredLocations = $("#preferredLocationInput").val().trim();
+
+            if (!preferredRoles || !preferredSalary || !preferredLocations) {
+                Swal.fire({
+                    title: "Missing Fields",
+                    text: "Please fill in all job preference fields.",
+                    icon: "warning",
+                    confirmButtonColor: "#4361ee"
+                });
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append("c_user_id", userId);
+
+            if (preferenceId) {
+                formData.append("c_PreferenceID", preferenceId);
+            }
+
+            formData.append("c_PreferredRoles", preferredRoles);
+            formData.append("c_PreferredSalary", preferredSalary);
+            formData.append("c_PreferredLocations", preferredLocations);
+
+            let url = preferenceId
+                ? "http://localhost:5086/api/UserDetails/UpdateJobPreference"
+                : "http://localhost:5086/api/UserDetails/AddJobPreference";
+
+            let type = preferenceId ? "PUT" : "POST";
+
+            Swal.fire({
+                title: preferenceId ? "Update Preferences?" : "Save Preferences?",
+                text: preferenceId ? "Do you want to update your job preferences?" : "Do you want to save your job preferences?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#4361ee",
+                cancelButtonColor: "#6c757d",
+                confirmButtonText: "Yes",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: preferenceId ? "Updating..." : "Saving...",
+                        text: "Please wait...",
+                        icon: "info",
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    $.ajax({
+                        url: url,
+                        type: type,
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function () {
+                            Swal.fire({
+                                title: "Success!",
+                                text: preferenceId ? "Job preferences updated successfully." : "Job preferences saved successfully.",
+                                icon: "success",
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+
+                            hideJobPreferenceForm();
+                            loadJobPreferences();
+                        },
+                        error: function (xhr) {
+                            console.log("Error Response:", xhr.responseText);
+                            Swal.fire({
+                                title: "Error!",
+                                text: xhr.responseText || "Failed to save job preferences. Please try again.",
+                                icon: "error",
+                                confirmButtonColor: "#4361ee"
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        function deleteJobPreferences() {
+            if (!preferenceId) {
+                Swal.fire({
+                    title: "No Preferences Found",
+                    text: "You have no job preferences to delete.",
+                    icon: "warning",
+                    confirmButtonColor: "#4361ee"
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: "Delete Job Preferences?",
+                text: "Are you sure you want to delete your job preferences?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#4361ee",
+                cancelButtonColor: "#6c757d",
+                confirmButtonText: "Yes, Delete",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Deleting...",
+                        text: "Please wait while we delete your job preferences.",
+                        icon: "info",
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    $.ajax({
+                        url: `http://localhost:5086/api/UserDetails/DeleteJobPreference/${preferenceId}`,
+                        type: "DELETE",
+                        success: function () {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your job preferences have been deleted successfully.",
+                                icon: "success",
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+
+                            preferenceId = null;
+                            showAddPreferenceButton();
+                        },
+                        error: function () {
+                            Swal.fire({
+                                title: "Error",
+                                text: "Failed to delete job preferences. Please try again.",
+                                icon: "error",
+                                confirmButtonColor: "#4361ee"
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}

@@ -1,0 +1,226 @@
+@{
+    ViewData["Title"] = "User Management";
+    Layout = "_AdminLayout";
+}
+<style>
+    .k-pager-numbers .k-link.k-state-selected {
+        color: white;
+        background-color: #3A56D4;
+    }
+
+    .k-pager-numbers .k-link {
+        color: #3A56D4;
+    }
+
+    .k-pager-numbers .k-link:hover {
+        color: white;
+        background-color: #3f51b575;
+    }
+
+    #exportBtn {
+        background-color: #4361ee;
+        border: 2px solid #4361ee;
+    }
+
+    .k-grid-header .k-grid-filter.k-state-active,
+    .k-grid-header .k-header-column-menu.k-state-active,
+    .k-grid-header .k-hierarchy-cell .k-icon.k-state-active {
+        color: black;
+        background-color: white;
+    }
+</style>
+<div class="card">
+    <div class="card-header bg-white">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title">
+                <i class="fas fa-users-cog me-2"></i>User Management
+            </h5>
+            @* <div class="btn-group">
+                <button type="button" class="btn btn-success" id="exportBtn">
+                    <i class="fas fa-download me-2"></i>Export
+                </button>
+            </div> *@
+        </div>
+    </div>
+    <div class="card-body">
+        <!-- Filters -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="form-label">Role</label>
+                    <select class="form-select" id="roleFilter">
+                        <option value="">All Roles</option>
+                        <option value="Candidate">Candidate</option>
+                        <option value="Recruiter">Recruiter</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="form-label">&nbsp;</label>
+                    <button type="button" class="btn btn-primary w-100" id="applyFilters">
+                        <i class="fas fa-filter me-2"></i>Apply Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Grid -->
+        <div id="usersGrid"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            // Initialize Users Grid
+            var grid = $("#usersGrid").kendoGrid({
+                dataSource: {
+                    transport: {
+                        read: {
+                            url: "http://localhost:5086/api/AdminApi/get-user",
+                            dataType: "json"
+                        }
+                    },
+                    schema: {
+                        model: {
+                            id: "c_userId",
+                            fields: {
+                                c_userId: { type: "number" },
+                                c_username: { type: "string" },
+                                c_fullName: { type: "string" },
+                                c_email: { type: "string" },
+                                c_phoneNumber: { type: "string" },
+                                c_gender: { type: "string" },
+                                c_userRole: { type: "string" }
+                            }
+                        }
+                    }
+                },
+                columns: [
+                    { field: "c_fullName", title: "Full Name" },
+                    { field: "Email", title: "Email" },
+                    { field: "Role", title: "Role" },
+                    { field: "c_gender", title: "Gender" },
+                    { field: "c_phoneNumber", title: "Mobile" },
+                    {
+                        title: "Actions",
+                        template: `<button class="btn btn-danger btn-sm delete-btn"><i class="fas fa-trash"></i> Delete</button>`,
+                        width: "150px"
+                    }
+                ],
+                sortable: true,
+                filterable: true,
+                pageable: {
+                    pageSize: 10,
+                    pageSizes: [10, 25, 50]
+                },
+                height: 600
+            }).data("kendoGrid");
+
+            // Apply Filters
+            $("#applyFilters").click(function () {
+                var role = $("#roleFilter").val();
+                var dataSource = grid.dataSource;
+
+                var filters = [];
+                if (role) {
+                    filters.push({ field: "Role", operator: "eq", value: role });
+                }
+
+                dataSource.filter(filters);
+            });
+
+            // Export to CSV
+            $("#exportBtn").click(function () {
+                var data = grid.dataSource.view();
+                if (data.length === 0) {
+                    alert("No data available to export.");
+                    return;
+                }
+
+                var csvContent = "data:text/csv;charset=utf-8,";
+                csvContent += "Full Name,Email,Role,Gender,Mobile\n";
+
+                data.forEach(function (item) {
+                    var row = [
+                        "${item.c_fullName}",
+                        "${item.Email}",
+                        "${item.c_userRole}",
+                        "${item.c_gender}",
+                        "${item.c_phoneNumber}"
+                    ].join(",");
+                    csvContent += row + "\n";
+                });
+
+                var encodedUri = encodeURI(csvContent);
+                var link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", "User_Data.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+
+            // Handle Delete Button Click (delegated event)
+            $("#usersGrid").on("click", ".delete-btn", function () {
+                var tr = $(this).closest("tr");
+                var dataItem = grid.dataItem(tr);
+                deleteUser(dataItem);
+            });
+        });
+
+        // Delete API Call
+        function deleteUser(dataItem) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This action will permanently delete the user!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "Cancel",
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "http://localhost:5086/api/AdminApi/delete-user/" + dataItem.c_userId,
+                        type: "DELETE",
+                        beforeSend: function () {
+                            Swal.fire({
+                                title: "Deleting...",
+                                text: "Please wait...",
+                                icon: "info",
+                                allowOutsideClick: false,
+                                showConfirmButton: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+                        },
+                        success: function () {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "User has been deleted successfully.",
+                                icon: "success",
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+
+                            $("#usersGrid").data("kendoGrid").dataSource.read(); // Refresh grid
+                        },
+                        error: function (xhr) {
+                            Swal.fire({
+                                title: "Error!",
+                                text: xhr.responseText || "Failed to delete user. Please try again.",
+                                icon: "error"
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+    </script>
+}

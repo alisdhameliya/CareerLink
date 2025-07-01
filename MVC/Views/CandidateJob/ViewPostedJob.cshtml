@@ -1,0 +1,239 @@
+@{
+    ViewData["Title"] = "View jobs";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+<style>
+    #card-shelf {
+        display: flex;
+        flex-direction: column;
+        /* Stack cards vertically */
+        gap: 15px;
+        max-width: 600px;
+        /* Match the width in the image */
+        margin: 20px auto;
+        /* Center the cards */
+    }
+
+    .k-card {
+        border: none;
+        /* Remove default border */
+        border-radius: 8px;
+        /* Rounded corners */
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        /* Subtle shadow */
+        background-color: #fff;
+    }
+
+    .k-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 15px;
+        border-bottom: none;
+        /* Remove Kendo’s default border */
+    }
+
+    .swal2-confirm {
+        background-color: #4361ee;
+    }
+
+    .k-card-header .title {
+        font-size: 16px;
+        font-weight: bold;
+        color: #000;
+        margin: 0;
+    }
+
+    .k-card-header .company {
+        font-size: 14px;
+        color: #666;
+        margin-top: 5px;
+    }
+
+    .k-card-header .logo {
+        width: 30px;
+        height: 30px;
+        background-color: #ff6200;
+        /* Orange background */
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .k-card-body {
+        padding: 0 15px 15px;
+    }
+
+    .details {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 10px;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .details span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .details .icon {
+        font-size: 16px;
+        color: #666;
+    }
+
+    .description {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 10px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        /* Limit to 2 lines */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .skills {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .skills span:not(:last-child):after {
+        content: " • ";
+        margin: 0 5px;
+    }
+
+    .k-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 15px;
+        border-top: none;
+        /* Remove Kendo’s default border */
+    }
+
+    .posted-date {
+        font-size: 12px;
+        color: #666;
+    }
+
+    .actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .actions button {
+        background: none;
+        border: none;
+        font-size: 14px;
+        color: #666;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .actions .icon {
+        font-size: 16px;
+    }
+
+    /* Change hover background color */
+    .k-list-item.k-selected,
+    .k-selected.k-list-optionlabel {
+        color: #fff;
+        background-color: #0b65c3;
+    }
+
+    .k-list-item.k-selected:hover {
+        color: #fff;
+        background-color: #0b65c3;
+    }
+</style>
+
+
+<div id="card-shelf" style="cursor: pointer;"></div>
+<script>
+    function timeAgo(dateString) {
+        // Parse the date string in DD-MM-YYYY HH:mm:ss format
+        const [datePart, timePart] = dateString.split(' ');
+        const [day, month, year] = datePart.split('-');
+        const [hours, minutes, seconds] = timePart.split(':');
+
+        // Create a Date object (months are 0-based in JavaScript, so subtract 1 from month)
+        const posted = new Date(year, month - 1, day, hours, minutes, seconds);
+
+        const now = new Date(); // Current date and time
+        const diffInMs = now - posted; // Difference in milliseconds
+
+        const diffInMinutes = Math.floor(diffInMs / (1000 * 60)); // Convert to minutes
+        const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60)); // Convert to hours
+        const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24)); // Convert to days
+
+        if (diffInMinutes < 60) {
+            return `${diffInMinutes} minute${diffInMinutes === 1 ? '' : 's'} ago`;
+        } else if (diffInHours < 24) {
+            return `${diffInHours} hour${diffInHours === 1 ? '' : 's'} ago`;
+        } else {
+            return `${diffInDays} day${diffInDays === 1 ? '' : 's'} ago`;
+        }
+    }
+
+    function loadCards() {
+        const shelf = document.getElementById('card-shelf');
+        $.ajax({
+            url: "http://localhost:5086/api/postedjob/getjobs",
+            dataType: "json",
+            success: function (jobs) {
+                if (jobs.length === 0) {
+                    shelf.innerHTML = "<p>No jobs to show!</p>";
+                    return;
+                }
+                const cards = jobs.map(job => {
+                    return `
+                            <div class="k-card" onclick="viewJobDetails(${job.c_job_id})">
+                                <div class="k-card-header">
+                                    <div>
+                                        <h3 class="title">${job.c_job_title || "No Title"}</h3>
+                                        <p class="company">${job.company.c_company_name || "Unknown Company"}</p>
+                                    </div>
+                                    <div class="logo"><img src="${job.company.c_company_logo}" alt="${job.company.c_company_name} Logo" width="30px" height="30px"/></div>
+                                </div>
+                                <div class="k-card-body">
+                                    <div class="details">
+                                        <span><span class="icon">💼 0 -</span>${job.c_job_experience || "N/A"} Yrs </span>
+                                        | <span><span class="icon">₹</span>${job.c_salary_range || "Not disclosed"}</span>
+                                        | <span><i class="fa-solid fa-location-dot"></i></span>${job.c_job_location || "N/A"}</span>
+                                    </div>
+                                    <div class="skills">
+                                        ${(job.c_skills ? job.c_skills.split(',').map(skill => skill.trim()).slice(0, 6) : []).map(skill => `<span>${skill}</span>`).join('')}
+                                    </div>
+                                </div>
+                                <div class="k-card-footer">
+                                    <span class="posted-date">${job.c_post_date ? timeAgo(job.c_post_date) : "N/A"}</span>
+                                    <div class="actions">
+                                        <button class="hide-btn" onclick="editJob(${job.c_job_id})"><i class="fa-solid fa-eye-slash"></i>Hide</button>
+                                        <button class="save-btn" onclick="deleteJob(${job.c_job_id})"><i class="fa-solid fa-bookmark"></i>Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                });
+                shelf.innerHTML = cards.join('');
+            }
+        });
+    }
+
+    function viewJobDetails(jobId) {
+        window.location.href = `/CandidateJob/JobDetails?c_job_id=${jobId}`;
+    }
+
+    $(document).ready(function () {
+        loadCards();
+    });
+</script>

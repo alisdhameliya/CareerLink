@@ -1,0 +1,729 @@
+@{
+    Layout = "../Shared/_RecruiterLayout.cshtml";
+}
+
+<style>
+    :root {
+        --primary-color: #4361ee;
+        --primary-hover: #3a56d4;
+        --error-color: #ef4444;
+        --success-color: #10b981;
+        --border-radius: 8px;
+        --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .registration-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .registration-card {
+        border: none;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        overflow: hidden;
+        background: white;
+        transition: var(--transition);
+    }
+
+    .registration-card:hover {
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .form-header {
+        background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+        color: white;
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .form-body {
+        padding: 2rem;
+    }
+
+    .form-control {
+        height: 50px;
+        border-radius: var(--border-radius);
+        border: 1px solid #e2e8f0;
+        transition: var(--transition);
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+    }
+
+    .is-invalid {
+        border-color: var(--error-color) !important;
+    }
+
+    .is-valid {
+        border-color: var(--success-color) !important;
+    }
+
+    .invalid-feedback {
+        color: var(--error-color);
+        font-size: 0.85rem;
+    }
+
+    .valid-feedback {
+        color: var(--success-color);
+        font-size: 0.85rem;
+    }
+
+    .swal2-confirm {
+        background-color: #4361ee;
+    }
+
+    .file-upload-container {
+        border: 2px dashed #e2e8f0;
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        text-align: center;
+        transition: var(--transition);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .file-upload-container:hover {
+        border-color: var(--primary-color);
+        background-color: rgba(67, 97, 238, 0.05);
+    }
+
+    .file-upload-container.dragover {
+        border-color: var(--primary-color);
+        background-color: rgba(67, 97, 238, 0.1);
+    }
+
+    .file-upload-input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .preview-container {
+        margin-top: 1rem;
+    }
+
+    .logo-preview {
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+        border-radius: 50%;
+        border: 1px solid #e2e8f0;
+        padding: 5px;
+    }
+
+    .file-preview-item {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem;
+        background: #f8fafc;
+        border-radius: var(--border-radius);
+        margin-bottom: 0.5rem;
+    }
+
+    .file-preview-icon {
+        margin-right: 0.75rem;
+        color: #64748b;
+    }
+
+    .submit-btn {
+        background: var(--primary-color);
+        border: none;
+        height: 50px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: var(--transition);
+    }
+
+    .submit-btn:hover {
+        background: var(--primary-hover);
+        transform: translateY(-2px);
+    }
+
+    .submit-btn:disabled {
+        background: #94a3b8;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .registration-container {
+            padding: 1rem;
+        }
+
+        .form-body {
+            padding: 1.5rem;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .form-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .form-control {
+            height: 45px;
+        }
+
+        .submit-btn {
+            height: 45px;
+        }
+    }
+
+    /* Animations */
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.5s ease-out forwards;
+    }
+</style>
+
+<div class="registration-container animate-fade-in">
+    <div class="registration-card">
+        <div class="form-header">
+            <h2 class="mb-0">Company Registration</h2>
+            <p class="mb-0 opacity-75">Register your company to start posting jobs</p>
+        </div>
+
+        <div class="form-body">
+            <form enctype="multipart/form-data" id="companyForm" class="needs-validation" novalidate>
+                <div class="row g-3">
+                    <!-- Company Name -->
+                    <div class="col-md-6">
+                        <label for="companyName" class="form-label">Company Name *</label>
+                        <input type="text" class="form-control" id="companyName" name="c_company_name" required
+                            placeholder="Enter company name" minlength="3" maxlength="100">
+                        <div class="invalid-feedback">Please provide a valid company name (3-100 characters).</div>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+
+                    <!-- Company Email -->
+                    <div class="col-md-6">
+                        <label for="companyEmail" class="form-label">Company Email *</label>
+                        <input type="email" class="form-control" id="companyEmail" name="c_company_email" required
+                            placeholder="company@example.com" pattern="[a-z0-9._%+-]+@@[a-z0-9.-]+\.[a-z]{2,4}$">
+                        <div class="invalid-feedback">Please provide a valid email address.</div>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+
+                    <!-- Company Phone -->
+                    <div class="col-md-6">
+                        <label for="companyPhone" class="form-label">Company Phone *</label>
+                        <input type="tel" class="form-control" id="companyPhone" name="c_company_phone" required
+                            placeholder="Enter 10-digit phone number" pattern="^\d{10}$" maxlength="10">
+                        <div class="invalid-feedback">Please provide a valid 10-digit phone number.</div>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+
+                    <!-- Company Address -->
+                    <div class="col-12">
+                        <label for="companyAddress" class="form-label">Company Address *</label>
+                        <input type="text" class="form-control" id="companyAddress" name="c_company_address" required
+                            placeholder="Enter full address" minlength="10" maxlength="200">
+                        <div class="invalid-feedback">Please provide a valid address (10-200 characters).</div>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+
+                    <!-- Registration Number -->
+                    <div class="col-md-6">
+                        <label for="companyRegNumber" class="form-label">Registration Number *</label>
+                        <input type="text" class="form-control" id="companyRegNumber" name="c_company_reg_number"
+                            required placeholder="Eg: L12345MH2010PLC123456" minlength="5" maxlength="50">
+                        <div class="invalid-feedback">Please provide a valid registration number.</div>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+
+                    <!-- Tax ID Number -->
+                    <div class="col-md-6">
+                        <label for="taxIdNumber" class="form-label">PAN Number *</label>
+                        <input type="text" class="form-control" id="taxIdNumber" name="c_tax_id_number" required
+                            placeholder="Eg: EABCDE1234F" minlength="5" maxlength="50">
+                        <div class="invalid-feedback">Please provide a valid PAN ID number.</div>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+
+                    <!-- Industry -->
+                    <div class="col-md-6">
+                        <label for="industry" class="form-label">Industry *</label>
+                        <select class="form-select" id="industry" name="c_industry" required>
+                            <option value="" selected disabled>Select industry</option>
+                            <!-- Options will be populated via JavaScript -->
+                        </select>
+                        <div class="invalid-feedback">Please select an industry.</div>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+
+                    <!-- Website -->
+                    <div class="col-md-6">
+                        <label for="website" class="form-label">Website</label>
+                        <div class="input-group">
+                            <span class="input-group-text">https://</span>
+                            <input type="text" class="form-control" id="website" name="c_website"
+                                placeholder="yourcompany.com" pattern="^([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$">
+                        </div>
+                        <div class="invalid-feedback">Please provide a valid domain (e.g., yourcompany.com).</div>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+
+                    <!-- Logo Upload -->
+                    <div class="col-md-6">
+                        <label class="form-label">Company Logo</label>
+                        <div class="file-upload-container" id="logoUploadContainer">
+                            <input type="file" id="companyLogo" name="companyLogo" class="file-upload-input"
+                                accept="image/*">
+                            <div class="d-flex flex-column align-items-center">
+                                <i class="fas fa-cloud-upload-alt fa-3x mb-2 text-primary"></i>
+                                <p class="mb-1">Drag & drop your logo here or click to browse</p>
+                                <small class="text-muted">Recommended size: 300x300px (Max 2MB)</small>
+                            </div>
+                        </div>
+                        <div class="preview-container text-center" id="logoPreview"></div>
+                    </div>
+
+                    <!-- Legal Documents -->
+                    <div class="col-md-6">
+                        <label class="form-label">Legal Documents (PDF, DOC, JPG, PNG)</label>
+                        <div class="file-upload-container" id="documentsUploadContainer">
+                            <input type="file" id="legalDocuments" name="legalDocuments" class="file-upload-input"
+                                multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                            <div class="d-flex flex-column align-items-center">
+                                <i class="fas fa-file-upload fa-3x mb-2 text-primary"></i>
+                                <p class="mb-1">Drag & drop documents here or click to browse</p>
+                                <small class="text-muted">Max 5 files (10MB each)</small>
+                            </div>
+                        </div>
+                        <div class="preview-container" id="filePreview"></div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="col-12 mt-4">
+                        <button type="submit" id="registerBtn" class="btn btn-primary submit-btn w-100 py-3">
+                            <span class="spinner-border spinner-border-sm d-none" id="submitSpinner"
+                                role="status"></span>
+                            <span id="submitText">Register Company</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function getUserIdFromToken() {
+        let token = localStorage.getItem("token");
+        if (!token) return null;
+
+        try {
+            let payload = JSON.parse(atob(token.split('.')[1]));
+            return payload.uid;
+        } catch (e) {
+            console.error("Error decoding token:", e);
+            return null;
+        }
+    }
+
+    $(document).ready(function () {
+        const userId = getUserIdFromToken();
+        if (!userId) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Session Expired',
+                text: 'You need to log in again',
+                confirmButtonColor: '#4361ee',
+            }).then(() => {
+                window.location.href = '/Auth/Login';
+            });
+            return;
+        }
+
+        $.ajax({
+            url: `http://localhost:5086/api/CompanyApi/getCompanyId/${userId}`,
+            type: "GET",
+            // beforeSend: function () {
+            //     $("#loadingOverlay").show();
+            // },
+            success: function (response) {
+                console.log("company id " + response);
+                const companyId = response;
+
+                if (companyId != 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Company Already Registered',
+                        text: 'Your company is already registered on the platform.',
+                        confirmButtonColor: '#2563eb'
+                    }).then(() => {
+                        window.location = '../RecruiterDashboard/Index';
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching company ID:", error);
+            }
+        });
+
+
+        // Fetch industries for dropdown
+        $.ajax({
+            url: "http://localhost:5086/api/IndustryApi/industries",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                const industryDropdown = $("#industry");
+                industryDropdown.empty().append('<option value="" selected disabled>Select industry</option>');
+
+                $.each(data, function (index, item) {
+                    industryDropdown.append(`<option value="${item.id}">${item.industry_name}</option>`);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching industries:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to load industries. Please refresh the page.',
+                    confirmButtonColor: '#4361ee',
+                });
+            }
+        });
+
+        // Improved file selection handling
+        function setupFileUpload(containerId, inputId, previewId) {
+            const container = $(`#${containerId}`);
+            const input = $(`#${inputId}`);
+            const preview = $(`#${previewId}`);
+
+            // Click handler
+            container.on('click', function (e) {
+                // Prevent triggering the input click twice
+                if ($(e.target).is('input')) return;
+                input.trigger('click');
+            });
+
+            // Drag and drop
+            container.on('dragover', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                container.addClass('dragover');
+            });
+
+            container.on('dragleave', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                container.removeClass('dragover');
+            });
+
+            container.on('drop', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                container.removeClass('dragover');
+
+                if (e.originalEvent.dataTransfer.files.length) {
+                    input[0].files = e.originalEvent.dataTransfer.files;
+                    handleFileSelection(inputId, input[0].files);
+                }
+            });
+
+            // Change handler
+            input.on('change', function () {
+                if (this.files && this.files.length > 0) {
+                    handleFileSelection(inputId, this.files);
+                }
+            });
+        }
+
+        // Initialize file uploads
+        setupFileUpload('logoUploadContainer', 'companyLogo', 'logoPreview');
+        setupFileUpload('documentsUploadContainer', 'legalDocuments', 'filePreview');
+
+        // File preview and validation
+        function handleFileSelection(inputId, files) {
+            if (!files || files.length === 0) return;
+
+            if (inputId === 'companyLogo') {
+                // Validate logo
+                const file = files[0];
+                const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                const maxSize = 2 * 1024 * 1024; // 2MB
+
+                if (!validTypes.includes(file.type)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid File Type',
+                        text: 'Please upload an image file (JPEG, PNG, GIF)',
+                        confirmButtonColor: '#4361ee',
+                    });
+                    return;
+                }
+
+                if (file.size > maxSize) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'File Too Large',
+                        text: 'Image size should be less than 2MB',
+                        confirmButtonColor: '#4361ee',
+                    });
+                    return;
+                }
+
+                // Display preview
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    $("#logoPreview").html(`
+                        <img src="${e.target.result}" class="logo-preview mb-2" alt="Logo Preview">
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearLogo()">
+                            <i class="fas fa-times me-1"></i> Remove
+                        </button>
+                    `);
+                };
+                reader.readAsDataURL(file);
+            }
+            else if (inputId === 'legalDocuments') {
+                // Validate documents
+                const validTypes = ['application/pdf'];
+                const maxSize = 10 * 1024 * 1024; // 10MB
+                const maxFiles = 5;
+
+                if (files.length > maxFiles) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Too Many Files',
+                        text: `Maximum ${maxFiles} files allowed`,
+                        confirmButtonColor: '#4361ee',
+                    });
+                    return;
+                }
+
+                let invalidFiles = [];
+                let oversizedFiles = [];
+
+                Array.from(files).forEach(file => {
+                    if (!validTypes.includes(file.type)) {
+                        invalidFiles.push(file.name);
+                    }
+                    if (file.size > maxSize) {
+                        oversizedFiles.push(file.name);
+                    }
+                });
+
+                if (invalidFiles.length > 0) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid File Types',
+                        text: `Please upload an pdf file`,
+                        confirmButtonColor: '#4361ee',
+                    });
+                    return;
+                }
+
+                if (oversizedFiles.length > 0) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Files Too Large',
+                        text: `The following files exceed 10MB limit: ${oversizedFiles.join(', ')}`,
+                        confirmButtonColor: '#4361ee',
+                    });
+                    return;
+                }
+
+                // Display preview
+                let previewHtml = '<div class="d-flex flex-column">';
+                Array.from(files).forEach((file, index) => {
+                    const iconClass = file.type.includes('pdf') ? 'fa-file-pdf' :
+                        file.type.includes('word') ? 'fa-file-word' :
+                            file.type.includes('image') ? 'fa-file-image' : 'fa-file';
+
+                    previewHtml += `
+                        <div class="file-preview-item">
+                            <i class="fas ${iconClass} file-preview-icon"></i>
+                            <div class="flex-grow-1 text-truncate">${file.name}</div>
+                            <small class="text-muted ms-2">${formatFileSize(file.size)}</small>
+                        </div>
+                    `;
+                });
+                previewHtml += `
+                    <button type="button" class="btn btn-sm btn-outline-danger mt-2" onclick="clearDocuments()">
+                        <i class="fas fa-times me-1"></i> Remove All
+                    </button>
+                </div>`;
+
+                $("#filePreview").html(previewHtml);
+            }
+        }
+
+        // Form validation
+        function validateForm() {
+            const form = document.getElementById('companyForm');
+
+            // Validate all fields
+            Array.from(form.elements).forEach(element => {
+                // Skip website field
+                if (element.id === 'website') return;
+                if (element.required && !element.value.trim()) {
+                    element.classList.add('is-invalid');
+                } else if (element.type === 'email' && element.value && !element.checkValidity()) {
+                    element.classList.add('is-invalid');
+                } else if (element.pattern && element.value && !new RegExp(element.pattern).test(element.value)) {
+                    element.classList.add('is-invalid');
+                } else if (element.required) {
+                    element.classList.add('is-valid');
+                    element.classList.remove('is-invalid');
+                }
+            });
+
+            return form.checkValidity();
+        }
+
+        // Real-time validation
+        $('#companyForm input, #companyForm select').on('input change', function () {
+            const element = $(this)[0];
+
+            if (element.required && !element.value.trim()) {
+                element.classList.remove('is-valid', 'is-invalid');
+            } else if (element.checkValidity()) {
+                element.classList.add('is-valid');
+                element.classList.remove('is-invalid');
+            } else {
+                element.classList.add('is-invalid');
+                element.classList.remove('is-valid');
+            }
+        });
+
+        // Website URL formatting
+        $('#website').on('blur', function () {
+            let url = $(this).val().trim();
+            if (url && !/^https?:\/\//i.test(url)) {
+                $(this).val(url.toLowerCase());
+            }
+        });
+
+        // Form submission
+        $("#companyForm").submit(function (event) {
+            event.preventDefault();
+
+            if (!validateForm()) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Form Validation Error',
+                    text: 'Please fill all required fields correctly',
+                    confirmButtonColor: '#4361ee',
+                });
+                return;
+            }
+
+            // Additional validation for phone number
+            const phone = $("#companyPhone").val();
+            if (!/^\d{10}$/.test(phone)) {
+                $("#companyPhone").addClass('is-invalid');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Phone Number',
+                    text: 'Please enter a valid 10-digit phone number',
+                    confirmButtonColor: '#4361ee',
+                });
+                return;
+            }
+
+
+
+
+            // Prepare form data
+            const formData = new FormData(this);
+            formData.append("c_owner_id", userId);
+
+            // Show loading state
+            $("#submitSpinner").removeClass('d-none');
+            $("#submitText").text('Registering...');
+            $("#registerBtn").prop('disabled', true);
+
+            // Submit form
+            $.ajax({
+                url: "http://localhost:5086/api/CompanyApi/Register",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Registration Successful!',
+                            text: response.message,
+                            confirmButtonColor: '#4361ee',
+                            willClose: () => {
+                                window.location.href = '/RecruiterDashboard';
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Registration Failed',
+                            text: response.message || 'Registration failed',
+                            confirmButtonColor: '#4361ee',
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    let errorMsg = 'An error occurred during registration';
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        errorMsg = response.message || errorMsg;
+                    } catch (e) {
+                        console.error(e);
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Registration Error',
+                        text: errorMsg,
+                        confirmButtonColor: '#4361ee',
+                    });
+                },
+                complete: function () {
+                    $("#submitSpinner").addClass('d-none');
+                    $("#submitText").text('Register Company');
+                    $("#registerBtn").prop('disabled', false);
+                }
+            });
+        });
+    });
+
+    // Helper functions
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    function clearLogo() {
+        $("#companyLogo").val('');
+        $("#logoPreview").empty();
+    }
+
+    function clearDocuments() {
+        $("#legalDocuments").val('');
+        $("#filePreview").empty();
+    }
+</script>

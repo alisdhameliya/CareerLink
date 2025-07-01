@@ -1,0 +1,132 @@
+@{
+    Layout = "_CustomAdminLayout";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Job Portal</title>
+
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f6f9;
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        /* Dashboard Stats */
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 20px;
+        }
+
+        .card .icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .card.bg-blue {
+            background: #FFA500;
+            color: white;
+        }
+
+        .card.bg-lightblue {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .card.bg-orange {
+            background: #fd7e14;
+            color: white;
+        }
+
+        .card.bg-green {
+            background: #28a745;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h2 class="mb-4">Admin Dashboard</h2>
+
+        <!-- Dashboard Stats -->
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card bg-blue text-white">
+                    <i class="icon fas fa-users"></i>
+                    <h5>Total Users</h5>
+                    <h3 id="totalUsers">Loading...</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-lightblue text-white">
+                    <i class="icon fas fa-briefcase"></i>
+                    <h5>Total Jobs</h5>
+                    <h3 id="totalJobs">Loading...</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-orange text-white">
+                    <i class="icon fas fa-user-tie"></i>
+                    <h5>Total Recruiters</h5>
+                    <h3 id="totalRecruiters">Loading...</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-green text-white">
+                    <i class="icon fas fa-check-circle"></i>
+                    <h5>Jobs Filled</h5>
+                    <h3 id="jobsFilled">Loading...</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Function to fetch API data
+        function fetchDashboardStats() {
+            fetch("http://localhost:5177/api/AdminApi/get-user-count")  // Replace with your actual API URL
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("totalUsers").innerText = data.totalUsers;
+                })
+                .catch(error => {
+                    console.error("Error fetching dashboard stats:", error);
+                    document.getElementById("totalUsers").innerText = "Error!";
+                });
+                 fetch("http://localhost:5177/api/AdminApi/get-recruiter-count")  // Replace with your actual API URL
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("totalRecruiters").innerText = data.totalUsers;
+                })
+                .catch(error => {
+                    console.error("Error fetching dashboard stats:", error);
+                    document.getElementById("totalRecruiters").innerText = "Error!";
+                });
+        }
+
+        // Fetch data when the page loads
+        document.addEventListener("DOMContentLoaded", fetchDashboardStats);
+    </script>
+
+</body>
+</html>

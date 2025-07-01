@@ -1,0 +1,1002 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerLink - Find Your Dream Job</title>
+    <!-- Font and icon imports -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="~/css/Default/landingPage.css">
+</head>
+
+<body>
+    <!-- Animated Background Section -->
+    <div class="animated-bg"></div>
+
+    <!-- Floating Particles Container -->
+    <div id="particles-js"></div>
+
+    <!-- Navigation -->
+    <nav class="glass-nav">
+        <div class="logo">
+            <img src="~/css/Default/images/CL.png" alt="CareerLink" class="logo-img">
+        </div>
+        <div class="auth-buttons">
+            <a class="btn-white lo" asp-action="Login" asp-controller="Auth"><button class="btn-primary login">Log
+                    in</button></a>
+            <a class="text-white si" asp-action="Register" asp-controller="Auth"><button class="btn-primary signup">Sign
+                    up</button></a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="text-gradient">Land</span> Your
+                <span class="typing-animation"></span> Job
+            </h1>
+            <p class="hero-subtitle">AI-powered resume ATS tracking</p>
+
+            <div class="search-container">
+                <div class="search-bar">
+                    <input type="text" placeholder="Job title, keywords, company or location">
+                    <button class="btn-primary find-jobs">Find Jobs</button>
+                </div>
+                <div class="popular-searches">
+                    <span>Popular: </span>
+                    <a href="#">Developer</a>
+                    <a href="#">Designer</a>
+                    <a href="#">Marketing</a>
+                    <a href="#">Remote</a>
+                </div>
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number" data-count="25000">0</div>
+                    <div class="stat-label">Jobs Posted</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="9800">0</div>
+                    <div class="stat-label">Hired Candidates</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="1200">0</div>
+                    <div class="stat-label">Companies</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-image">
+            <img src="~/css/Default/images/jobboard.png" alt="Career Success" class="floating-animation">
+        </div>
+    </section>
+
+    <!-- Trusted By Section -->
+    <section class="trusted-by">
+        <p>Trusted by innovative companies worldwide</p>
+        <div class="company-logos">
+            <img src="~/css/Default/images/google.png" alt="Google">
+            <img src="~/css/Default/images/microsoft.webp" alt="Microsoft">
+            <img src="~/css/Default/images/apple.webp" alt="Apple">
+            <img src="~/css/Default/images/amazon.jpg" alt="Amazon">
+            <img src="~/css/Default/images/spotify.png" alt="Spotify">
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="section-header">
+            <h2>Why Choose CareerLink</h2>
+            <p>Our platform is designed to give you the competitive edge in today's job market</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Salary Insights</h3>
+                <p>See how your salary compares and negotiate with confidence using real-time market data.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3>Direct Messaging</h3>
+                <p>Connect directly with recruiters and hiring managers without middlemen.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3>Skill Development</h3>
+                <p>Access free courses to upgrade your skills and become more competitive.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3>Mobile Friendly</h3>
+                <p>Full functionality on any device, so you can job hunt on the go.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="section-header">
+            <h2>How It Works</h2>
+            <p>Get started in just a few simple steps</p>
+        </div>
+
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Create Your Profile</h3>
+                    <p>Build your professional profile in minutes with our easy-to-use tools.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Boost Your Chances with AI</h3>
+                    <p>Our AI analyzes your resume and calculates your ATS score.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Apply With One Click</h3>
+                    <p>Submit applications quickly with your pre-filled CareerLink profile.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Track & Manage</h3>
+                    <p>Monitor all your applications in one place and get real-time updates.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-container">
+            <a asp-action="Register" asp-controller="Auth"><button class="btn-primary btn-large">Get Started
+                    Now</button></a>
+        </div>
+    </section>
+
+    <!-- Job Listings Preview -->
+    <section class="job-preview">
+        <div class="section-header">
+            <h2>Recent Job Openings</h2>
+            <p>Browse thousands of opportunities from top employers</p>
+        </div>
+
+        <div class="job-cards">
+            <!-- Job Card 1 -->
+            <div class="job-card">
+                @* <div class="job-badge">Featured</div> *@
+                <div class="job-header">
+                    <img src="~/css/Default/images/google.png" alt="Company Logo">
+                    <div class="job-title">
+                        <h3>Senior UX Designer</h3>
+                        <p>Google • Mountain View, CA</p>
+                    </div>
+                </div>
+                <div class="job-details">
+                    <span class="job-salary">6 LPA - 9 LPA</span>
+                    <span class="job-type">Full-time</span>
+                    <span class="job-remote">Remote Possible</span>
+                </div>
+                <div class="job-skills">
+                    <span>UI/UX</span>
+                    <span>Figma</span>
+                    <span>Prototyping</span>
+                </div>
+                <div class="job-footer">
+                    <span class="job-posted">Posted 2 days ago</span>
+                    <button class="btn-apply">Quick Apply</button>
+                </div>
+            </div>
+
+            <!-- Job Card 2 -->
+            <div class="job-card">
+                <div class="job-header">
+                    <img src="~/css/Default/images/airbnb.png" alt="Company Logo">
+                    <div class="job-title">
+                        <h3>Full Stack Developer</h3>
+                        <p>Airbnb • Remote</p>
+                    </div>
+                </div>
+                <div class="job-details">
+                    <span class="job-salary">3 LPA - 5 LPA</span>
+                    <span class="job-type">Full-time</span>
+                    <span class="job-remote">Remote</span>
+                </div>
+                <div class="job-skills">
+                    <span>React</span>
+                    <span>Node.js</span>
+                    <span>AWS</span>
+                </div>
+                <div class="job-footer">
+                    <span class="job-posted">Posted 1 week ago</span>
+                    <button class="btn-apply">Quick Apply</button>
+                </div>
+            </div>
+
+            <!-- Job Card 3 -->
+            <div class="job-card">
+                @* <div class="job-badge">Urgent</div> *@
+                <div class="job-header">
+                    <img src="~/css/Default/images/spotify.png" alt="Company Logo">
+                    <div class="job-title">
+                        <h3>Product Manager</h3>
+                        <p>Spotify • New York, NY</p>
+                    </div>
+                </div>
+                <div class="job-details">
+                    <span class="job-salary">12 LPA - 15 LPA</span>
+                    <span class="job-type">Full-time</span>
+                    <span class="job-remote">Hybrid</span>
+                </div>
+                <div class="job-skills">
+                    <span>Agile</span>
+                    <span>Scrum</span>
+                    <span>Product Strategy</span>
+                </div>
+                <div class="job-footer">
+                    <span class="job-posted">Posted 3 days ago</span>
+                    <button class="btn-apply">Quick Apply</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="view-all-jobs">
+            <a href="#" class="btn-secondary" style="text-decoration: none; border: none;">View All Jobs <i
+                    class="fas fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials">
+        <div class="section-header">
+            <h2>Success Stories</h2>
+            <p>Hear from people who found their dream jobs through CareerLink</p>
+        </div>
+
+        <div class="testimonial-slider">
+            <!-- Testimonial 1 -->
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <p>CareerLink's smart matching connected me with a startup that perfectly aligned with my skills and
+                        values. I doubled my salary and finally feel excited about my work!</p>
+                </div>
+                <div class="testimonial-author">
+                    @* will be changed in sprint 2 *@
+                    <img src="https://media.licdn.com/dms/image/v2/D5603AQHrDKS1mzQJbQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1714736542444?e=1749686400&v=beta&t=F5mIxzSVDamUwczKOpbnwL9DdcXaz32Z8Njm9C-qqDY" alt="Sarah J.">
+                    <div class="author-info">
+                        <h4>Shweta Patel</h4>
+                        <p>Senior Product Designer at Figma</p>
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonial 2 -->
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    @* <div class="quote-icon">
+                        <i class="fas fa-quote-left"></i>
+                    </div> *@
+                    <p>After months of unsuccessful applications, CareerLink helped me land interviews with 5 top tech
+                        companies within 2 weeks. I accepted an offer with a 40% salary increase!</p>
+                </div>
+                <div class="testimonial-author">
+                    @* will be changed in sprint 2 *@
+                    <img src="https://media.licdn.com/dms/image/v2/C4D03AQETBcFG0uN-ag/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1654755535957?e=1749686400&v=beta&t=D7nGYbiaBHZKxHgsGYS2Jc-yzA7wi51_7sgXIBChszU" alt="Michael T.">
+                    <div class="author-info">
+                        <h4>Kailas Patil</h4>
+                        <p>Software Engineer at Google</p>
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number" data-count="92">0</div>
+                <div class="stat-label">Registered Candidates</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-count="10000">0</div>
+                <div class="stat-label">Interviews Held So Far</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-count="78">0</div>
+                <div class="stat-label active-job">Active Job Posts</div>
+            </div>
+        </div>
+    </section>
+
+@* employer-cta *@
+    <!-- Employer CTA Section -->
+    <section class="employer-cta">
+        <div class="cta-content">
+            <h2>Are You Hiring?</h2>
+            <p>Join thousands of companies finding top talent through CareerLink</p>
+            <ul class="benefits-list">
+                <li><i class="fas fa-check"></i> Access to premium talent pool</li>
+                <li><i class="fas fa-check"></i> Calculate ATS score of your resume</li>
+                <li><i class="fas fa-check"></i> Reduced time-to-hire by 60%</li>
+                <li><i class="fas fa-check"></i> Employer branding tools</li>
+            </ul>
+            <button asp-action="Login" asp-controller="Auth" class="btn-primary btn-large">Post a Job</button>
+            <button class="btn-secondary btn-large">Learn More</button>
+        </div>
+        <div class="cta-image">
+            <img src="~/css/Default/images/hiringimg.jpg" alt="Hiring Solutions">
+        </div>
+    </section>
+
+    <!-- Mobile App Section -->
+    <section class="mobile-app">
+        <div class="app-image">
+            <img src="~/css/Default/images/jobsearch.jpg" alt="img">
+        </div>
+        <div class="app-content">
+            <h2>Job Search On The Go</h2>
+            <p>Stay updated with the latest opportunities and manage your job search anytime, anywhere.</p>
+            <div class="app-features">
+                <div class="app-feature">
+                    <i class="fas fa-bell"></i>
+                    <span>Instant job alerts</span>
+                </div>
+                <div class="app-feature">
+                    <i class="fas fa-comment-alt"></i>
+                    <span>In-app messaging</span>
+                </div>
+                <div class="app-feature">
+                    <i class="fas fa-video"></i>
+                    <span>Virtual Interviews</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq">
+        <div class="section-header">
+            <h2>Frequently Asked Questions</h2>
+            <p>Everything you need to know about CareerLink</p>
+        </div>
+
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How does CareerLink differ from other job sites?</h3>
+                    @* <i class="fas fa-chevron-down"></i> *@
+                </div>
+                <div class="faq-answer">
+                    <p>CareerLink uses advanced AI to match you with jobs that truly fit your skills and career goals,
+                        not just keyword matches. Our platform also provides salary insights, skill assessments, and
+                        direct communication with employers.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Is CareerLink free for job seekers?</h3>
+                    @* <i class="fas fa-chevron-down"></i> *@
+                </div>
+                <div class="faq-answer">
+                    <p>Yes! All job search features are completely free for candidates. We offer premium subscriptions
+                        with additional features like enhanced visibility to recruiters and advanced analytics, but you
+                        can find and apply to jobs without paying anything.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How do I make my profile stand out?</h3>
+                    @* <i class="fas fa-chevron-down"></i> *@
+                </div>
+                <div class="faq-answer">
+                    <p>Complete all profile sections, especially skills and work experience. Use specific achievements
+                        with metrics when possible (e.g., "Increased conversion by 30%"). Adding a professional photo
+                        and taking our skill assessments can also boost your profile visibility.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Can I apply to jobs directly through CareerLink?</h3>
+                    @* <i class="fas fa-chevron-down"></i> *@
+                </div>
+                <div class="faq-answer">
+                    <p>Absolutely! Many jobs on our platform support one-click applications using your CareerLink
+                        profile. For others, we'll redirect you to the company's application page with your information
+                        pre-filled where possible.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How does the AI matching work?</h3>
+                    @* <i class="fas fa-chevron-down"></i> *@
+                </div>
+                <div class="faq-answer">
+                    <p>Our algorithm analyzes your profile, skills, experience, and preferences, then compares them with
+                        job requirements, company culture, and other factors to surface the most relevant opportunities.
+                        The more complete your profile, the better our matches become.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Newsletter Section -->
+    <section class="newsletter" style="background-color: transparent;">
+        <div class="newsletter-container">
+            <div class="newsletter-content">
+                <h2 style="color: black;">Get Job Alerts Straight to Your Inbox</h2>
+                <p style="color: black;">Sign up for our newsletter and receive curated job listings based on your
+                    preferences.</p>
+                <div class="newsletter-form">
+                    <button class="btn-primary subscribe"><a style="text-decoration: none;color: white;"
+                            asp-action="Register" asp-controller="Auth">Subscribe</a></button>
+                </div>
+                @* sprint2 work...*@
+                <small style="color: black;">We respect your privacy. Unsubscribe at any time.</small>
+            </div>
+            <div class="newsletter-image">
+                <img src="~/css/Default/images/subscribeimg.jpg" alt="Stay Updated">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-about">
+                <div class="footer-logo">
+                    <img src="~/css/Default/images/CL2.png" alt="CareerLink" class="logo-img" style="display: none;">
+                </div>
+                <p>Connecting talent with opportunity through intelligent matching technology.</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.twitter.com"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.linkedin.com"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://www.instagram.com"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.youtube.com"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <div class="link-column">
+                    <h4 style="color:rgba(255, 255, 255, 0.7);">About Us</h4>
+                    <ul>
+                        <li><a href="#">Our Mission</a></li>
+                        <li><a href="#">Team</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+
+                <div class="link-column">
+                    <h4 style="color:rgba(255, 255, 255, 0.7);">Contact</h4>
+                    <ul>
+                        <li><a href="mailto:info@careerlink.com">Email Us</a></li>
+                        <li><a href="tel:+1234567890">Call Us</a></li>
+                        <li><a href="#">Support Center</a></li>
+                        <li><a href="#">Visit Us</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" title="Go to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    @* <script src="app.js"></script> *@
+    <script>
+        // Main app.js file
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize all functionality
+            initParticles();
+            initMobileMenu();
+            initTypingAnimation();
+            initCounters();
+            initFAQAccordion();
+            initBackToTop();
+            initSmoothScrolling();
+            initTestimonialSlider();
+        });
+
+        // Particles.js Background
+        function initParticles() {
+            if (typeof particlesJS !== 'undefined') {
+                particlesJS('particles-js', {
+                    particles: {
+                        number: { value: 80, density: { enable: true, value_area: 800 } },
+                        color: { value: "#4361ee" },
+                        shape: { type: "circle" },
+                        opacity: { value: 0.5, random: true },
+                        size: { value: 3, random: true },
+                        line_linked: { enable: true, distance: 150, color: "#4361ee", opacity: 0.4, width: 1 },
+                        move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
+                    },
+                    interactivity: {
+                        detect_on: "canvas",
+                        events: {
+                            onhover: { enable: true, mode: "repulse" },
+                            onclick: { enable: true, mode: "push" }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Mobile Menu Toggle
+        function initMobileMenu() {
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            const navLinks = document.querySelector('.nav-links');
+            const authButtons = document.querySelector('.auth-buttons');
+
+            if (menuBtn) {
+                menuBtn.addEventListener('click', function () {
+                    navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+                    authButtons.style.display = authButtons.style.display === 'flex' ? 'none' : 'flex';
+                });
+            }
+
+            // Close mobile menu when clicking on a link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', function () {
+                    if (window.innerWidth <= 768) {
+                        navLinks.style.display = 'none';
+                        authButtons.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Typing Animation in Hero Section
+        function initTypingAnimation() {
+            const typingElement = document.querySelector('.typing-animation');
+            if (!typingElement) return;
+
+            const words = ["Dream", "Perfect", "Ideal", "Next"];
+            let wordIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+            let isEnd = false;
+
+            function type() {
+                const currentWord = words[wordIndex];
+                const currentChar = currentWord.substring(0, charIndex);
+
+                typingElement.textContent = currentChar;
+
+                if (!isDeleting && charIndex < currentWord.length) {
+                    // Typing
+                    charIndex++;
+                    setTimeout(type, 200);
+                } else if (isDeleting && charIndex > 0) {
+                    // Deleting
+                    charIndex--;
+                    setTimeout(type, 100);
+                } else {
+                    // Change word
+                    isDeleting = !isDeleting;
+                    if (!isDeleting) {
+                        wordIndex = (wordIndex + 1) % words.length;
+                    }
+                    setTimeout(type, 500);
+                }
+            }
+
+            setTimeout(type, 1000);
+        }
+
+        // Animated Counter for Stats
+        function initCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            const speed = 200;
+
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-count');
+                const count = +counter.innerText;
+                const increment = target / speed;
+
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + increment);
+                    setTimeout(initCounters, 1);
+                } else {
+                    counter.innerText = target.toLocaleString();
+                }
+            });
+        }
+
+        // FAQ Accordion
+        function initFAQAccordion() {
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+
+                question.addEventListener('click', () => {
+                    const isActive = item.classList.contains('active');
+
+                    // Close all other items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('active');
+                            otherItem.querySelector('.faq-answer').style.maxHeight = null;
+                        }
+                    });
+
+                    // Toggle current item
+                    if (!isActive) {
+                        item.classList.add('active');
+                        const answer = item.querySelector('.faq-answer');
+                        answer.style.maxHeight = answer.scrollHeight + 'px';
+                    } else {
+                        item.classList.remove('active');
+                        item.querySelector('.faq-answer').style.maxHeight = null;
+                    }
+                });
+            });
+        }
+
+        // Back to Top Button
+        function initBackToTop() {
+            const backToTopBtn = document.getElementById('back-to-top');
+
+            if (backToTopBtn) {
+                window.addEventListener('scroll', function () {
+                    if (window.pageYOffset > 300) {
+                        backToTopBtn.classList.add('visible');
+                    } else {
+                        backToTopBtn.classList.remove('visible');
+                    }
+                });
+
+                backToTopBtn.addEventListener('click', function () {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+        }
+
+        // Smooth Scrolling for Anchor Links
+        // Update your existing initSmoothScrolling function to this:
+        function initSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        // Calculate the position to scroll to, accounting for the fixed header
+                        const headerHeight = document.querySelector('.glass-nav').offsetHeight;
+                        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+
+                        // Update URL without jumping
+                        if (history.pushState) {
+                            history.pushState(null, null, targetId);
+                        } else {
+                            location.hash = targetId;
+                        }
+                    }
+                });
+            });
+        }
+
+        // Testimonial Slider
+        function initTestimonialSlider() {
+            const slider = document.querySelector('.testimonial-slider');
+            if (!slider) return;
+
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            slider.addEventListener('mousedown', (e) => {
+                isDown = true;
+                startX = e.pageX - slider.offsetLeft;
+                scrollLeft = slider.scrollLeft;
+            });
+
+            slider.addEventListener('mouseleave', () => {
+                isDown = false;
+            });
+
+            slider.addEventListener('mouseup', () => {
+                isDown = false;
+            });
+
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - slider.offsetLeft;
+                const walk = (x - startX) * 2;
+                slider.scrollLeft = scrollLeft - walk;
+            });
+        }
+
+        // AJAX Job Search Functionality
+        function initJobSearch() {
+            const searchForm = document.querySelector('.search-bar');
+            if (searchForm) {
+                searchForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    const jobTitle = this.querySelector('input[type="text"]').value;
+                    const location = this.querySelector('input[placeholder="Location"]').value;
+
+                    // Show loading state
+                    const searchBtn = this.querySelector('button');
+                    const originalText = searchBtn.textContent;
+                    searchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
+
+                    // Simulate AJAX call (replace with actual API call)
+                    setTimeout(() => {
+                        // This would be replaced with actual fetch/AJAX call
+                        // fetchJobs(jobTitle, location);
+
+                        // For demo purposes, just show a message
+                        searchBtn.textContent = originalText;
+                        alert(`Searching for "${jobTitle}" jobs in ${location || 'any location'}`);
+                    }, 1500);
+                });
+            }
+        }
+
+        // Example of fetching jobs from an API
+        async function fetchJobs(keyword = '', location = '') {
+            try {
+                // This would be your actual API endpoint
+                const response = await fetch(`/api/jobs?keyword=${encodeURIComponent(keyword)}&location=${encodeURIComponent(location)}`);
+                const data = await response.json();
+
+                // Process and display the jobs
+                displayJobs(data.jobs);
+            } catch (error) {
+                console.error('Error fetching jobs:', error);
+                // Show error to user
+            }
+        }
+
+        function displayJobs(jobs) {
+            const jobsContainer = document.querySelector('.job-cards');
+            if (!jobsContainer) return;
+
+            // Clear existing jobs
+            jobsContainer.innerHTML = '';
+
+            // Add new jobs
+            jobs.forEach(job => {
+                const jobCard = document.createElement('div');
+                jobCard.className = 'job-card';
+                jobCard.innerHTML = `
+            @* ${job.featured ? '<div class="job-badge">Featured</div>' : ''} *@
+            <div class="job-header">
+                <img src="${job.companyLogo}" alt="${job.companyName}">
+                <div class="job-title">
+                    <h3>${job.title}</h3>
+                    <p>${job.companyName} • ${job.location}</p>
+                </div>
+            </div>
+            <div class="job-details">
+                <span class="job-salary">${job.salary}</span>
+                <span class="job-type">${job.type}</span>
+                ${job.remote ? '<span class="job-remote">Remote Possible</span>' : ''}
+            </div>
+            <div class="job-skills">
+                ${job.skills.map(skill => `<span>${skill}</span>`).join('')}
+            </div>
+            <div class="job-footer">
+                <span class="job-posted">Posted ${job.postedDate}</span>
+                <button class="btn-apply" data-job-id="${job.id}">Quick Apply</button>
+            </div>
+        `;
+
+                jobsContainer.appendChild(jobCard);
+            });
+
+            // Add event listeners to new apply buttons
+            document.querySelectorAll('.btn-apply').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const jobId = this.getAttribute('data-job-id');
+                    applyForJob(jobId);
+                });
+            });
+        }
+
+        async function applyForJob(jobId) {
+            try {
+                // Check if user is logged in
+                const isLoggedIn = checkAuthStatus(); // You'd implement this
+
+                if (!isLoggedIn) {
+                    // Show login modal or redirect
+                    showLoginModal();
+                    return;
+                }
+
+                // Show loading state
+                const applyBtn = document.querySelector(`.btn-apply[data-job-id="${jobId}"]`);
+                const originalText = applyBtn.textContent;
+                applyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Applying...';
+
+                // Simulate API call
+                setTimeout(() => {
+                    // In a real app, you'd make an actual API call here
+                    // const response = await fetch(`/api/jobs/${jobId}/apply`, { method: 'POST' });
+
+                    // For demo purposes
+                    applyBtn.textContent = 'Applied!';
+                    applyBtn.style.backgroundColor = '#4CAF50';
+                    applyBtn.disabled = true;
+
+                    // Show success message
+                    showToast('Application submitted successfully!');
+                }, 1500);
+            } catch (error) {
+                console.error('Error applying for job:', error);
+                showToast('Failed to apply. Please try again.', 'error');
+            }
+        }
+
+        // Utility Functions
+        function checkAuthStatus() {
+            // In a real app, check if user has a valid auth token
+            return false; // Change this based on actual auth status
+        }
+
+        function showLoginModal() {
+            // Implement a modal to prompt login/signup
+            alert('Please login or create an account to apply for jobs.');
+        }
+
+        function showToast(message, type = 'success') {
+            // Implement a toast notification system
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+        // Add this function to your existing JavaScript
+        function initScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+
+                        // For elements that should animate only once
+                        if (entry.target.dataset.animateOnce === 'true') {
+                            observer.unobserve(entry.target);
+                        }
+                    } else if (!entry.target.dataset.animateOnce) {
+                        // For elements that should animate every time they come into view
+                        entry.target.classList.remove('visible');
+                    }
+                });
+            }, observerOptions);
+
+            // Add animation classes to your sections and elements
+            document.querySelectorAll('.feature-card').forEach((card, index) => {
+                card.classList.add(index % 2 === 0 ? 'slide-in-left' : 'slide-in-right');
+                observer.observe(card);
+            });
+
+            document.querySelectorAll('.step').forEach((step, index) => {
+                step.classList.add('fade-in');
+                step.style.transitionDelay = `${index * 0.1}s`;
+                observer.observe(step);
+            });
+
+            document.querySelectorAll('.job-card').forEach((card, index) => {
+                card.classList.add('scale-in');
+                card.style.transitionDelay = `${index * 0.1}s`;
+                observer.observe(card);
+            });
+
+            document.querySelectorAll('.testimonial-card').forEach(card => {
+                card.classList.add('fade-in');
+                observer.observe(card);
+            });
+
+            // Add animations to section headers
+            document.querySelectorAll('.section-header').forEach(header => {
+                header.classList.add('fade-in');
+                observer.observe(header);
+            });
+
+            // Add animations to other elements as needed
+            document.querySelectorAll('.stat-item').forEach(item => {
+                item.classList.add('fade-in');
+                observer.observe(item);
+            });
+
+            document.querySelectorAll('.app-feature').forEach((feature, index) => {
+                feature.classList.add('fade-in');
+                feature.style.transitionDelay = `${index * 0.1}s`;
+                observer.observe(feature);
+            });
+
+            document.querySelectorAll('.faq-item').forEach((item, index) => {
+                item.classList.add('fade-in');
+                item.style.transitionDelay = `${index * 0.05}s`;
+                observer.observe(item);
+            });
+        }
+
+        // Add this to your DOMContentLoaded event listener
+        document.addEventListener('DOMContentLoaded', function () {
+            // ... your existing initialization calls
+            initScrollAnimations();
+        });
+        // Initialize all functionality when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            initParticles();
+            initMobileMenu();
+            initTypingAnimation();
+            initCounters();
+            initFAQAccordion();
+            initBackToTop();
+            initSmoothScrolling();
+            initTestimonialSlider();
+            initJobSearch();
+        });
+    </script>
+</body>
+
+</html>

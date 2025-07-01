@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CareerLink</title>
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-500: #4361ee;
+            --primary-400: #5f75f1;
+            --primary-300: #7b89f4;
+            --primary-100: #e6e9ff;
+            --primary-50: #f3f5ff;
+
+            --dark-800: #121826;
+            --dark-700: #1a1d23;
+            --dark-600: #2d323e;
+
+            --light-100: #ffffff;
+            --light-200: #f8f9fa;
+            --light-300: #f1f3f5;
+
+            --border-100: #e0e3eb;
+            --border-200: #d0d5dd;
+
+            --success-500: #28a745;
+            --warning-500: #ffc107;
+            --danger-500: #dc3545;
+
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+            --glass-effect: rgba(255, 255, 255, 0.85);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.18);
+            --glass-blur: blur(12px);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--light-200);
+            color: var(--dark-600);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            padding-top: 80px;
+        }
+
+        /* ========== Single Row Navigation ========== */
+        .navbar {
+            height: 80px;
+            background: var(--glass-effect);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-bottom: var(--glass-border);
+            box-shadow: var(--shadow-md);
+            padding: 0 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-container {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .navbar-brand:hover img {
+            transform: scale(1.05);
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-grow: 1;
+            justify-content: space-evenly;
+            margin: 0 20px;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            padding: 0.5rem 0.5rem;
+            color: var(--dark-600);
+            transition: var(--transition);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(241, 245, 249, 0.5);
+        }
+
+        .nav-link:hover {
+            background: var(--primary-100);
+            color: var(--primary-500);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-link.active {
+            color: white;
+            background: var(--primary-500);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+        }
+
+        .nav-link i {
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* ========== Profile Section ========== */
+        .profile-wrapper {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--light-100);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .profile-wrapper:hover .profile-img {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 3px var(--primary-100);
+        }
+
+        .progress-ring {
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            width: 48px;
+            height: 48px;
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-circle {
+            stroke: var(--primary-500);
+            stroke-width: 3;
+            fill: transparent;
+            stroke-dasharray: 126;
+            stroke-dashoffset: 126;
+            transition: stroke-dashoffset 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .percentage-badge {
+            position: absolute;
+            bottom: -4px;
+            right: -4px;
+            background: var(--primary-500);
+            color: var(--light-100);
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 2px solid var(--light-100);
+            transition: var(--transition);
+        }
+
+        /* ========== Responsive Adjustments ========== */
+        @@media (max-width: 1200px) {
+            .nav-link span {
+                display: none;
+            }
+
+            .nav-link i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+        }
+
+        @@media (max-width: 992px) {
+            .navbar {
+                padding: 0 1rem;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+        }
+
+        .navbar-brand img {
+            height: 9vh;
+            transition: var(--transition);
+        }
+
+        body {
+            margin: 0px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="navbar-container">
+                <a class="navbar-brand" href="/">
+                    <img src="~/css/Default/images/CL.png" alt="CareerLink">
+                </a>
+
+                <div class="nav-menu">
+                    <a class="nav-link" asp-area="" asp-controller="UserDashboard" asp-action="Index">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    <a class="nav-link" asp-area="" asp-controller="UserDetails" asp-action="PersonalInfo">
+                        <i class="fas fa-user"></i>
+                        <span>Personal</span>
+                    </a>
+                    <a class="nav-link" asp-area="" asp-controller="UserDetails" asp-action="Education">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Education</span>
+                    </a>
+                    <a class="nav-link" asp-area="" asp-controller="UserDetails" asp-action="Skills">
+                        <i class="fas fa-code"></i>
+                        <span>Skills</span>
+                    </a>
+                    <a class="nav-link" asp-area="" asp-controller="UserDetails" asp-action="JobPreference">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Jobs</span>
+                    </a>
+                    <a class="nav-link" asp-area="" asp-controller="UserDetails" asp-action="Experience">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Experience</span>
+                    </a>
+                    <a class="nav-link" asp-area="" asp-controller="UserDetails" asp-action="Projects">
+                        <i class="fas fa-project-diagram"></i>
+                        <span>Projects</span>
+                    </a>
+                    <a class="nav-link" asp-area="" asp-controller="UserDetails" asp-action="Certificates">
+                        <i class="fas fa-certificate"></i>
+                        <span>Certificates</span>
+                    </a>
+                    <a class="nav-link" asp-area="" asp-controller="UserDetails" asp-action="UploadResume">
+                        <i class="fas fa-file-upload"></i>
+                        <span>Upload Resume</span>
+                    </a>
+                    <a class="nav-link" asp-area="" asp-controller="UserDetails" asp-action="UsersDetail">
+                        <i class="fas fa-file-alt"></i>
+                        <span>User Details</span>
+                    </a>
+                </div>
+
+                <div class="nav-right">
+                    <div class="profile-wrapper" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                        title="Profile Completion">
+                        <svg class="progress-ring">
+                            <circle class="progress-ring-circle" cx="24" cy="24" r="20"></circle>
+                        </svg>
+                        <img id="profileImage" src="~/img/default-profile.png" class="profile-img" alt="Profile">
+                        <div class="percentage-badge" id="profilePercentage">0</div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-container">
+        <div class="content-wrapper">
+            <div class="container">
+                @RenderBody()
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container text-center">
+                <p>&copy; 2025 - CareerLink | Connecting Talent, Building Futures!</p>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Core Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        $(document).ready(function () {
+            // Initialize tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+
+            // Highlight current active nav link
+            const currentPath = window.location.pathname;
+            $('.nav-link').each(function () {
+                const linkPath = $(this).attr('href');
+                if (currentPath.includes(linkPath)) {
+                    $(this).addClass('active');
+                }
+            });
+
+            // Profile data loading
+            function getUserIdFromToken() {
+                const token = localStorage.getItem("token");
+                if (!token) return null;
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                return payload.uid;
+            }
+
+            const userId = getUserIdFromToken();
+            if (!userId) return;
+
+            // Load profile image
+            $.ajax({
+                url: `http://localhost:5086/api/UserDetails/GetUserProfile/${userId}`,
+                success: function (response) {
+                    if (response.data?.c_profileImage) {
+                        $("#profileImage").attr("src", response.data.c_profileImage);
+                    }
+                },
+                error: function () {
+                    console.log("Error loading profile image");
+                }
+            });
+
+            // Load profile completion
+            $.ajax({
+                url: `http://localhost:5086/api/UserDetails/GetProfilePercentage/${userId}`,
+                success: function (response) {
+                    const percentage = Math.round(response.profile_completion_percentage || 0);
+                    updateProfileProgress(percentage);
+                },
+                error: function () {
+                    console.log("Error loading profile completion");
+                    updateProfileProgress(0);
+                }
+            });
+        });
+
+        function updateProfileProgress(percentage) {
+            const circle = document.querySelector('.progress-ring-circle');
+            const radius = 20;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference - (percentage / 100) * circumference;
+
+            circle.style.strokeDashoffset = offset;
+            document.getElementById('profilePercentage').textContent = percentage;
+
+            // Change color based on completion level
+            if (percentage >= 80) {
+                circle.style.stroke = 'var(--success-500)';
+                document.getElementById('profilePercentage').style.background = 'var(--success-500)';
+            } else if (percentage >= 50) {
+                circle.style.stroke = 'var(--warning-500)';
+                document.getElementById('profilePercentage').style.background = 'var(--warning-500)';
+            } else {
+                circle.style.stroke = 'var(--danger-500)';
+                document.getElementById('profilePercentage').style.background = 'var(--danger-500)';
+            }
+        }
+    </script>
+</body>
+
+</html>
