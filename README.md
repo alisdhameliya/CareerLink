@@ -1,6 +1,8 @@
 # Introduction
 
-![visit this link to see full project](https://drive.google.com/file/d/1vhFeTGW3PVKQd7Hg4jdjBxt5gTsVTzWo/view?usp=drive_link)
+[visit this link to see full project](https://drive.google.com/file/d/1vhFeTGW3PVKQd7Hg4jdjBxt5gTsVTzWo/view?usp=drive_link)
+
+Screenshots are provided at the End of readme. [demo](# Screenshots)
 
 # How It Works
 
@@ -54,11 +56,7 @@ TODO: Guide users through getting your code up and running on their own system. 
 
 TODO: Describe and show how to build your code and run the tests.
 
-![Testing](githubImages/testing.png)
-
 # Contribute
-
-![Contribution](githubImages/contribute.png)
 
 TODO: Explain how other users and developers can contribute to make your code better.
 
