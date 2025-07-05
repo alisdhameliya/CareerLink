@@ -2,7 +2,7 @@
 
 [visit this link to see full project](https://drive.google.com/file/d/1vhFeTGW3PVKQd7Hg4jdjBxt5gTsVTzWo/view?usp=drive_link)
 
-Screenshots are provided at the End of readme. [demo](# Screenshots)
+Screenshots are provided at the End of readme. 
 
 # How It Works
 
