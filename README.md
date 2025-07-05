@@ -1,14 +1,47 @@
 # Introduction
 
-![Project Banner](githubImages/1.png)
+![visit this link to see full project](https://drive.google.com/file/d/1vhFeTGW3PVKQd7Hg4jdjBxt5gTsVTzWo/view?usp=drive_link)
 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project.
+# How It Works
 
-![Project Overview](githubImages/overview.png)
+CareerLink is designed to streamline the job search process through the following workflow:
+
+1. **User Registration & Profile Creation**
+
+   - Users create accounts with basic information
+   - Job seekers build comprehensive profiles with skills, experience, and portfolio
+   - Employers create company profiles and job listings
+
+2. **Job Search & Matching**
+
+   - Advanced search functionality with filters (location, industry, salary)
+   - AI-powered job matching based on user skills and preferences
+   - Personalized job recommendations displayed on user dashboard
+
+3. **Application Process**
+
+   - One-click application submission
+   - Resume and cover letter management
+   - Application tracking system for both employers and job seekers
+
+4. **Interview Management**
+
+   - Scheduling system for interviews
+   - Video interview capabilities
+   - Feedback collection tools
+
+5. **Career Development**
+
+   - Skill assessment tools
+   - Learning resources and course recommendations
+   - Career path visualization
+
+6. **Analytics & Reporting**
+   - Job market insights and trends
+   - Application success metrics
+   - Employer hiring analytics
 
 # Getting Started
-
-![Getting Started](githubImages/getting-started.png)
 
 TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
 
@@ -17,11 +50,7 @@ TODO: Guide users through getting your code up and running on their own system. 
 3. Latest releases
 4. API references
 
-![Setup Process](githubImages/setup.png)
-
 # Build and Test
-
-![Build Process](githubImages/build-process.png)
 
 TODO: Describe and show how to build your code and run the tests.
 
@@ -43,7 +72,7 @@ If you want to learn more about creating good readme files then refer the follow
 
 Here are some screenshots of the application:
 
-![Dashboard](githubImages/dashboard.png)
-![User Profile](githubImages/profile.png)
-![Job Search](githubImages/job-search.png)
-![Application Tracking](githubImages/applications.png)
+![Project Banner](githubImages/1.png)
+![Project Overview](githubImages/2.png)
+![Project Overview](githubImages/5.png)
+![Project Overview](githubImages/3.png)
